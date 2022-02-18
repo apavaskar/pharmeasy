@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Expense-adhoc-mapper">
+    <cache />
+    <select id="expense_visit_count_select" resultType="map">
+        SELECT
+            dtvat_yyyy_mm_dd visit_date,
+            count(1) FILTER (WHERE dtvat_visit_type_id = 'syslv00000000000000000000000000000028') as physical_count,
+            count(1) FILTER (WHERE dtvat_visit_type_id = 'syslv00000000000000000000000000000027') as digital_count,
+            count(1) visit_count
+        from rpt_daily_visit_attendee
+        where
+            dtvat_employee_id = #{conditions.employeeId.value}
+            and dtvat_yyyy_mm= ${conditions.yearMonth.value}
+            and dtvat_is_reported = TRUE
+            and dtvat_activity_type_id='syslv00000000000000000000000000000024'
+        group by dtvat_yyyy_mm_dd
+        order by dtvat_yyyy_mm_dd
+    </select>
+
+    <select id="expense_daily_visit_type_select" resultType="map">
+        SELECT DISTINCT a.dtvat_yyyy_mm_dd visit_date, a.visit_id visit_type, a.activity_id activity_id from(
+        SELECT
+        dtvat_yyyy_mm_dd, dtvat_activity_type_id visit_id, dtvat_activity_type_id_id activity_id
+        from rpt_daily_visit_attendee att
+        where dtvat_employee_id = #{conditions.employeeId.value} and dtvat_yyyy_mm=${conditions.yearMonth.value}
+        and dtvat_activity_type_id='syslv00000000000000000000000000000024'
+        and dtvat_is_reported = TRUE
+
+        union ALL
+
+        SELECT
+        dtvat_yyyy_mm_dd, dtvat_activity_type_id visit_id,  dtvat_activity_type_id_id activity_id
+        from rpt_daily_visit_attendee att
+        where dtvat_employee_id = #{conditions.employeeId.value} and dtvat_yyyy_mm=${conditions.yearMonth.value}
+        and dtvat_activity_type_id='syslv00000000000000000000000000000025'
+        and dtvat_is_reported = TRUE
+
+        UNION ALL
+
+        SELECT
+        dtvat_yyyy_mm_dd, leave_leave_type_id visit_id,  dtvat_activity_type_id_id activity_id
+        from rpt_daily_visit_attendee att
+        inner join lev_leaves_applied la on la.leave_id = dtvat_activity_type_id_id
+        where dtvat_employee_id = #{conditions.employeeId.value} and dtvat_yyyy_mm= ${conditions.yearMonth.value}
+        and dtvat_activity_type_id='syslv00000000000000000000000000000026'
+        ) a order by a.dtvat_yyyy_mm_dd
+    </select>
+
+    <select id="expense_visited_towns_select" resultType="map">
+        SELECT
+        distinct t.towns_id, t.towns_name, t.towns_classification_id towns_classification_id
+        from rpt_daily_visit_attendee att
+        inner join cmt_address_master adr on att.dtvat_customer_id = adr.addrs_owner_id
+        inner join cmt_town_master t on t.towns_id = adr.addrs_town_id
+        where att.dtvat_employee_id= #{conditions.employeeId.value} and att.dtvat_yyyy_mm_dd= #{conditions.yearMonthDate.value}
+        and att.dtvat_is_reported = TRUE
+    </select>
+
+    <select id="expense_distance_select" resultMap="Distance-mapper.distnMap">
+        SELECT DISTN_FROM_TOWN_ID, DISTN_TO_TOWN_ID, DISTN_FROM_STATE_ID, DISTN_TO_STATE_ID, DISTN_KMS, DISTN_FROM_TO_LOC, DISTN_TO_FROM_LOC, DISTN_CREATED_BY, DISTN_UPDATED_BY, DISTN_CREATED_ON, DISTN_UPDATED_ON, DISTN_STALE_ID, DISTN_ID FROM public.EXP_DISTANCE_MASTER
+        WHERE distn_from_to_loc = #{conditions.townStr.value}
+        or distn_to_from_loc = #{conditions.townStr.value}
+    </select>
+
+    <select id="expense_allowance_select" resultMap="expAllowance_resultMap">
+        SELECT
+        nm.syslv_name al_name, tp.syslv_name al_type, pc.syslv_name al_period, lt.syslv_name location_type, tc.syslv_name town_type,
+        al.alwnc_min_required_limit, al.alwnc_max_required_limit,al.alwnc_value,al.alwnc_max_value,
+        al.alwnc_is_document_required,al.alwnc_is_editable,
+        alwnc_allowance_name_id exp_allowance_id, alwnc_location_type_id location_type_id
+        from  exp_expense_allowances al
+        inner JOIN fmk_system_lov nm on nm.syslv_id = al.alwnc_allowance_name_id
+        INNER JOIN fmk_system_lov tp on tp.syslv_id = al.alwnc_expense_type_id
+        INNER JOIN fmk_system_lov pc on pc.syslv_id = al.alwnc_period_category_id
+        INNER JOIN fmk_system_lov tc on tc.syslv_id = al.alwnc_town_category_id
+        LEFT JOIN fmk_system_lov lt on lt.syslv_id = al.alwnc_location_type_id
+        <where>
+            and al.alwnc_is_active = TRUE
+            <if test="conditions['jobId']!=null">
+                and al.alwnc_job_title_id = #{conditions.jobId.value}
+            </if>
+            <if test="conditions['townCategory']!=null">
+                and al.alwnc_town_category_id= #{conditions.townCategory.value}
+            </if>
+            <if test="conditions['divisionId']!=null">
+                and al.alwnc_division_id = #{conditions.divisionId.value}
+            </if>
+            <if test="conditions['yyyyMM']!=null">
+                and ${conditions.yyyyMM.value} BETWEEN al.alwnc_valid_from and al.alwnc_valid_to
+            </if>
+            <if test="conditions['typeId']!=null">
+                and al.alwnc_expense_type_id = #{conditions.typeId.value}
+            </if>
+        </where>
+
+    </select>
+
+    <resultMap id="expAllowance_resultMap" type="com.squer.sfe.expense.dto.AllowanceDTO">
+        <result property="name" column="al_name"/>
+        <result property="type" column="al_type"/>
+        <result property="period" column="al_period"/>
+        <result property="locationType" column="location_type"/>
+        <result property="townType" column="town_type"/>
+        <result property="minReqValue" column="alwnc_min_required_limit"/>
+        <result property="maxReqValue" column="alwnc_max_required_limit"/>
+        <result property="value" column="alwnc_value"/>
+        <result property="maxValue" column="alwnc_max_value"/>
+        <result property="isDocumentRequired" column="alwnc_is_document_required"/>
+        <result property="isEditable" column="alwnc_is_editable"/>
+        <result property="allowanceId" column="exp_allowance_id"/>
+        <result property="locationTypeId" column="location_type_id"/>
+    </resultMap>
+
+    <select id="expense_routes_select" resultMap="Routs-mapper.routsMap">
+        SELECT ROUTS_EXPENSE_DETAIL_ID, ROUTS_FROM_TOWN_ID, ROUTS_TO_TOWN_ID, ROUTS_FROM_TOWN_NAME,
+               ROUTS_TO_TOWN_NAME, ROUTS_TRANSPORT_MODE_ID, ROUTS_DISTANCE, ROUTS_ALLOWNACE, ROUTS_AMOUNT,
+               ROUTS_IS_RETURN, ROUTS_CREATED_BY, ROUTS_UPDATED_BY, ROUTS_CREATED_ON, ROUTS_UPDATED_ON, ROUTS_STALE_ID,
+               ROUTS_ID FROM ${schemaName}.EXP_EXPENSE_ROUTS R
+        inner join ${schemaName}.EXP_EXPENSE_DETAILS E on R.ROUTS_EXPENSE_DETAIL_ID = EXPDT_ID
+        <include refid="base.where_statement"></include>
+    </select>
+
+    <select id="expense_category_select" resultMap="alctg_resultMap">
+        SELECT ALCTG_ID, ALCTG_NAME, ALCTG_CI_NAME, ALCTG_CREATED_ON, ALCTG_CREATED_BY, ALCTG_UPDATED_ON, ALCTG_UPDATED_BY, ALCTG_STALE_ID
+            from EXP_ALLOWANCE_CATEGORY
+            <include refid="base.where_statement"></include>
+    </select>
+    <resultMap id="alctg_resultMap" type="com.squer.sfe.expense.entity.ExpenseAllowanceCategory">
+        <id property="id" column="alctg_id" />
+        <result property="name" column="alctg_name"/>
+        <result property="ciName" column="alctg_ci_name"/>
+        <result property="createdBy" column="alctg_created_by" />
+        <result property="updatedBy" column="alctg_updated_by" />
+        <result property="createdOn" column="alctg_created_on" />
+        <result property="updatedOn" column="alctg_updated_on" />
+        <result property="staleId" column="alctg_stale_id" />
+    </resultMap>
+
+    <select id="expense_category_allowance_select" resultType="map">
+        SELECT ALCTA_CATEGORY_ID, ALCTA_ALLOWANCE_ID
+        from ${schemaName}.EXP_ALLOWANCE_CATEGORY_ALLOWANCE
+        <include refid="base.where_statement"></include>
+    </select>
+
+    <select id="elcal_select" resultMap="elcal_resultMap">
+        SELECT ELCAL_ID, ELCAL_EXPENSE_ID, ELCAL_MODE_TRANSPORT_ID, ELCAL_FROM_TOWN, ELCAL_TO_TOWN, ELCAL_FARE
+        FROM ${schemaName}.EXP_LOCAL_CONVEYANCE_ALLOWANCE
+        <include refid="base.where_statement"></include>
+    </select>
+    <resultMap id="elcal_resultMap" type="com.squer.sfe.expense.entity.ExpenseLocalConvenyanceDetails">
+        <id property="id" column="elcal_id" />
+        <result property="expenseDetail" column="elcal_expense_id" />
+        <result property="transportMode" column="elcal_mode_transport_id" />
+        <result property="fromTown" column="elcal_from_town" />
+        <result property="toTown" column="elcal_to_town" />
+        <result property="fare" column="elcal_fare" />
+    </resultMap>
+    <insert id="elcal_insert">
+        insert into ${schemaName}.EXP_LOCAL_CONVEYANCE_ALLOWANCE(ELCAL_ID, ELCAL_EXPENSE_ID, ELCAL_MODE_TRANSPORT_ID,
+        ELCAL_FROM_TOWN, ELCAL_TO_TOWN, ELCAL_FARE)
+        values(#{entity.id}, #{entity.expenseDetail}, #{entity.transportMode}, #{entity.fromTown}, #{entity.toTown}, #{entity.fare})
+    </insert>
+    <delete id="elcal_detail_delete">
+        delete from ${schemaName}.EXP_LOCAL_CONVEYANCE_ALLOWANCE where elcal_expense_id = #{elcal_expense_id}
+    </delete>
+
+    <select id="documents_by_date_select" resultType="map">
+        SELECT expdt_yyyy_mm_dd, docmt_id, expdt_expense_type_id, docmt_name, syslv_name from exp_expense_details
+            inner join CMT_DOCUMENT_MASTER  on expdt_id = DOCMT_OWNER_ID
+            inner join FMK_SYSTEM_LOV on syslv_id = expdt_expense_type_id
+            where expdt_employee_id = #{conditions.employeeId.value} and expdt_yyyy_mm = #{conditions.yearMonth.value}
+    </select>
+
+    <select id="expense_sum_select" resultType="map">
+        select expdt_expense_id, sum(expdt_amount) amount from exp_expense_details
+        <include refid="base.where_statement"></include>
+        group by expdt_expense_id
+    </select>
+
+    <select id="expense_approved_select" resultType="map">
+        select expaa_expense_id, TO_CHAR(expmt_updated_on,'YYYY-MM-DD') expmt_updated_on, TO_CHAR(expaa_created_on, 'YYYY-MM-DD') expaa_created_on,
+        sum(expaa_amount_approved) amount from exp_expense_approval_amount
+        inner join exp_expense_master on expmt_id = expaa_expense_id
+        inner join cmt_location_master on locat_id = expmt_location_id
+        <include refid="base.where_statement"></include>
+        group by expaa_expense_id, TO_CHAR(expmt_updated_on,'YYYY-MM-DD'), TO_CHAR(expaa_created_on, 'YYYY-MM-DD')
+    </select>
+
+    <insert id="expaa_insert">
+        insert into ${schemaName}.EXP_EXPENSE_APPROVAL_AMOUNT( EXPAA_ID, EXPAA_MANAGER_ID, EXPAA_JOB_ROLE_ID, EXPAA_EXPENSE_ID, EXPAA_ALLOWANCE_CATEGORY_ID,
+                                                               EXPAA_AMOUNT_CLAIMED, EXPAA_AMOUNT_ADDED, EXPAA_AMOUNT_DEDUCTED, EXPAA_AMOUNT_APPROVED,
+                                                               EXPAA_REMARKS, EXPAA_CHAIN_ID, EXPAA_STATUS, EXPAA_CREATED_ON, EXPAA_CREATED_BY, EXPAA_UPDATED_ON, EXPAA_UPDATED_BY, EXPAA_STALE_ID)
+                                values(#{entity.id}, #{entity.manager.id},#{entity.jobRole.id}, #{entity.expense.id}, #{entity.allowanceCategory.id},
+                                        #{entity.amountClaimed}, #{entity.amountAdded}, #{entity.amountDeducted}, #{entity.amountApproved},
+                                        #{entity.remarks}, #{entity.chain.id}, #{entity.status}, #{entity.createdOn}, #{entity.createdBy}, #{entity.updatedOn}, #{entity.updatedBy}, #{entity.staleId})
+    </insert>
+    <select id="expaa_select" resultMap="expaa_result">
+        SELECT EXPAA_ID, EXPAA_MANAGER_ID, EXPAA_JOB_ROLE_ID, EXPAA_EXPENSE_ID, EXPAA_ALLOWANCE_CATEGORY_ID,
+            EXPAA_AMOUNT_CLAIMED, EXPAA_AMOUNT_ADDED, EXPAA_AMOUNT_DEDUCTED, EXPAA_AMOUNT_APPROVED,
+            EXPAA_REMARKS, EXPAA_CHAIN_ID, EXPAA_STATUS, EXPAA_CREATED_ON, EXPAA_CREATED_BY, EXPAA_UPDATED_ON,
+            EXPAA_UPDATED_BY, EXPAA_STALE_ID, EXPAA_JOB_ROLE_ID
+        from ${schemaName}.EXP_EXPENSE_APPROVAL_AMOUNT
+        inner join ${schemaName}.CMT_EMPLOYEE_PROFILE on EMPRF_EMPLOYEE_ID = EXPAA_MANAGER_ID and EMPRF_IS_ACTIVE = true
+        inner join ${schemaName}.CMT_JOB_ROLE on JOBRL_ID = EMPRF_JOB_ROLE_ID
+            <include refid="base.where_statement"></include>
+        order by expaa_manager_id
+    </select>
+    <resultMap id="expaa_result" type="com.squer.sfe.expense.entity.ExpenseApprovalAmount">
+        <id property="id" column="EXPAA_ID" />
+        <result property="manager" column="EXPAA_MANAGER_ID" />
+        <result property="jobRole" column="EXPAA_JOB_ROLE_ID"/>
+        <result property="expense" column="EXPAA_EXPENSE_ID" />
+        <result property="allowanceCategory" column="EXPAA_ALLOWANCE_CATEGORY_ID" />
+        <result property="amountClaimed" column="EXPAA_AMOUNT_CLAIMED" />
+        <result property="amountDeducted" column="EXPAA_AMOUNT_DEDUCTED" />
+        <result property="amountAdded" column="EXPAA_AMOUNT_ADDED" />
+        <result property="amountApproved" column="EXPAA_AMOUNT_APPROVED" />
+        <result property="remarks" column="EXPAA_REMARKS" />
+        <result property="chain" column="EXPAA_CHAIN_ID" />
+        <result property="status" column="EXPAA_STATUS" />
+        <result property="createdBy" column="EXPAA_CREATED_BY" />
+        <result property="updatedBy" column="EXPAA_UPDATED_BY" />
+        <result property="createdOn" column="EXPAA_CREATED_ON" />
+        <result property="updatedOn" column="EXPAA_UPDATED_ON" />
+        <result property="staleId" column="EXPAA_STALE_ID" />
+        <result property="jobRole" column="EXPAA_JOB_ROLE_ID" />
+    </resultMap>
+
+    <update id="allowace_amount_update" >
+        UPDATE ${schemaName}.EXP_EXPENSE_APPROVAL_AMOUNT
+            set ${columnName} = #{column},
+                expaa_status = 'APPROVED'
+        where expaa_manager_id = #{managerId}
+         and expaa_allowance_category_id = #{allowanceId}
+         and expaa_expense_id = #{expenseId}
+    </update>
+
+    <delete id="allowance_amount_delete">
+        delete from ${schemaName}.EXP_EXPENSE_APPROVAL_AMOUNT
+            where expaa_expense_id = #{expenseId}
+    </delete>
+
+    <update id="allowance_amount_approve_update">
+        UPDATE exp_expense_approval_amount AMT_1
+        SET expaa_amount_claimed = AMT_2.expaa_amount_approved
+        FROM exp_expense_approval_amount AMT_2
+        WHERE AMT_1.EXPAA_EXPENSE_ID = AMT_2.expaa_expense_id
+        and AMT_1.EXPAA_ALLOWANCE_CATEGORY_ID =  AMT_2.EXPAA_ALLOWANCE_CATEGORY_ID
+        and AMT_1.EXPAA_MANAGER_ID = #{managerId}
+        and AMT_1.EXPAA_EXPENSE_ID = #{expenseId}
+        and AMT_2.EXPAA_MANAGER_ID = #{approverId}
+    </update>
+
+    <select id="consolidation_expense_master_select" resultType="map">
+        SELECT
+        exp.expmt_id exp_id, d.divsn_name div_name, z.locat_name zone_nm, r.locat_name region, l.locat_name hq,
+        lt.loctt_name loc_type, st.syslv_name exp_status, e.emply_person_code emp_code, e.emply_name emp_name,
+        to_char(to_date(exp.expmt_yyyy_mm::text,'YYYYMM'),'Month-yyyy') yearmonth,
+        to_char(e.emply_date_of_joining,'dd/mm/yyyy') joining_date,
+        CASE
+        WHEN exp.expmt_status_id = 'syslves000000000000000000000000000003' then to_char(expmt_updated_on,'dd/mm/yyyy')
+        ELSE '' END
+        as mis_date
+        from exp_expense_master exp
+        inner join cmt_employee_master e on e.emply_id = exp.expmt_employee_id
+        inner join cmt_location_master l on l.locat_id = exp.expmt_location_id
+        inner join cmt_location_master r on r.locat_id = l.locat_parent_id
+        inner join cmt_location_master z on z.locat_id = r.locat_parent_id
+        inner join cmt_division_master d on d.divsn_id = l.locat_division_id
+        inner join fmk_system_lov st on st.syslv_id = exp.expmt_status_id
+        inner join cmt_location_type lt on lt.loctt_id = l.locat_type_id
+        where l.locat_division_id= #{conditions.divisionId.value} and exp.expmt_yyyy_mm = #{conditions.yyyyMM.value}
+        and exp.expmt_status_id !='syslves000000000000000000000000000001'
+    </select>
+
+    <select id="consolidation_expense_details_select" resultType="map">
+        SELECT expaa_expense_id expense_id, expaa_allowance_category_id category_id, sum(added) added, sum(deducted) deducted, string_agg(expaa_remarks,',') remarks FROM(
+        SELECT
+        expaa_expense_id,
+        expaa_allowance_category_id,
+        expaa_job_role_id,
+        amt.expaa_amount_added added,
+        amt.expaa_amount_deducted deducted,
+        amt.expaa_remarks
+        from exp_expense_approval_amount amt
+        inner join exp_expense_master exp on exp.expmt_id = amt.expaa_expense_id
+        inner join cmt_location_master l on l.locat_id = exp.expmt_location_id
+        where l.locat_division_id= #{conditions.divisionId.value} and exp.expmt_yyyy_mm = #{conditions.yyyyMM.value}
+        and exp.expmt_status_id !='syslves000000000000000000000000000001'
+        ORDER by expaa_expense_id,expaa_allowance_category_id,expaa_job_role_id) a
+        GROUP by expaa_expense_id,expaa_allowance_category_id
+    </select>
+
+    <select id="consolidated_expense_claimed_amount_select" resultType="map">
+        SELECT expaa_expense_id expense_id,expaa_allowance_category_id category_id,expaa_job_role_id role_id, expaa_amount_claimed amount_claimed
+        FROM
+        (
+            SELECT
+                d.aprci_owner_id owner_id ,d.aprci_approver_id approver_id, d.aprci_approver_level, ROW_NUMBER() OVER (PARTITION by d.aprci_owner_id order by d.aprci_approver_level) rn
+                from cmt_approval_chain_instance d
+                inner join exp_expense_master e on e.expmt_id = d.aprci_owner_id
+                inner join cmt_location_master l on l.locat_id = e.expmt_location_id
+            where l.locat_division_id= #{conditions.divisionId.value} and e.expmt_yyyy_mm = #{conditions.yyyyMM.value}
+        ) t inner JOIN exp_expense_approval_amount amt on amt.expaa_expense_id = t.owner_id and t.approver_id = amt.expaa_manager_id
+        where t.rn = 1
+    </select>
+
+    <select id="expense_by_employee_code_month_select" resultMap="ExpenseMaster-mapper.expmtMap">
+        SELECT EXPMT_EMPLOYEE_ID, EXPMT_LOCATION_ID, EXPMT_YEAR, EXPMT_MONTH, EXPMT_YYYY_MM,
+        EXPMT_CURRENTLY_APPROVED_BY_ID, EXPMT_STATUS_ID, EXPMT_CREATED_BY, EXPMT_UPDATED_BY,LOCAT_TYPE_ID,
+        EXPMT_DISPLAY_STATUS, EXPMT_CREATED_ON, EXPMT_UPDATED_ON, EXPMT_STALE_ID, EXPMT_ID, EMPLY_PERSON_CODE
+        FROM ${schemaName}.EXP_EXPENSE_MASTER
+        inner join ${schemaName}.CMT_LOCATION_MASTER on LOCAT_ID = EXPMT_LOCATION_ID
+        inner join ${schemaName}.CMT_EMPLOYEE_MASTER on EMPLY_ID = EXPMT_EMPLOYEE_ID
+        where  expmt_yyyy_mm =#{conditions.yyyyMM.value} and emply_person_code=#{conditions.employeeCode.value}
+    </select>
+    
+    <delete id="expense_approval_amount_delete" parameterType="map">
+        delete from exp_expense_approval_amount where expaa_expense_id= #{expenseId}
+    </delete>
+
+    <delete id="expense_approval_delete" parameterType="map">
+        delete from cmt_approval_chain_instance where aprci_owner_id= #{expenseId}
+    </delete>
+
+    <select id="consolidated_expense_type_select" resultType="map">
+        SELECT
+            expdt_expense_id expense_id, expdt_location_type_id location_type,count(1)  cnt
+        from exp_expense_details d
+        inner join cmt_location_master l on l.locat_id = d.expdt_location_id
+        where expdt_yyyy_mm= #{conditions.yyyyMM.value}
+        and l.locat_division_id= #{conditions.divisionId.value}
+        and expdt_location_type_id in ('syslv00000000000000000000000000000160','syslv00000000000000000000000000000161','syslv00000000000000000000000000000162')
+        and expdt_expense_type_id='syslv00000000000000000000000000000172'
+        group by expdt_expense_id, expdt_location_type_id;
+    </select>
+
+    <select id="consolidated_expense_manager_approval_date" resultType="map">
+        SELECT owner_id, string_agg(aprdt,',') aprdt from
+        (SELECT
+            aprci_owner_id owner_id,  to_char(aprci_received_on ,'dd/mm/yyyy') aprdt
+        from cmt_approval_chain_instance i
+        inner join exp_expense_master e on e.expmt_id = i.aprci_owner_id
+        inner join cmt_location_master l on l.locat_id = e.expmt_location_id
+        where  aprci_approver_id!='emply12000000000000000000000000000000'  and aprci_approval_status='APPROVED'
+        and l.locat_division_id= #{conditions.divisionId.value} and expmt_yyyy_mm= #{conditions.yyyyMM.value}
+        order by aprci_owner_id, aprci_approver_level) a
+        GROUP by owner_id
+    </select>
+
+    <select id="consolidated_expense_submission_date_select" resultType="map">
+        SELECT
+            DISTINCT expaa_expense_id expense_id, to_char(expaa_created_on,'dd/mm/yyyy') exp_date
+        from exp_expense_master m
+        inner join exp_expense_approval_amount a on m.expmt_id = a.expaa_expense_id
+        inner join cmt_location_master l on l.locat_id = m.expmt_location_id
+        where l.locat_division_id= #{conditions.divisionId.value} and m.expmt_yyyy_mm= #{conditions.yyyyMM.value}
+    </select>
+</mapper>

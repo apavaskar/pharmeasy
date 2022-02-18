@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SalaryBlockingEntries-mapper">
+    <cache />
+
+
+            <select id="slblk_select" resultMap="slblkMap">
+                SELECT SLBLK_JOB_DATE, SLBLK_EMPLOYEE_ID, SLBLK_LOCATION_ID, SLBLK_JOB_ROLE_ID, SLBLK_MISSED_FROM_DATE, SLBLK_MISSED_TO_DATE, SLBLK_MISSED_DAYS, SLBLK_LEAVES_FROM_DATE, SLBLK_LEAVES_TO_DATE, SLBLK_SALARY_STATUS_ID, SLBLK_REPORTING_STATUS, SLBLK_CREATED_BY, SLBLK_UPDATED_BY, SLBLK_CREATED_ON, SLBLK_UPDATED_ON, SLBLK_STALE_ID, SLBLK_ID FROM ${schemaName}.CST_WOCKHARDT_SALARY_BLOCKING
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="slblkMap" type="com.squer.scheduledJob.custom.wockhardt.entity.SalaryBlockingEntries" autoMapping="true">
+            		<id property="id" column="SLBLK_ID" />
+			<result property="jobDate" column="SLBLK_JOB_DATE" />
+			<result property="employee" column="SLBLK_EMPLOYEE_ID" />
+			<result property="location" column="SLBLK_LOCATION_ID" />
+			<result property="jobRole" column="SLBLK_JOB_ROLE_ID" />
+			<result property="missedFromDate" column="SLBLK_MISSED_FROM_DATE" />
+			<result property="missedToDate" column="SLBLK_MISSED_TO_DATE" />
+			<result property="missedDays" column="SLBLK_MISSED_DAYS" />
+			<result property="leavesFromDate" column="SLBLK_LEAVES_FROM_DATE" />
+			<result property="leavesToDate" column="SLBLK_LEAVES_TO_DATE" />
+			<result property="salaryStatus" column="SLBLK_SALARY_STATUS_ID" />
+			<result property="reportingStatus" column="SLBLK_REPORTING_STATUS" />
+			<result property="createdBy" column="SLBLK_CREATED_BY" />
+			<result property="updatedBy" column="SLBLK_UPDATED_BY" />
+			<result property="createdOn" column="SLBLK_CREATED_ON" />
+			<result property="updatedOn" column="SLBLK_UPDATED_ON" />
+			<result property="staleId" column="SLBLK_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="slblk_insert" >
+                INSERT INTO ${schemaName}.CST_WOCKHARDT_SALARY_BLOCKING(SLBLK_JOB_DATE, SLBLK_EMPLOYEE_ID, SLBLK_LOCATION_ID, SLBLK_JOB_ROLE_ID, SLBLK_MISSED_FROM_DATE, SLBLK_MISSED_TO_DATE, SLBLK_MISSED_DAYS, SLBLK_LEAVES_FROM_DATE, SLBLK_LEAVES_TO_DATE, SLBLK_SALARY_STATUS_ID, SLBLK_REPORTING_STATUS, SLBLK_CREATED_BY, SLBLK_UPDATED_BY, SLBLK_CREATED_ON, SLBLK_UPDATED_ON, SLBLK_STALE_ID, SLBLK_ID)
+                VALUES (#{entity.jobDate}, #{entity.employee.id}, #{entity.location.id}, #{entity.jobRole.id}, #{entity.missedFromDate}, #{entity.missedToDate}, #{entity.missedDays}, #{entity.leavesFromDate}, #{entity.leavesToDate}, #{entity.salaryStatus.id}, #{entity.reportingStatus}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="slblk_update" >
+                UPDATE ${schemaName}.CST_WOCKHARDT_SALARY_BLOCKING set SLBLK_JOB_DATE = #{entity.jobDate}, SLBLK_EMPLOYEE_id = #{entity.employee.id}, SLBLK_LOCATION_id = #{entity.location.id}, SLBLK_JOB_ROLE_id = #{entity.jobRole.id}, SLBLK_MISSED_FROM_DATE = #{entity.missedFromDate}, SLBLK_MISSED_TO_DATE = #{entity.missedToDate}, SLBLK_MISSED_DAYS = #{entity.missedDays}, SLBLK_LEAVES_FROM_DATE = #{entity.leavesFromDate}, SLBLK_LEAVES_TO_DATE = #{entity.leavesToDate}, SLBLK_SALARY_STATUS_id = #{entity.salaryStatus.id}, SLBLK_REPORTING_STATUS = #{entity.reportingStatus}, SLBLK_UPDATED_BY = #{entity.updatedBy}, SLBLK_UPDATED_ON = #{entity.updatedOn}, SLBLK_STALE_ID = #{entity.staleId} 
+                WHERE SLBLK_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="slblk_delete" >
+                DELETE FROM  ${schemaName}.CST_WOCKHARDT_SALARY_BLOCKING <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

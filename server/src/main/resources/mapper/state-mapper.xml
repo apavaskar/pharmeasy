@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="State-mapper">
+    <cache />
+
+
+            <select id="state_select" resultMap="stateMap">
+                SELECT STATE_NAME, STATE_CI_NAME, STATE_CREATED_BY, STATE_UPDATED_BY, STATE_CREATED_ON, STATE_UPDATED_ON, STATE_STALE_ID, STATE_ID FROM ${schemaName}.CMT_STATE_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="stateMap" type="com.squer.sfe.common.entity.State" autoMapping="true">
+            		<id property="id" column="STATE_ID" />
+			<result property="name" column="STATE_NAME" />
+			<result property="ciName" column="STATE_CI_NAME" />
+			<result property="createdBy" column="STATE_CREATED_BY" />
+			<result property="updatedBy" column="STATE_UPDATED_BY" />
+			<result property="createdOn" column="STATE_CREATED_ON" />
+			<result property="updatedOn" column="STATE_UPDATED_ON" />
+			<result property="staleId" column="STATE_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="state_insert" >
+                INSERT INTO ${schemaName}.CMT_STATE_MASTER(STATE_NAME, STATE_CI_NAME, STATE_CREATED_BY, STATE_UPDATED_BY, STATE_CREATED_ON, STATE_UPDATED_ON, STATE_STALE_ID, STATE_ID)
+                VALUES (#{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="state_update" >
+                UPDATE ${schemaName}.CMT_STATE_MASTER set STATE_NAME = #{entity.name}, STATE_CI_NAME = #{entity.ciName}, STATE_UPDATED_BY = #{entity.updatedBy}, STATE_UPDATED_ON = #{entity.updatedOn}, STATE_STALE_ID = #{entity.staleId} 
+                WHERE STATE_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="state_delete" >
+                DELETE FROM  ${schemaName}.CMT_STATE_MASTER WHERE ID = #{entity.id} 
+            </delete>    
+        
+
+</mapper>

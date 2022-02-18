@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LocationType-mapper">
+    <cache />
+
+
+            <select id="loctt_select" resultMap="locttMap">
+                SELECT LOCTT_PARENT_ID, LOCTT_LEVEL, LOCTT_NAME, LOCTT_CI_NAME, LOCTT_CREATED_BY, LOCTT_UPDATED_BY, LOCTT_CREATED_ON, LOCTT_UPDATED_ON, LOCTT_STALE_ID, LOCTT_ID FROM ${schemaName}.CMT_LOCATION_TYPE
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="locttMap" type="com.squer.sfe.common.entity.LocationType" autoMapping="true">
+            		<id property="id" column="LOCTT_ID" />
+			<result property="parent" column="LOCTT_PARENT_ID" />
+			<result property="level" column="LOCTT_LEVEL" />
+			<result property="name" column="LOCTT_NAME" />
+			<result property="ciName" column="LOCTT_CI_NAME" />
+			<result property="createdBy" column="LOCTT_CREATED_BY" />
+			<result property="updatedBy" column="LOCTT_UPDATED_BY" />
+			<result property="createdOn" column="LOCTT_CREATED_ON" />
+			<result property="updatedOn" column="LOCTT_UPDATED_ON" />
+			<result property="staleId" column="LOCTT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="loctt_insert" >
+                INSERT INTO ${schemaName}.CMT_LOCATION_TYPE(LOCTT_PARENT_ID, LOCTT_LEVEL, LOCTT_NAME, LOCTT_CI_NAME, LOCTT_CREATED_BY, LOCTT_UPDATED_BY, LOCTT_CREATED_ON, LOCTT_UPDATED_ON, LOCTT_STALE_ID, LOCTT_ID)
+                VALUES (#{entity.parent.id}, #{entity.level}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="loctt_update" >
+                UPDATE ${schemaName}.CMT_LOCATION_TYPE set LOCTT_PARENT_id = #{entity.parent.id}, LOCTT_LEVEL = #{entity.level}, LOCTT_NAME = #{entity.name}, LOCTT_CI_NAME = #{entity.ciName}, LOCTT_UPDATED_BY = #{entity.updatedBy}, LOCTT_UPDATED_ON = #{entity.updatedOn}, LOCTT_STALE_ID = #{entity.staleId} 
+                WHERE LOCTT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="loctt_delete" >
+                DELETE FROM  ${schemaName}.CMT_LOCATION_TYPE <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

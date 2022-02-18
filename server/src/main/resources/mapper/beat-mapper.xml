@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Beat-mapper">
+    <cache />
+
+
+            <select id="beats_select" resultMap="beatsMap">
+                SELECT BEATS_LOCATION_ID, BEATS_IS_ACTIVE, BEATS_IS_DEFAULT, BEATS_NAME, BEATS_CI_NAME,
+                BEATS_CREATED_BY, BEATS_UPDATED_BY, BEATS_CREATED_ON, BEATS_UPDATED_ON, BEATS_STALE_ID,
+                BEATS_ID FROM ${schemaName}.CMT_BEAT_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="beatsMap" type="com.squer.sfe.common.entity.Beat" autoMapping="true">
+            		<id property="id" column="BEATS_ID" />
+			<result property="location" column="BEATS_LOCATION_ID" />
+			<result property="isActive" column="BEATS_IS_ACTIVE" />
+			<result property="isDefault" column="BEATS_IS_DEFAULT" />
+			<result property="name" column="BEATS_NAME" />
+			<result property="ciName" column="BEATS_CI_NAME" />
+			<result property="createdBy" column="BEATS_CREATED_BY" />
+			<result property="updatedBy" column="BEATS_UPDATED_BY" />
+			<result property="createdOn" column="BEATS_CREATED_ON" />
+			<result property="updatedOn" column="BEATS_UPDATED_ON" />
+			<result property="staleId" column="BEATS_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="beats_insert" >
+                INSERT INTO ${schemaName}.CMT_BEAT_MASTER(BEATS_LOCATION_ID, BEATS_IS_ACTIVE, BEATS_IS_DEFAULT, BEATS_NAME, BEATS_CI_NAME, BEATS_CREATED_BY, BEATS_UPDATED_BY, BEATS_CREATED_ON, BEATS_UPDATED_ON, BEATS_STALE_ID, BEATS_ID)
+                VALUES (#{entity.location.id}, #{entity.isActive}, #{entity.isDefault}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="beats_update" >
+                UPDATE ${schemaName}.CMT_BEAT_MASTER set BEATS_LOCATION_id = #{entity.location.id}, BEATS_IS_ACTIVE = #{entity.isActive}, BEATS_IS_DEFAULT = #{entity.isDefault}, BEATS_NAME = #{entity.name}, BEATS_CI_NAME = #{entity.ciName}, BEATS_UPDATED_BY = #{entity.updatedBy}, BEATS_UPDATED_ON = #{entity.updatedOn}, BEATS_STALE_ID = #{entity.staleId} 
+                WHERE BEATS_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="beats_delete" >
+                DELETE FROM  ${schemaName}.CMT_BEAT_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

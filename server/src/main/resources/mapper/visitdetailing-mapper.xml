@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VisitDetailing-mapper">
+    <cache />
+
+
+            <select id="vdetl_select" resultMap="vdetlMap">
+                SELECT VDETL_ATTENDEE_ID, VDETL_SEQUENCE, VDETL_BRAND_ID, VDETL_MESSAGE_TYPE_ID, VDETL_PRESCRIPTION_LEVEL, VDETL_IS_ACTIVE, VDETL_CREATED_BY, VDETL_UPDATED_BY, VDETL_CREATED_ON, VDETL_UPDATED_ON, VDETL_STALE_ID, VDETL_ID FROM ${schemaName}.RPT_VISIT_DETAILING
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="vdetlMap" type="com.squer.sfe.reporting.entity.VisitDetailing" autoMapping="true">
+            		<id property="id" column="VDETL_ID" />
+			<result property="attendee" column="VDETL_ATTENDEE_ID" />
+			<result property="sequence" column="VDETL_SEQUENCE" />
+			<result property="brand" column="VDETL_BRAND_ID" />
+			<result property="messageType" column="VDETL_MESSAGE_TYPE_ID" />
+			<result property="prescriptionLevel" column="VDETL_PRESCRIPTION_LEVEL" />
+			<result property="isActive" column="VDETL_IS_ACTIVE" />
+			<result property="createdBy" column="VDETL_CREATED_BY" />
+			<result property="updatedBy" column="VDETL_UPDATED_BY" />
+			<result property="createdOn" column="VDETL_CREATED_ON" />
+			<result property="updatedOn" column="VDETL_UPDATED_ON" />
+			<result property="staleId" column="VDETL_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="vdetl_insert" >
+                INSERT INTO ${schemaName}.RPT_VISIT_DETAILING(VDETL_ATTENDEE_ID, VDETL_SEQUENCE, VDETL_BRAND_ID, VDETL_MESSAGE_TYPE_ID, VDETL_PRESCRIPTION_LEVEL, VDETL_IS_ACTIVE, VDETL_CREATED_BY, VDETL_UPDATED_BY, VDETL_CREATED_ON, VDETL_UPDATED_ON, VDETL_STALE_ID, VDETL_ID)
+                VALUES (#{entity.attendee.id}, #{entity.sequence}, #{entity.brand.id}, #{entity.messageType.id}, #{entity.prescriptionLevel}, #{entity.isActive}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="vdetl_update" >
+                UPDATE ${schemaName}.RPT_VISIT_DETAILING set VDETL_ATTENDEE_id = #{entity.attendee.id}, VDETL_SEQUENCE = #{entity.sequence}, VDETL_BRAND_id = #{entity.brand.id}, VDETL_MESSAGE_TYPE_id = #{entity.messageType.id}, VDETL_PRESCRIPTION_LEVEL = #{entity.prescriptionLevel}, VDETL_IS_ACTIVE = #{entity.isActive}, VDETL_UPDATED_BY = #{entity.updatedBy}, VDETL_UPDATED_ON = #{entity.updatedOn}, VDETL_STALE_ID = #{entity.staleId} 
+                WHERE VDETL_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="vdetl_delete" >
+                DELETE FROM  ${schemaName}.RPT_VISIT_DETAILING <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

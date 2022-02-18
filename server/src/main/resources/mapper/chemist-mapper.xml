@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Chemist-mapper">
+    <cache />
+
+
+    <select id="chmst_select" resultMap="chmstMap">
+        SELECT CHMST_LOCATION_ID, CHMST_STATUS_ID, CHMST_BEAT_ID, CHMST_GENDER_ID, CHMST_MARITAL_STATUS_ID, CHMST_DATE_OF_BIRTH, CHMST_PERSON_CODE, CHMST_IS_ACTIVE, CHMST_NAME, CHMST_CI_NAME, CHMST_CREATED_BY, CHMST_UPDATED_BY, CHMST_CREATED_ON, CHMST_UPDATED_ON, CHMST_STALE_ID, CHMST_ID FROM ${schemaName}.CMT_CHEMIST_MASTER
+        <include refid="base.where_statement"></include>
+    </select>
+    <resultMap id="chmstMap" type="com.squer.sfe.common.entity.Chemist" autoMapping="true">
+            <id property="id" column="CHMST_ID" />
+        <result property="location" column="CHMST_LOCATION_ID" />
+        <result property="status" column="CHMST_STATUS_ID" />
+        <result property="beat" column="CHMST_BEAT_ID" />
+        <result property="gender" column="CHMST_GENDER_ID" />
+        <result property="maritalStatus" column="CHMST_MARITAL_STATUS_ID" />
+        <result property="dateOfBirth" column="CHMST_DATE_OF_BIRTH" />
+        <result property="personCode" column="CHMST_PERSON_CODE" />
+        <result property="isActive" column="CHMST_IS_ACTIVE" />
+        <result property="name" column="CHMST_NAME" />
+        <result property="ciName" column="CHMST_CI_NAME" />
+        <result property="createdBy" column="CHMST_CREATED_BY" />
+        <result property="updatedBy" column="CHMST_UPDATED_BY" />
+        <result property="createdOn" column="CHMST_CREATED_ON" />
+        <result property="updatedOn" column="CHMST_UPDATED_ON" />
+        <result property="staleId" column="CHMST_STALE_ID" />
+    </resultMap>
+
+    <insert id="chmst_insert" >
+        INSERT INTO ${schemaName}.CMT_CHEMIST_MASTER(CHMST_LOCATION_ID, CHMST_STATUS_ID, CHMST_BEAT_ID, CHMST_GENDER_ID, CHMST_MARITAL_STATUS_ID, CHMST_DATE_OF_BIRTH, CHMST_PERSON_CODE, CHMST_IS_ACTIVE, CHMST_NAME, CHMST_CI_NAME, CHMST_CREATED_BY, CHMST_UPDATED_BY, CHMST_CREATED_ON, CHMST_UPDATED_ON, CHMST_STALE_ID, CHMST_ID)
+        VALUES (#{entity.location.id}, #{entity.status.id}, #{entity.beat.id}, #{entity.gender.id}, #{entity.maritalStatus.id}, #{entity.dateOfBirth}, #{entity.personCode}, #{entity.isActive}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+    </insert>
+
+    <update id="chmst_update" >
+        UPDATE ${schemaName}.CMT_CHEMIST_MASTER set CHMST_LOCATION_id = #{entity.location.id}, CHMST_STATUS_id = #{entity.status.id}, CHMST_BEAT_id = #{entity.beat.id}, CHMST_GENDER_id = #{entity.gender.id}, CHMST_MARITAL_STATUS_id = #{entity.maritalStatus.id}, CHMST_DATE_OF_BIRTH = #{entity.dateOfBirth}, CHMST_PERSON_CODE = #{entity.personCode}, CHMST_IS_ACTIVE = #{entity.isActive}, CHMST_NAME = #{entity.name}, CHMST_CI_NAME = #{entity.ciName}, CHMST_UPDATED_BY = #{entity.updatedBy}, CHMST_UPDATED_ON = #{entity.updatedOn}, CHMST_STALE_ID = #{entity.staleId}
+        WHERE CHMST_ID = #{entity.id}
+    </update>
+
+    <delete id="chmst_delete" >
+        DELETE FROM  ${schemaName}.CMT_CHEMIST_MASTER <include refid="base.delete_where_statement"></include>
+    </delete>
+        
+
+</mapper>

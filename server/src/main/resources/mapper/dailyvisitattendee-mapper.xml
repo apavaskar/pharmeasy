@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DailyVisitAttendee-mapper">
+    <cache />
+
+
+		<select id="dtvat_select" resultMap="dtvatMap">
+			SELECT DTVAT_PLAN_ID, DTVAT_CUSTOMER_ID, DTVAT_ACTIVITY_TYPE_ID, DTVAT_ACTIVITY_TYPE_ID_ID,
+			DTVAT_DURATION, DTVAT_YYYY_MM, DTVAT_YYYY_MM_DD, DTVAT_LOCATION_ID, DTVAT_EMPLOYEE_ID, DTVAT_IS_PLANNED,
+			DTVAT_IS_REPORTED, DTVAT_IS_JOINT, DTVAT_IS_RCPA_DONE, DTVAT_IS_VIDEO_SHOWN, DTVAT_VISIT_TYPE_ID,
+			DTVAT_REMARKS, DTVAT_IS_ACTIVE, DTVAT_JOINEE_REFERENCE_ID, DTVAT_CREATED_BY, DTVAT_UPDATED_BY,
+			DTVAT_CREATED_ON, DTVAT_UPDATED_ON, DTVAT_STALE_ID, DTVAT_ID, DTVAT_REPORTED_TIME, DTVAT_VISIT_LONGITUDE,
+			DTVAT_VISIT_LATITUDE
+			FROM ${schemaName}.RPT_DAILY_VISIT_ATTENDEE
+			<include refid="base.where_statement"></include>
+		</select>
+		<resultMap id="dtvatMap" type="com.squer.sfe.reporting.entity.DailyVisitAttendee" autoMapping="true">
+			<id property="id" column="DTVAT_ID" />
+			<result property="plan" column="DTVAT_PLAN_ID" />
+			<result property="customer" column="DTVAT_CUSTOMER_ID" />
+			<result property="activityType" column="DTVAT_ACTIVITY_TYPE_ID" />
+			<result property="activityTypeId" column="DTVAT_ACTIVITY_TYPE_ID_ID" />
+			<result property="duration" column="DTVAT_DURATION" />
+			<result property="yyyyMm" column="DTVAT_YYYY_MM" />
+			<result property="yyyyMmDd" column="DTVAT_YYYY_MM_DD" />
+			<result property="location" column="DTVAT_LOCATION_ID" />
+			<result property="employee" column="DTVAT_EMPLOYEE_ID" />
+			<result property="isPlanned" column="DTVAT_IS_PLANNED" />
+			<result property="isReported" column="DTVAT_IS_REPORTED" />
+			<result property="isJoint" column="DTVAT_IS_JOINT" />
+			<result property="isRcpaDone" column="DTVAT_IS_RCPA_DONE" />
+			<result property="isVideoShown" column="DTVAT_IS_VIDEO_SHOWN" />
+			<result property="visitType" column="DTVAT_VISIT_TYPE_ID" />
+			<result property="remarks" column="DTVAT_REMARKS" />
+			<result property="isActive" column="DTVAT_IS_ACTIVE" />
+			<result property="joineeReference" column="DTVAT_JOINEE_REFERENCE_ID" />
+			<result property="visitRecordedTime" column="DTVAT_REPORTED_TIME"/>
+			<result property="longitude" column="dtvat_visit_longitude"/>
+			<result property="latitude" column="dtvat_visit_latitude"/>
+			<result property="createdBy" column="DTVAT_CREATED_BY" />
+			<result property="updatedBy" column="DTVAT_UPDATED_BY" />
+			<result property="createdOn" column="DTVAT_CREATED_ON" />
+			<result property="updatedOn" column="DTVAT_UPDATED_ON" />
+			<result property="staleId" column="DTVAT_STALE_ID" />
+		</resultMap>
+
+		<insert id="dtvat_insert" >
+			INSERT INTO ${schemaName}.RPT_DAILY_VISIT_ATTENDEE(DTVAT_PLAN_ID, DTVAT_CUSTOMER_ID, DTVAT_ACTIVITY_TYPE_ID,
+				DTVAT_ACTIVITY_TYPE_ID_ID, DTVAT_DURATION, DTVAT_YYYY_MM, DTVAT_YYYY_MM_DD, DTVAT_LOCATION_ID, DTVAT_EMPLOYEE_ID,
+				DTVAT_IS_PLANNED, DTVAT_IS_REPORTED, DTVAT_IS_JOINT, DTVAT_IS_RCPA_DONE, DTVAT_IS_VIDEO_SHOWN,
+				DTVAT_VISIT_TYPE_ID, DTVAT_REMARKS, DTVAT_IS_ACTIVE, DTVAT_JOINEE_REFERENCE_ID,
+				DTVAT_CREATED_BY, DTVAT_UPDATED_BY, DTVAT_CREATED_ON, DTVAT_UPDATED_ON, DTVAT_STALE_ID, DTVAT_ID, DTVAT_REPORTED_TIME)
+			VALUES (#{entity.plan.id}, #{entity.customer.id}, #{entity.activityType.id}, #{entity.activityTypeId.id},
+				#{entity.duration}, #{entity.yyyyMm}, #{entity.yyyyMmDd}, #{entity.location.id}, #{entity.employee.id},
+				#{entity.isPlanned}, #{entity.isReported}, #{entity.isJoint}, #{entity.isRcpaDone}, #{entity.isVideoShown},
+				#{entity.visitType.id}, #{entity.remarks}, #{entity.isActive}, #{entity.joineeReference.id}, #{entity.createdBy},
+				#{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id}, #{entity.visitRecordedTime})
+		</insert>
+
+		<update id="dtvat_update" >
+			UPDATE ${schemaName}.RPT_DAILY_VISIT_ATTENDEE set DTVAT_PLAN_id = #{entity.plan.id},
+				DTVAT_CUSTOMER_id = #{entity.customer.id}, DTVAT_ACTIVITY_TYPE_id = #{entity.activityType.id},
+				DTVAT_ACTIVITY_TYPE_ID_id = #{entity.activityTypeId.id}, DTVAT_DURATION = #{entity.duration},
+				DTVAT_YYYY_MM = #{entity.yyyyMm}, DTVAT_YYYY_MM_DD = #{entity.yyyyMmDd},
+				DTVAT_LOCATION_id = #{entity.location.id}, DTVAT_EMPLOYEE_id = #{entity.employee.id},
+				DTVAT_IS_PLANNED = #{entity.isPlanned}, DTVAT_IS_REPORTED = #{entity.isReported},
+				DTVAT_IS_JOINT = #{entity.isJoint}, DTVAT_IS_RCPA_DONE = #{entity.isRcpaDone},
+				DTVAT_IS_VIDEO_SHOWN = #{entity.isVideoShown}, DTVAT_VISIT_TYPE_id = #{entity.visitType.id},
+				DTVAT_REMARKS = #{entity.remarks}, DTVAT_IS_ACTIVE = #{entity.isActive},
+				DTVAT_JOINEE_REFERENCE_id = #{entity.joineeReference.id}, DTVAT_UPDATED_BY = #{entity.updatedBy},
+				DTVAT_UPDATED_ON = #{entity.updatedOn}, DTVAT_STALE_ID = #{entity.staleId}, DTVAT_REPORTED_TIME = #{entity.visitRecordedTime},
+				DTVAT_VISIT_LONGITUDE= #{entity.longitude}, DTVAT_VISIT_LATITUDE = #{entity.latitude}
+			WHERE DTVAT_ID = #{entity.id}
+		</update>
+		<delete id="dtvat_delete" >
+			DELETE FROM  ${schemaName}.RPT_DAILY_VISIT_ATTENDEE <include refid="base.delete_where_statement"></include>
+		</delete>
+</mapper>

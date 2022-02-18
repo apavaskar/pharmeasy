@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Contact-mapper">
+    <cache />
+
+
+            <select id="contc_select" resultMap="contcMap">
+                SELECT CONTC_OWNER_ID, CONTC_TYPE_ID, CONTC_CONTACT_DETAIL, CONTC_ID FROM ${schemaName}.CMT_CONTACT_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="contcMap" type="com.squer.sfe.common.entity.Contact" autoMapping="true">
+            		<id property="id" column="CONTC_ID" />
+			<result property="owner" column="CONTC_OWNER_ID" />
+			<result property="type" column="CONTC_TYPE_ID" />
+			<result property="contactDetail" column="CONTC_CONTACT_DETAIL" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="contc_insert" >
+                INSERT INTO ${schemaName}.CMT_CONTACT_MASTER(CONTC_OWNER_ID, CONTC_TYPE_ID, CONTC_CONTACT_DETAIL, CONTC_ID)
+                VALUES (#{entity.owner.id}, #{entity.type.id}, #{entity.contactDetail}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="contc_update" >
+                UPDATE ${schemaName}.CMT_CONTACT_MASTER set CONTC_OWNER_id = #{entity.owner.id}, CONTC_TYPE_id = #{entity.type.id}, CONTC_CONTACT_DETAIL = #{entity.contactDetail} 
+                WHERE CONTC_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="contc_delete" >
+                DELETE FROM  ${schemaName}.CMT_CONTACT_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

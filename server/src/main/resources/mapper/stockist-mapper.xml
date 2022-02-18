@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Stockist-mapper">
+    <cache />
+
+
+            <select id="stckt_select" resultMap="stcktMap">
+                SELECT STCKT_LOCATION_ID, STCKT_STATUS_ID, STCKT_GENDER_ID, STCKT_MARITAL_STATUS_ID, STCKT_DATE_OF_BIRTH, STCKT_PERSON_CODE, STCKT_IS_ACTIVE, STCKT_NAME, STCKT_CI_NAME, STCKT_CREATED_BY, STCKT_UPDATED_BY, STCKT_CREATED_ON, STCKT_UPDATED_ON, STCKT_STALE_ID, STCKT_ID FROM ${schemaName}.CMT_STOCKIST_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="stcktMap" type="com.squer.sfe.common.entity.Stockist" autoMapping="true">
+            		<id property="id" column="STCKT_ID" />
+			<result property="location" column="STCKT_LOCATION_ID" />
+			<result property="status" column="STCKT_STATUS_ID" />
+			<result property="gender" column="STCKT_GENDER_ID" />
+			<result property="materialStatus" column="STCKT_MARITAL_STATUS_ID" />
+			<result property="dateOfBirth" column="STCKT_DATE_OF_BIRTH" />
+			<result property="personCode" column="STCKT_PERSON_CODE" />
+			<result property="isActive" column="STCKT_IS_ACTIVE" />
+			<result property="name" column="STCKT_NAME" />
+			<result property="ciName" column="STCKT_CI_NAME" />
+			<result property="createdBy" column="STCKT_CREATED_BY" />
+			<result property="updatedBy" column="STCKT_UPDATED_BY" />
+			<result property="createdOn" column="STCKT_CREATED_ON" />
+			<result property="updatedOn" column="STCKT_UPDATED_ON" />
+			<result property="staleId" column="STCKT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="stckt_insert" >
+                INSERT INTO ${schemaName}.CMT_STOCKIST_MASTER(STCKT_LOCATION_ID, STCKT_STATUS_ID, STCKT_GENDER_ID, STCKT_MARITAL_STATUS_ID, STCKT_DATE_OF_BIRTH, STCKT_PERSON_CODE, STCKT_IS_ACTIVE, STCKT_NAME, STCKT_CI_NAME, STCKT_CREATED_BY, STCKT_UPDATED_BY, STCKT_CREATED_ON, STCKT_UPDATED_ON, STCKT_STALE_ID, STCKT_ID)
+                VALUES (#{entity.location.id}, #{entity.status.id}, #{entity.gender.id}, #{entity.materialStatus.id}, #{entity.dateOfBirth}, #{entity.personCode}, #{entity.isActive}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="stckt_update" >
+                UPDATE ${schemaName}.CMT_STOCKIST_MASTER set STCKT_LOCATION_id = #{entity.location.id}, STCKT_STATUS_id = #{entity.status.id}, STCKT_GENDER_id = #{entity.gender.id}, STCKT_MARITAL_STATUS_ID = #{entity.materialStatus.id}, STCKT_DATE_OF_BIRTH = #{entity.dateOfBirth}, STCKT_PERSON_CODE = #{entity.personCode}, STCKT_IS_ACTIVE = #{entity.isActive}, STCKT_NAME = #{entity.name}, STCKT_CI_NAME = #{entity.ciName}, STCKT_UPDATED_BY = #{entity.updatedBy}, STCKT_UPDATED_ON = #{entity.updatedOn}, STCKT_STALE_ID = #{entity.staleId}
+                WHERE STCKT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="stckt_delete" >
+                DELETE FROM  ${schemaName}.CMT_STOCKIST_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

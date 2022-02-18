@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DetailingAdditionalInfo-mapper">
+    <cache />
+
+
+            <select id="dtlin_select" resultMap="dtlinMap">
+                SELECT DTLIN_DETAILING_MASTER_ID, DTLIN_REMARKS, DTLIN_CREATED_BY, DTLIN_UPDATED_BY, DTLIN_CREATED_ON, DTLIN_UPDATED_ON, DTLIN_STALE_ID, DTLIN_ID FROM ${schemaName}.DTL_DETAILING_ADDITIONAL_INFO
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="dtlinMap" type="com.squer.sfe.edetailing.entity.DetailingAdditionalInfo" autoMapping="true">
+            		<id property="id" column="DTLIN_ID" />
+			<result property="detailingMaster" column="DTLIN_DETAILING_MASTER_ID" />
+			<result property="remarks" column="DTLIN_REMARKS" />
+			<result property="createdBy" column="DTLIN_CREATED_BY" />
+			<result property="updatedBy" column="DTLIN_UPDATED_BY" />
+			<result property="createdOn" column="DTLIN_CREATED_ON" />
+			<result property="updatedOn" column="DTLIN_UPDATED_ON" />
+			<result property="staleId" column="DTLIN_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="dtlin_insert" >
+                INSERT INTO ${schemaName}.DTL_DETAILING_ADDITIONAL_INFO(DTLIN_DETAILING_MASTER_ID, DTLIN_REMARKS, DTLIN_CREATED_BY, DTLIN_UPDATED_BY, DTLIN_CREATED_ON, DTLIN_UPDATED_ON, DTLIN_STALE_ID, DTLIN_ID)
+                VALUES (#{entity.detailingMaster.id}, #{entity.remarks}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="dtlin_update" >
+                UPDATE ${schemaName}.DTL_DETAILING_ADDITIONAL_INFO set DTLIN_DETAILING_MASTER_id = #{entity.detailingMaster.id}, DTLIN_REMARKS = #{entity.remarks}, DTLIN_UPDATED_BY = #{entity.updatedBy}, DTLIN_UPDATED_ON = #{entity.updatedOn}, DTLIN_STALE_ID = #{entity.staleId} 
+                WHERE DTLIN_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="dtlin_delete" >
+                DELETE FROM  ${schemaName}.DTL_DETAILING_ADDITIONAL_INFO <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

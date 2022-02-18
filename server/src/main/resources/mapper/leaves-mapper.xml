@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Leaves-mapper">
+    <cache />
+
+
+            <select id="leave_select" resultMap="leaveMap">
+                SELECT LEAVE_OWNER_ID, LEAVE_LEAVE_TYPE_ID, LEAVE_FROM_DATE, LEAVE_TO_DATE, LEAVE_ACTUAL_LEAVES_DAYS, LEAVE_REASON, LEAVE_APPLIED_AGAINST_TYPE_ID, LEAVE_STATUS_ID, LEAVE_ACTION_BY_ID, LEAVE_CREATED_BY, LEAVE_UPDATED_BY, LEAVE_CREATED_ON, LEAVE_UPDATED_ON, LEAVE_STALE_ID, LEAVE_ID FROM ${schemaName}.LEV_LEAVES_APPLIED
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="leaveMap" type="com.squer.sfe.leave.entity.Leaves" autoMapping="true">
+            		<id property="id" column="LEAVE_ID" />
+			<result property="owner" column="LEAVE_OWNER_ID" />
+			<result property="leaveType" column="LEAVE_LEAVE_TYPE_ID" />
+			<result property="fromDate" column="LEAVE_FROM_DATE" />
+			<result property="toDate" column="LEAVE_TO_DATE" />
+			<result property="actualLeavesDays" column="LEAVE_ACTUAL_LEAVES_DAYS" />
+			<result property="reason" column="LEAVE_REASON" />
+			<result property="appliedAgainstType" column="LEAVE_APPLIED_AGAINST_TYPE_ID" />
+			<result property="status" column="LEAVE_STATUS_ID" />
+			<result property="actionBy" column="LEAVE_ACTION_BY_ID" />
+			<result property="createdBy" column="LEAVE_CREATED_BY" />
+			<result property="updatedBy" column="LEAVE_UPDATED_BY" />
+			<result property="createdOn" column="LEAVE_CREATED_ON" />
+			<result property="updatedOn" column="LEAVE_UPDATED_ON" />
+			<result property="staleId" column="LEAVE_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="leave_insert" >
+                INSERT INTO ${schemaName}.LEV_LEAVES_APPLIED(LEAVE_OWNER_ID, LEAVE_LEAVE_TYPE_ID, LEAVE_FROM_DATE, LEAVE_TO_DATE, LEAVE_ACTUAL_LEAVES_DAYS, LEAVE_REASON, LEAVE_APPLIED_AGAINST_TYPE_ID, LEAVE_STATUS_ID, LEAVE_ACTION_BY_ID, LEAVE_CREATED_BY, LEAVE_UPDATED_BY, LEAVE_CREATED_ON, LEAVE_UPDATED_ON, LEAVE_STALE_ID, LEAVE_ID)
+                VALUES (#{entity.owner.id}, #{entity.leaveType.id}, #{entity.fromDate}, #{entity.toDate}, #{entity.actualLeavesDays}, #{entity.reason}, #{entity.appliedAgainstType.id}, #{entity.status.id}, #{entity.actionBy.id}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="leave_update" >
+                UPDATE ${schemaName}.LEV_LEAVES_APPLIED set LEAVE_OWNER_id = #{entity.owner.id}, LEAVE_LEAVE_TYPE_id = #{entity.leaveType.id}, LEAVE_FROM_DATE = #{entity.fromDate}, LEAVE_TO_DATE = #{entity.toDate}, LEAVE_ACTUAL_LEAVES_DAYS = #{entity.actualLeavesDays}, LEAVE_REASON = #{entity.reason}, LEAVE_APPLIED_AGAINST_TYPE_id = #{entity.appliedAgainstType.id}, LEAVE_STATUS_id = #{entity.status.id}, LEAVE_ACTION_BY_id = #{entity.actionBy.id}, LEAVE_UPDATED_BY = #{entity.updatedBy}, LEAVE_UPDATED_ON = #{entity.updatedOn}, LEAVE_STALE_ID = #{entity.staleId} 
+                WHERE LEAVE_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="leave_delete" >
+                DELETE FROM  ${schemaName}.LEV_LEAVES_APPLIED <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

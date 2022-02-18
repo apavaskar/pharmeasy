@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Leaves-adhoc-mapper">
+    <cache />
+    <select id="leave_for_employee_select" resultMap="Leaves-mapper.leaveMap">
+        SELECT
+            LEAVE_OWNER_ID, LEAVE_LEAVE_TYPE_ID, LEAVE_FROM_DATE, LEAVE_TO_DATE, LEAVE_ACTUAL_LEAVES_DAYS, LEAVE_REASON, LEAVE_APPLIED_AGAINST_TYPE_ID, LEAVE_CREATED_BY, LEAVE_UPDATED_BY, LEAVE_CREATED_ON, LEAVE_UPDATED_ON, LEAVE_STALE_ID, LEAVE_ID
+        FROM ${schemaName}.LEV_LEAVES_APPLIED
+        where
+        leave_owner_id = #{conditions.employeeId.value}
+        and (leave_from_date BETWEEN #{conditions.fromDate.value} and #{conditions.toDate.value}
+        or leave_to_date BETWEEN #{conditions.fromDate.value} and #{conditions.toDate.value})
+    </select>
+
+    <select id="leave_balance_for_employee_select" resultMap="LeaveBalance-mapper.lvblcMap">
+        SELECT
+            LVBLC_EMPLOYEE_ID, LVBLC_LEAVE_TYPE_ID, LVBLC_FROM_DATE, LVBLC_TO_DATE, LVBLC_VALID_FROM, LVBLC_OPENING, LVBLC_CONSUMED, LVBLC_BALANCE, LVBLC_CREATED_BY, LVBLC_UPDATED_BY, LVBLC_CREATED_ON, LVBLC_UPDATED_ON, LVBLC_STALE_ID, LVBLC_ID
+        FROM ${schemaName}.LEV_LEAVE_BALANCE
+        where
+        lvblc_employee_id = #{conditions.employeeId.value}
+        and #{conditions.fromDate.value} BETWEEN lvblc_from_date and lvblc_to_date
+        and #{conditions.toDate.value} BETWEEN lvblc_from_date and lvblc_to_date
+        <if test="conditions.checkValidFrom != null">
+            and lvblc_valid_from &lt;= #{conditions.fromDate.value}
+        </if>
+        <if test="conditions.leaveType != null">
+            and lvblc_leave_type_id = #{conditions.leaveType.value}
+        </if>
+        order by LVBLC_ID
+    </select>
+
+    <select id="temp_leave_select" resultMap="Leaves-mapper.leaveMap">
+        SELECT * from tmp_leaves_applied
+    </select>
+
+    <select id="leave_details_for_employee_select" resultMap="leavesDtlResultMap">
+        SELECT
+            lev.leave_id leave_id, lt.syslv_name leave_type, to_date(lev.leave_from_date::text, 'YYYYMMDD') from_date, to_date(lev.leave_to_date::text, 'YYYYMMDD') to_date,
+            lev.leave_actual_leaves_days tot_days, st.syslv_name leave_status, lev.leave_updated_on updated_on, e.emply_name updated_by
+        FROM lev_leaves_applied lev
+        inner join fmk_system_lov st on st.syslv_id = lev.leave_status_id
+        inner join fmk_system_lov lt on lt.syslv_id = lev.leave_leave_type_id
+        INNER join cmt_employee_master o on o.emply_id = lev.leave_owner_id
+        left join cmt_employee_master e on e.emply_id = lev.leave_action_by_id
+        where o.emply_person_code = #{conditions.employeeCode.value}
+        and EXTRACT (year from to_date(leave_from_date::TEXT, 'YYYYMMDD'))  = #{conditions.year.value}
+        and EXTRACT (year from to_date(leave_to_date::TEXT, 'YYYYMMDD')) = #{conditions.year.value}
+        order by lev.leave_from_date
+    </select>
+
+    <resultMap id="leavesDtlResultMap" type="com.squer.sfe.leave.controller.dto.LeaveDetailsDTO">
+        <result column="leave_id" property="leaveId"/>
+        <result column="leave_type" property="leaveType"/>
+        <result column="from_date" property="fromDate"/>
+        <result column="to_date" property="toDate"/>
+        <result column="tot_days" property="totalDays"/>
+        <result column="leave_status" property="status"/>
+        <result column="updated_on" property="updatedOn"/>
+        <result column="updated_by" property="updatedBy"/>
+    </resultMap>
+
+</mapper>

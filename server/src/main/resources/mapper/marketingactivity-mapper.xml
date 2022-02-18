@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MarketingActivity-mapper">
+    <cache />
+
+
+            <select id="mract_select" resultMap="mractMap">
+                SELECT MRACT_DIVISION_ID, MRACT_IS_ACTIVE, MRACT_IN_CLINIC_ACTIVITY, MRACT_NAME, MRACT_CI_NAME, MRACT_CREATED_BY, MRACT_UPDATED_BY, MRACT_CREATED_ON, MRACT_UPDATED_ON, MRACT_STALE_ID, MRACT_ID FROM ${schemaName}.CMT_MARKETING_ACTIVITY_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="mractMap" type="com.squer.sfe.common.entity.MarketingActivity" autoMapping="true">
+            		<id property="id" column="MRACT_ID" />
+			<result property="division" column="MRACT_DIVISION_ID" />
+			<result property="isActive" column="MRACT_IS_ACTIVE" />
+			<result property="inClinicActivity" column="MRACT_IN_CLINIC_ACTIVITY" />
+			<result property="name" column="MRACT_NAME" />
+			<result property="ciName" column="MRACT_CI_NAME" />
+			<result property="createdBy" column="MRACT_CREATED_BY" />
+			<result property="updatedBy" column="MRACT_UPDATED_BY" />
+			<result property="createdOn" column="MRACT_CREATED_ON" />
+			<result property="updatedOn" column="MRACT_UPDATED_ON" />
+			<result property="staleId" column="MRACT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="mract_insert" >
+                INSERT INTO ${schemaName}.CMT_MARKETING_ACTIVITY_MASTER(MRACT_DIVISION_ID, MRACT_IS_ACTIVE, MRACT_IN_CLINIC_ACTIVITY, MRACT_NAME, MRACT_CI_NAME, MRACT_CREATED_BY, MRACT_UPDATED_BY, MRACT_CREATED_ON, MRACT_UPDATED_ON, MRACT_STALE_ID, MRACT_ID)
+                VALUES (#{entity.division.id}, #{entity.isActive}, #{entity.inClinicActivity}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="mract_update" >
+                UPDATE ${schemaName}.CMT_MARKETING_ACTIVITY_MASTER set MRACT_DIVISION_id = #{entity.division.id}, MRACT_IS_ACTIVE = #{entity.isActive}, MRACT_IN_CLINIC_ACTIVITY = #{entity.inClinicActivity}, MRACT_NAME = #{entity.name}, MRACT_CI_NAME = #{entity.ciName}, MRACT_UPDATED_BY = #{entity.updatedBy}, MRACT_UPDATED_ON = #{entity.updatedOn}, MRACT_STALE_ID = #{entity.staleId} 
+                WHERE MRACT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="mract_delete" >
+                DELETE FROM  ${schemaName}.CMT_MARKETING_ACTIVITY_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

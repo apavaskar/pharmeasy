@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LeaveBalance-mapper">
+    <cache />
+
+
+            <select id="lvblc_select" resultMap="lvblcMap">
+                SELECT LVBLC_EMPLOYEE_ID, LVBLC_LEAVE_TYPE_ID, LVBLC_FROM_DATE, LVBLC_TO_DATE, LVBLC_VALID_FROM, LVBLC_OPENING, LVBLC_CONSUMED, LVBLC_BALANCE, LVBLC_ADJUSTED, LVBLC_CREATED_BY, LVBLC_UPDATED_BY, LVBLC_CREATED_ON, LVBLC_UPDATED_ON, LVBLC_STALE_ID, LVBLC_ID FROM ${schemaName}.LEV_LEAVE_BALANCE
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="lvblcMap" type="com.squer.sfe.leave.entity.LeaveBalance" autoMapping="true">
+            		<id property="id" column="LVBLC_ID" />
+			<result property="employee" column="LVBLC_EMPLOYEE_ID" />
+			<result property="leaveType" column="LVBLC_LEAVE_TYPE_ID" />
+			<result property="fromDate" column="LVBLC_FROM_DATE" />
+			<result property="toDate" column="LVBLC_TO_DATE" />
+			<result property="validFrom" column="LVBLC_VALID_FROM" />
+			<result property="opening" column="LVBLC_OPENING" />
+			<result property="consumed" column="LVBLC_CONSUMED" />
+			<result property="balance" column="LVBLC_BALANCE" />
+			<result property="adjusted" column="LVBLC_ADJUSTED" />
+			<result property="createdBy" column="LVBLC_CREATED_BY" />
+			<result property="updatedBy" column="LVBLC_UPDATED_BY" />
+			<result property="createdOn" column="LVBLC_CREATED_ON" />
+			<result property="updatedOn" column="LVBLC_UPDATED_ON" />
+			<result property="staleId" column="LVBLC_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="lvblc_insert" >
+                INSERT INTO ${schemaName}.LEV_LEAVE_BALANCE(LVBLC_EMPLOYEE_ID, LVBLC_LEAVE_TYPE_ID, LVBLC_FROM_DATE, LVBLC_TO_DATE, LVBLC_VALID_FROM, LVBLC_OPENING, LVBLC_CONSUMED, LVBLC_BALANCE, LVBLC_ADJUSTED, LVBLC_CREATED_BY, LVBLC_UPDATED_BY, LVBLC_CREATED_ON, LVBLC_UPDATED_ON, LVBLC_STALE_ID, LVBLC_ID)
+                VALUES (#{entity.employee.id}, #{entity.leaveType.id}, #{entity.fromDate}, #{entity.toDate}, #{entity.validFrom}, #{entity.opening}, #{entity.consumed}, #{entity.balance}, #{entity.adjusted}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="lvblc_update" >
+                UPDATE ${schemaName}.LEV_LEAVE_BALANCE set LVBLC_EMPLOYEE_id = #{entity.employee.id}, LVBLC_LEAVE_TYPE_id = #{entity.leaveType.id}, LVBLC_FROM_DATE = #{entity.fromDate}, LVBLC_TO_DATE = #{entity.toDate}, LVBLC_VALID_FROM = #{entity.validFrom}, LVBLC_OPENING = #{entity.opening}, LVBLC_CONSUMED = #{entity.consumed}, LVBLC_BALANCE = #{entity.balance}, LVBLC_ADJUSTED = #{entity.adjusted}, LVBLC_UPDATED_BY = #{entity.updatedBy}, LVBLC_UPDATED_ON = #{entity.updatedOn}, LVBLC_STALE_ID = #{entity.staleId} 
+                WHERE LVBLC_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="lvblc_delete" >
+                DELETE FROM  ${schemaName}.LEV_LEAVE_BALANCE <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

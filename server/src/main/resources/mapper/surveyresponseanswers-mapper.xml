@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SurveyResponseAnswers-mapper">
+    <cache />
+
+
+            <select id="srvan_select" resultMap="srvanMap">
+                SELECT SRVAN_DETAILS_ID, SRVAN_ANSWER_ID, SRVAN_ANSWER, SRVAN_CREATED_BY, SRVAN_UPDATED_BY, SRVAN_CREATED_ON, SRVAN_UPDATED_ON, SRVAN_STALE_ID, SRVAN_ID FROM ${schemaName}.SRY_SURVEY_RESPONSE_ANSWERS
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="srvanMap" type="com.squer.sfe.survey.entity.SurveyResponseAnswers" autoMapping="true">
+            		<id property="id" column="SRVAN_ID" />
+			<result property="details" column="SRVAN_DETAILS_ID" />
+			<result property="answerId" column="SRVAN_ANSWER_ID" />
+			<result property="answer" column="SRVAN_ANSWER" />
+			<result property="createdBy" column="SRVAN_CREATED_BY" />
+			<result property="updatedBy" column="SRVAN_UPDATED_BY" />
+			<result property="createdOn" column="SRVAN_CREATED_ON" />
+			<result property="updatedOn" column="SRVAN_UPDATED_ON" />
+			<result property="staleId" column="SRVAN_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="srvan_insert" >
+                INSERT INTO ${schemaName}.SRY_SURVEY_RESPONSE_ANSWERS(SRVAN_DETAILS_ID, SRVAN_ANSWER_ID, SRVAN_ANSWER, SRVAN_CREATED_BY, SRVAN_UPDATED_BY, SRVAN_CREATED_ON, SRVAN_UPDATED_ON, SRVAN_STALE_ID, SRVAN_ID)
+                VALUES (#{entity.details.id}, #{entity.answerId}, #{entity.answer}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="srvan_update" >
+                UPDATE ${schemaName}.SRY_SURVEY_RESPONSE_ANSWERS set SRVAN_DETAILS_id = #{entity.details.id}, SRVAN_ANSWER_ID = #{entity.answerId}, SRVAN_ANSWER = #{entity.answer}, SRVAN_UPDATED_BY = #{entity.updatedBy}, SRVAN_UPDATED_ON = #{entity.updatedOn}, SRVAN_STALE_ID = #{entity.staleId} 
+                WHERE RVAN_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="srvan_delete" >
+                DELETE FROM  ${schemaName}.SRY_SURVEY_RESPONSE_ANSWERS <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

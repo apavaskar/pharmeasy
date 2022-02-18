@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="security">
+    <cache />
+    <sql id="users_col">
+        USERS.ID, USER_NAME, USER_PASSWORD as PASSWORD, USER_STATUS as STATUS, CREATED_BY, CREATED_ON, UPDATED_BY, UPDATED_ON, STALE_ID
+    </sql>
+
+    <insert id="users_insert">
+        INSERT INTO FMK_SECURITY_USER (ID,USER_NAME, USER_PASSWORD, USER_STATUS, CREATED_BY, CREATED_ON, UPDATED_BY, UPDATED_ON, STALE_ID)
+        values (#{entity.id.id},#{entity.username},#{entity.password},#{entity.status},#{entity.createdBy},#{entity.createdOn},
+                #{entity.updatedBy},#{entity.updatedOn},#{entity.staleId})
+    </insert>
+
+    <select id="users_select" resultType="com.squer.platform.security.entity.SecurityUser">
+        SELECT <include refid="users_col"/> FROM FMK_SECURITY_USER USERS
+        <where>
+            <foreach item="item" index="index" collection="conditions"
+                     separator=" and ">
+                ${item.name} ${item.operator} #{item.value}
+            </foreach>
+        </where>
+    </select>
+
+    <update id="users_update">
+        update FMK_SECURITY_USER set USER_NAME = #{entity.username},
+        USER_PASSWORD = #{entity.password},
+        USER_STATUS = #{entity.status},
+        UPDATED_BY = #{entity.updatedBy},
+        UPDATED_ON = #{entity.updatedOn},
+        STALE_ID = #{entity.staleId}
+        where ID = #{entity.id}
+    </update>
+
+    <insert id="utent_insert">
+        INSERT INTO FMK_USER_TENANT_ASSOC (USER_ID, TENANT_ID) values (#{entity.userId},#{entity.tenantId})
+    </insert>
+
+    <select id="user_tenant_select" resultType="map">
+        SELECT USER_ID, TENANT_ID FROM FMK_USER_TENANT_ASSOC
+        <where>
+            <foreach item="item" index="index" collection="conditions"
+                     separator=" and ">
+                ${item.name} ${item.operator} #{item.value}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="logif_select" resultType="com.squer.platform.security.entity.LoginInfo">
+        SELECT ID, USER_ID, FIRST_LOGIN_TIME, LAST_ACCESS_TIME, ACTION_TAKEN FROM FMK_LOGIN_HISTORY
+        <where>
+            <foreach item="item" index="index" collection="conditions"
+                     separator=" and ">
+                ${item.name} ${item.operator} #{item.value}
+            </foreach>
+        </where>
+    </select>
+
+    <insert id="logif_insert">
+        INSERT INTO FMK_LOGIN_HISTORY(ID, USER_ID, FIRST_LOGIN_TIME, LAST_ACCESS_TIME, ACTION_TAKEN)
+        VALUES (#{entity.id.id}, #{entity.userId.id}, #{entity.firstLoginTime}, #{entity.lastAccessTime}, #{entity.actionTaken})
+    </insert>
+
+    <update id="logif_update">
+        UPDATE FMK_LOGIN_HISTORY set USER_ID = #{entity.userId.id}, FIRST_LOGIN_TIME = #{entity.firstLoginTime}, LAST_ACCESS_TIME = #{entity.lastAccessTime},
+        ACTION_TAKEN = #{entity.actionTaken} WHERE ID = #{entity.id.id}
+    </update>
+</mapper>

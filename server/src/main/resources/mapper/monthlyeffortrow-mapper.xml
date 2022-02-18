@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MonthlyEffortRow-mapper">
+    <cache />
+
+
+            <select id="meffr_select" resultMap="meffrMap">
+                SELECT MEFFR_LOCATION_ID, MEFFR_MONTH_YEAR, MEFFR_IS_INDIVIDUAL, MEFFR_COUNT_SUPER_CORE_DR, MEFFR_COUNT_CORE_DR, MEFFR_COUNT_NON_CORE_DR, MEFFR_COUNT_TOTAL_DR, MEFFR_COUNT_SUPER_CORE_RETAILER, MEFFR_COUNT_CORE_RETAILER, MEFFR_COUNT_NON_CORE_RETAILER, MEFFR_COUNT_TOTAL_RETAILER, MEFFR_COUNT_SUPER_CORE_HOSPITAL, MEFFR_COUNT_CORE_HOSPITAL, MEFFR_COUNT_NON_CORE_HOSPITAL, MEFFR_COUNT_TOTAL_HOSPITAL, MEFFR_COUNT_SUPER_CORE_DR_REPORTED, MEFFR_COUNT_CORE_DR_REPORTED, MEFFR_COUNT_NON_CORE_DR_REPORTED, MEFFR_COUNT_TOTAL_DR_REPORTED, MEFFR_COUNT_SUPER_CORE_RETAILER_REPORTED, MEFFR_COUNT_CORE_RETAILER_REPORTED, MEFFR_COUNT_NON_CORE_RETAILER_REPORTED, MEFFR_COUNT_TOTAL_RETAILER_REPORTED, MEFFR_COUNT_SUPER_CORE_HOSPITAL_REPORTED, MEFFR_COUNT_CORE_HOSPITAL_REPORTED, MEFFR_COUNT_NON_CORE_HOSPITAL_REPORTED, MEFFR_COUNT_TOTAL_HOSPITAL_REPORTED, MEFFR_COUNT_NCA, MEFFR_DURATION_NCA, MEFFR_LEAVE_DURATION, MEFFR_COUNT_PHYSICAL_SUPER_CORE_DR, MEFFR_COUNT_PHYSICAL_CORE_DR, MEFFR_COUNT_PHYSICAL_NON_CORE_DR, MEFFR_COUNT_PHYSICAL_TOTAL_DR, MEFFR_COUNT_PHYSICAL_SUPER_CORE_RETAILER, MEFFR_COUNT_PHYSICAL_CORE_RETAILER, MEFFR_COUNT_PHYSICAL_NON_CORE_RETAILER, MEFFR_COUNT_PHYSICAL_TOTAL_RETAILER, MEFFR_COUNT_PHYSICAL_SUPER_CORE_HOSPITAL, MEFFR_COUNT_PHYSICAL_CORE_HOSPITAL, MEFFR_COUNT_PHYSICAL_NON_CORE_HOSPITAL, MEFFR_COUNT_PHYSICAL_TOTAL_HOSPITAL, MEFFR_COUNT_DIGITAL_SUPER_CORE_DR, MEFFR_COUNT_DIGITAL_CORE_DR, MEFFR_COUNT_DIGITAL_NON_CORE_DR, MEFFR_COUNT_DIGITAL_TOTAL_DR, MEFFR_COUNT_DIGITAL_SUPER_CORE_RETAILER, MEFFR_COUNT_DIGITAL_CORE_RETAILER, MEFFR_COUNT_DIGITAL_NON_CORE_RETAILER, MEFFR_COUNT_DIGITAL_TOTAL_RETAILER, MEFFR_COUNT_DIGITAL_SUPER_CORE_HOSPITAL, MEFFR_COUNT_DIGITAL_CORE_HOSPITAL, MEFFR_COUNT_DIGITAL_NON_CORE_HOSPITAL, MEFFR_COUNT_DIGITAL_TOTAL_HOSPITAL, MEFFR_ID FROM ${schemaName}.CON_MONTHLY_EFFORT_ROW
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="meffrMap" type="com.squer.consolidation.effort.MonthlyEffortRow" autoMapping="true">
+            		<id property="id" column="MEFFR_ID" />
+			<result property="locationId" column="MEFFR_LOCATION_ID" />
+			<result property="monthYear" column="MEFFR_MONTH_YEAR" />
+			<result property="individual" column="MEFFR_IS_INDIVIDUAL" />
+			<result property="countSuperCoreDr" column="MEFFR_COUNT_SUPER_CORE_DR" />
+			<result property="countCoreDr" column="MEFFR_COUNT_CORE_DR" />
+			<result property="countNonCoreDr" column="MEFFR_COUNT_NON_CORE_DR" />
+			<result property="countTotalDr" column="MEFFR_COUNT_TOTAL_DR" />
+			<result property="countSuperCoreRetailer" column="MEFFR_COUNT_SUPER_CORE_RETAILER" />
+			<result property="countCoreRetailer" column="MEFFR_COUNT_CORE_RETAILER" />
+			<result property="countNonCoreRetailer" column="MEFFR_COUNT_NON_CORE_RETAILER" />
+			<result property="countTotalRetailer" column="MEFFR_COUNT_TOTAL_RETAILER" />
+			<result property="countSuperCoreHospital" column="MEFFR_COUNT_SUPER_CORE_HOSPITAL" />
+			<result property="countCoreHospital" column="MEFFR_COUNT_CORE_HOSPITAL" />
+			<result property="countNonCoreHospital" column="MEFFR_COUNT_NON_CORE_HOSPITAL" />
+			<result property="countTotalHospital" column="MEFFR_COUNT_TOTAL_HOSPITAL" />
+			<result property="countSuperCoreDrReported" column="MEFFR_COUNT_SUPER_CORE_DR_REPORTED" />
+			<result property="countCoreDrReported" column="MEFFR_COUNT_CORE_DR_REPORTED" />
+			<result property="countNonCoreDrReported" column="MEFFR_COUNT_NON_CORE_DR_REPORTED" />
+			<result property="countTotalDrReported" column="MEFFR_COUNT_TOTAL_DR_REPORTED" />
+			<result property="countSuperCoreRetailerReported" column="MEFFR_COUNT_SUPER_CORE_RETAILER_REPORTED" />
+			<result property="countCoreRetailerReported" column="MEFFR_COUNT_CORE_RETAILER_REPORTED" />
+			<result property="countNonCoreRetailerReported" column="MEFFR_COUNT_NON_CORE_RETAILER_REPORTED" />
+			<result property="countTotalRetailerReported" column="MEFFR_COUNT_TOTAL_RETAILER_REPORTED" />
+			<result property="countSuperCoreHospitalReported" column="MEFFR_COUNT_SUPER_CORE_HOSPITAL_REPORTED" />
+			<result property="countCoreHospitalReported" column="MEFFR_COUNT_CORE_HOSPITAL_REPORTED" />
+			<result property="countNonCoreHospitalReported" column="MEFFR_COUNT_NON_CORE_HOSPITAL_REPORTED" />
+			<result property="countTotalHospitalReported" column="MEFFR_COUNT_TOTAL_HOSPITAL_REPORTED" />
+			<result property="countNCA" column="MEFFR_COUNT_NCA" />
+			<result property="durationNCA" column="MEFFR_DURATION_NCA" />
+			<result property="leaveDuration" column="MEFFR_LEAVE_DURATION" />
+			<result property="countPhysicalSuperCoreDr" column="MEFFR_COUNT_PHYSICAL_SUPER_CORE_DR" />
+			<result property="countPhysicalCoreDr" column="MEFFR_COUNT_PHYSICAL_CORE_DR" />
+			<result property="countPhysicalNonCoreDr" column="MEFFR_COUNT_PHYSICAL_NON_CORE_DR" />
+			<result property="countPhysicalTotalDr" column="MEFFR_COUNT_PHYSICAL_TOTAL_DR" />
+			<result property="countPhysicalSuperCoreRetailer" column="MEFFR_COUNT_PHYSICAL_SUPER_CORE_RETAILER" />
+			<result property="countPhysicalCoreRetailer" column="MEFFR_COUNT_PHYSICAL_CORE_RETAILER" />
+			<result property="countPhysicalNonCoreRetailer" column="MEFFR_COUNT_PHYSICAL_NON_CORE_RETAILER" />
+			<result property="countPhysicalTotalRetailer" column="MEFFR_COUNT_PHYSICAL_TOTAL_RETAILER" />
+			<result property="countPhysicalSuperCoreHospital" column="MEFFR_COUNT_PHYSICAL_SUPER_CORE_HOSPITAL" />
+			<result property="countPhysicalCoreHospital" column="MEFFR_COUNT_PHYSICAL_CORE_HOSPITAL" />
+			<result property="countPhysicalNonCoreHospital" column="MEFFR_COUNT_PHYSICAL_NON_CORE_HOSPITAL" />
+			<result property="countPhysicalTotalHospital" column="MEFFR_COUNT_PHYSICAL_TOTAL_HOSPITAL" />
+			<result property="countDigitalSuperCoreDr" column="MEFFR_COUNT_DIGITAL_SUPER_CORE_DR" />
+			<result property="countDigitalCoreDr" column="MEFFR_COUNT_DIGITAL_CORE_DR" />
+			<result property="countDigitalNonCoreDr" column="MEFFR_COUNT_DIGITAL_NON_CORE_DR" />
+			<result property="countDigitalTotalDr" column="MEFFR_COUNT_DIGITAL_TOTAL_DR" />
+			<result property="countDigitalSuperCoreRetailer" column="MEFFR_COUNT_DIGITAL_SUPER_CORE_RETAILER" />
+			<result property="countDigitalCoreRetailer" column="MEFFR_COUNT_DIGITAL_CORE_RETAILER" />
+			<result property="countDigitalNonCoreRetailer" column="MEFFR_COUNT_DIGITAL_NON_CORE_RETAILER" />
+			<result property="countDigitalTotalRetailer" column="MEFFR_COUNT_DIGITAL_TOTAL_RETAILER" />
+			<result property="countDigitalSuperCoreHospital" column="MEFFR_COUNT_DIGITAL_SUPER_CORE_HOSPITAL" />
+			<result property="countDigitalCoreHospital" column="MEFFR_COUNT_DIGITAL_CORE_HOSPITAL" />
+			<result property="countDigitalNonCoreHospital" column="MEFFR_COUNT_DIGITAL_NON_CORE_HOSPITAL" />
+			<result property="countDigitalTotalHospital" column="MEFFR_COUNT_DIGITAL_TOTAL_HOSPITAL" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="meffr_insert" >
+                INSERT INTO ${schemaName}.CON_MONTHLY_EFFORT_ROW(MEFFR_LOCATION_ID, MEFFR_MONTH_YEAR, MEFFR_IS_INDIVIDUAL, MEFFR_COUNT_SUPER_CORE_DR, MEFFR_COUNT_CORE_DR, MEFFR_COUNT_NON_CORE_DR, MEFFR_COUNT_TOTAL_DR, MEFFR_COUNT_SUPER_CORE_RETAILER, MEFFR_COUNT_CORE_RETAILER, MEFFR_COUNT_NON_CORE_RETAILER, MEFFR_COUNT_TOTAL_RETAILER, MEFFR_COUNT_SUPER_CORE_HOSPITAL, MEFFR_COUNT_CORE_HOSPITAL, MEFFR_COUNT_NON_CORE_HOSPITAL, MEFFR_COUNT_TOTAL_HOSPITAL, MEFFR_COUNT_SUPER_CORE_DR_REPORTED, MEFFR_COUNT_CORE_DR_REPORTED, MEFFR_COUNT_NON_CORE_DR_REPORTED, MEFFR_COUNT_TOTAL_DR_REPORTED, MEFFR_COUNT_SUPER_CORE_RETAILER_REPORTED, MEFFR_COUNT_CORE_RETAILER_REPORTED, MEFFR_COUNT_NON_CORE_RETAILER_REPORTED, MEFFR_COUNT_TOTAL_RETAILER_REPORTED, MEFFR_COUNT_SUPER_CORE_HOSPITAL_REPORTED, MEFFR_COUNT_CORE_HOSPITAL_REPORTED, MEFFR_COUNT_NON_CORE_HOSPITAL_REPORTED, MEFFR_COUNT_TOTAL_HOSPITAL_REPORTED, MEFFR_COUNT_NCA, MEFFR_DURATION_NCA, MEFFR_LEAVE_DURATION, MEFFR_COUNT_PHYSICAL_SUPER_CORE_DR, MEFFR_COUNT_PHYSICAL_CORE_DR, MEFFR_COUNT_PHYSICAL_NON_CORE_DR, MEFFR_COUNT_PHYSICAL_TOTAL_DR, MEFFR_COUNT_PHYSICAL_SUPER_CORE_RETAILER, MEFFR_COUNT_PHYSICAL_CORE_RETAILER, MEFFR_COUNT_PHYSICAL_NON_CORE_RETAILER, MEFFR_COUNT_PHYSICAL_TOTAL_RETAILER, MEFFR_COUNT_PHYSICAL_SUPER_CORE_HOSPITAL, MEFFR_COUNT_PHYSICAL_CORE_HOSPITAL, MEFFR_COUNT_PHYSICAL_NON_CORE_HOSPITAL, MEFFR_COUNT_PHYSICAL_TOTAL_HOSPITAL, MEFFR_COUNT_DIGITAL_SUPER_CORE_DR, MEFFR_COUNT_DIGITAL_CORE_DR, MEFFR_COUNT_DIGITAL_NON_CORE_DR, MEFFR_COUNT_DIGITAL_TOTAL_DR, MEFFR_COUNT_DIGITAL_SUPER_CORE_RETAILER, MEFFR_COUNT_DIGITAL_CORE_RETAILER, MEFFR_COUNT_DIGITAL_NON_CORE_RETAILER, MEFFR_COUNT_DIGITAL_TOTAL_RETAILER, MEFFR_COUNT_DIGITAL_SUPER_CORE_HOSPITAL, MEFFR_COUNT_DIGITAL_CORE_HOSPITAL, MEFFR_COUNT_DIGITAL_NON_CORE_HOSPITAL, MEFFR_COUNT_DIGITAL_TOTAL_HOSPITAL, MEFFR_ID)
+                VALUES (#{entity.locationId}, #{entity.monthYear}, #{entity.individual}, #{entity.countSuperCoreDr}, #{entity.countCoreDr}, #{entity.countNonCoreDr}, #{entity.countTotalDr}, #{entity.countSuperCoreRetailer}, #{entity.countCoreRetailer}, #{entity.countNonCoreRetailer}, #{entity.countTotalRetailer}, #{entity.countSuperCoreHospital}, #{entity.countCoreHospital}, #{entity.countNonCoreHospital}, #{entity.countTotalHospital}, #{entity.countSuperCoreDrReported}, #{entity.countCoreDrReported}, #{entity.countNonCoreDrReported}, #{entity.countTotalDrReported}, #{entity.countSuperCoreRetailerReported}, #{entity.countCoreRetailerReported}, #{entity.countNonCoreRetailerReported}, #{entity.countTotalRetailerReported}, #{entity.countSuperCoreHospitalReported}, #{entity.countCoreHospitalReported}, #{entity.countNonCoreHospitalReported}, #{entity.countTotalHospitalReported}, #{entity.countNCA}, #{entity.durationNCA}, #{entity.leaveDuration}, #{entity.countPhysicalSuperCoreDr}, #{entity.countPhysicalCoreDr}, #{entity.countPhysicalNonCoreDr}, #{entity.countPhysicalTotalDr}, #{entity.countPhysicalSuperCoreRetailer}, #{entity.countPhysicalCoreRetailer}, #{entity.countPhysicalNonCoreRetailer}, #{entity.countPhysicalTotalRetailer}, #{entity.countPhysicalSuperCoreHospital}, #{entity.countPhysicalCoreHospital}, #{entity.countPhysicalNonCoreHospital}, #{entity.countPhysicalTotalHospital}, #{entity.countDigitalSuperCoreDr}, #{entity.countDigitalCoreDr}, #{entity.countDigitalNonCoreDr}, #{entity.countDigitalTotalDr}, #{entity.countDigitalSuperCoreRetailer}, #{entity.countDigitalCoreRetailer}, #{entity.countDigitalNonCoreRetailer}, #{entity.countDigitalTotalRetailer}, #{entity.countDigitalSuperCoreHospital}, #{entity.countDigitalCoreHospital}, #{entity.countDigitalNonCoreHospital}, #{entity.countDigitalTotalHospital}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="meffr_update" >
+                UPDATE ${schemaName}.CON_MONTHLY_EFFORT_ROW set MEFFR_LOCATION_ID = #{entity.locationId}, MEFFR_MONTH_YEAR = #{entity.monthYear}, MEFFR_IS_INDIVIDUAL = #{entity.individual}, MEFFR_COUNT_SUPER_CORE_DR = #{entity.countSuperCoreDr}, MEFFR_COUNT_CORE_DR = #{entity.countCoreDr}, MEFFR_COUNT_NON_CORE_DR = #{entity.countNonCoreDr}, MEFFR_COUNT_TOTAL_DR = #{entity.countTotalDr}, MEFFR_COUNT_SUPER_CORE_RETAILER = #{entity.countSuperCoreRetailer}, MEFFR_COUNT_CORE_RETAILER = #{entity.countCoreRetailer}, MEFFR_COUNT_NON_CORE_RETAILER = #{entity.countNonCoreRetailer}, MEFFR_COUNT_TOTAL_RETAILER = #{entity.countTotalRetailer}, MEFFR_COUNT_SUPER_CORE_HOSPITAL = #{entity.countSuperCoreHospital}, MEFFR_COUNT_CORE_HOSPITAL = #{entity.countCoreHospital}, MEFFR_COUNT_NON_CORE_HOSPITAL = #{entity.countNonCoreHospital}, MEFFR_COUNT_TOTAL_HOSPITAL = #{entity.countTotalHospital}, MEFFR_COUNT_SUPER_CORE_DR_REPORTED = #{entity.countSuperCoreDrReported}, MEFFR_COUNT_CORE_DR_REPORTED = #{entity.countCoreDrReported}, MEFFR_COUNT_NON_CORE_DR_REPORTED = #{entity.countNonCoreDrReported}, MEFFR_COUNT_TOTAL_DR_REPORTED = #{entity.countTotalDrReported}, MEFFR_COUNT_SUPER_CORE_RETAILER_REPORTED = #{entity.countSuperCoreRetailerReported}, MEFFR_COUNT_CORE_RETAILER_REPORTED = #{entity.countCoreRetailerReported}, MEFFR_COUNT_NON_CORE_RETAILER_REPORTED = #{entity.countNonCoreRetailerReported}, MEFFR_COUNT_TOTAL_RETAILER_REPORTED = #{entity.countTotalRetailerReported}, MEFFR_COUNT_SUPER_CORE_HOSPITAL_REPORTED = #{entity.countSuperCoreHospitalReported}, MEFFR_COUNT_CORE_HOSPITAL_REPORTED = #{entity.countCoreHospitalReported}, MEFFR_COUNT_NON_CORE_HOSPITAL_REPORTED = #{entity.countNonCoreHospitalReported}, MEFFR_COUNT_TOTAL_HOSPITAL_REPORTED = #{entity.countTotalHospitalReported}, MEFFR_COUNT_NCA = #{entity.countNCA}, MEFFR_DURATION_NCA = #{entity.durationNCA}, MEFFR_LEAVE_DURATION = #{entity.leaveDuration}, MEFFR_COUNT_PHYSICAL_SUPER_CORE_DR = #{entity.countPhysicalSuperCoreDr}, MEFFR_COUNT_PHYSICAL_CORE_DR = #{entity.countPhysicalCoreDr}, MEFFR_COUNT_PHYSICAL_NON_CORE_DR = #{entity.countPhysicalNonCoreDr}, MEFFR_COUNT_PHYSICAL_TOTAL_DR = #{entity.countPhysicalTotalDr}, MEFFR_COUNT_PHYSICAL_SUPER_CORE_RETAILER = #{entity.countPhysicalSuperCoreRetailer}, MEFFR_COUNT_PHYSICAL_CORE_RETAILER = #{entity.countPhysicalCoreRetailer}, MEFFR_COUNT_PHYSICAL_NON_CORE_RETAILER = #{entity.countPhysicalNonCoreRetailer}, MEFFR_COUNT_PHYSICAL_TOTAL_RETAILER = #{entity.countPhysicalTotalRetailer}, MEFFR_COUNT_PHYSICAL_SUPER_CORE_HOSPITAL = #{entity.countPhysicalSuperCoreHospital}, MEFFR_COUNT_PHYSICAL_CORE_HOSPITAL = #{entity.countPhysicalCoreHospital}, MEFFR_COUNT_PHYSICAL_NON_CORE_HOSPITAL = #{entity.countPhysicalNonCoreHospital}, MEFFR_COUNT_PHYSICAL_TOTAL_HOSPITAL = #{entity.countPhysicalTotalHospital}, MEFFR_COUNT_DIGITAL_SUPER_CORE_DR = #{entity.countDigitalSuperCoreDr}, MEFFR_COUNT_DIGITAL_CORE_DR = #{entity.countDigitalCoreDr}, MEFFR_COUNT_DIGITAL_NON_CORE_DR = #{entity.countDigitalNonCoreDr}, MEFFR_COUNT_DIGITAL_TOTAL_DR = #{entity.countDigitalTotalDr}, MEFFR_COUNT_DIGITAL_SUPER_CORE_RETAILER = #{entity.countDigitalSuperCoreRetailer}, MEFFR_COUNT_DIGITAL_CORE_RETAILER = #{entity.countDigitalCoreRetailer}, MEFFR_COUNT_DIGITAL_NON_CORE_RETAILER = #{entity.countDigitalNonCoreRetailer}, MEFFR_COUNT_DIGITAL_TOTAL_RETAILER = #{entity.countDigitalTotalRetailer}, MEFFR_COUNT_DIGITAL_SUPER_CORE_HOSPITAL = #{entity.countDigitalSuperCoreHospital}, MEFFR_COUNT_DIGITAL_CORE_HOSPITAL = #{entity.countDigitalCoreHospital}, MEFFR_COUNT_DIGITAL_NON_CORE_HOSPITAL = #{entity.countDigitalNonCoreHospital}, MEFFR_COUNT_DIGITAL_TOTAL_HOSPITAL = #{entity.countDigitalTotalHospital} 
+                WHERE MEFFR_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="meffr_delete" >
+                DELETE FROM  ${schemaName}.CON_MONTHLY_EFFORT_ROW <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

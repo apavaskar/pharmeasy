@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DigitalCallTemplate-mapper">
+    <cache />
+
+
+            <select id="dictm_select" resultMap="dictmMap">
+                SELECT DICTM_BRAND_ID, DICTM_CALL_TYPE_ID, DICTM_TEMPLATE_TEXT, DICTM_IS_ACTIVE, DICTM_CREATED_BY, DICTM_UPDATED_BY, DICTM_CREATED_ON, DICTM_UPDATED_ON, DICTM_STALE_ID, DICTM_ID FROM ${schemaName}.CMT_DIGITAL_CALL_TEMPLATES
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="dictmMap" type="com.squer.sfe.common.entity.DigitalCallTemplate" autoMapping="true">
+            		<id property="id" column="DICTM_ID" />
+			<result property="brand" column="DICTM_BRAND_ID" />
+			<result property="callType" column="DICTM_CALL_TYPE_ID" />
+			<result property="templateText" column="DICTM_TEMPLATE_TEXT" />
+			<result property="isActive" column="DICTM_IS_ACTIVE" />
+			<result property="createdBy" column="DICTM_CREATED_BY" />
+			<result property="updatedBy" column="DICTM_UPDATED_BY" />
+			<result property="createdOn" column="DICTM_CREATED_ON" />
+			<result property="updatedOn" column="DICTM_UPDATED_ON" />
+			<result property="staleId" column="DICTM_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="dictm_insert" >
+                INSERT INTO ${schemaName}.CMT_DIGITAL_CALL_TEMPLATES(DICTM_BRAND_ID, DICTM_CALL_TYPE_ID, DICTM_TEMPLATE_TEXT, DICTM_IS_ACTIVE, DICTM_CREATED_BY, DICTM_UPDATED_BY, DICTM_CREATED_ON, DICTM_UPDATED_ON, DICTM_STALE_ID, DICTM_ID)
+                VALUES (#{entity.brand.id}, #{entity.callType.id}, #{entity.templateText}, #{entity.isActive}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="dictm_update" >
+                UPDATE ${schemaName}.CMT_DIGITAL_CALL_TEMPLATES set DICTM_BRAND_id = #{entity.brand.id}, DICTM_CALL_TYPE_id = #{entity.callType.id}, DICTM_TEMPLATE_TEXT = #{entity.templateText}, DICTM_IS_ACTIVE = #{entity.isActive}, DICTM_UPDATED_BY = #{entity.updatedBy}, DICTM_UPDATED_ON = #{entity.updatedOn}, DICTM_STALE_ID = #{entity.staleId} 
+                WHERE DICTM_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="dictm_delete" >
+                DELETE FROM  ${schemaName}.CMT_DIGITAL_CALL_TEMPLATES <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

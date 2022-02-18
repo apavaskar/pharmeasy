@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="crmss-mapper">
+    <cache />
+        <select id="crmss_select" resultMap="crmssMap">
+            SELECT CRMSS_ID, CRMPS_DOCTOR_ID, CRMPS_PRODUCT_ID, CRMPS_STAGE_ID, CRMSS_DROPPED FROM ${schemaName}.CRM_LATEST_STAGE_STATUS
+            <include refid="base.where_statement"></include>
+        </select>
+        <resultMap id="crmssMap" type="com.squer.crm.entity.CRMDoctorStatus" autoMapping="true">
+            <id property="id" column="CRMSS_ID" />
+            <result property="doctor" column="CRMSS_DOCTOR_ID" />
+            <result property="product" column="CRMSS_PRODUCT_ID" />
+            <result property="stage" column="CRMSS_STAGE_ID" />
+            <result property="dropped" column="CRMSS_DROPPED" />
+        </resultMap>
+        <insert id="crmss_insert">
+            insert into ${schemaName}.CRM_LATEST_STAGE_STATUS(CRMSS_ID, CRMSS_DOCTOR_ID, CRMSS_PRODUCT_ID, CRMSS_STAGE_ID, CRMSS_DROPPED)
+            values(#{entity.id.id}, #{entity.doctor.id}, #{entity.product.id}, #{entity.stage.id}, #{entity.dropped})
+        </insert>
+</mapper>

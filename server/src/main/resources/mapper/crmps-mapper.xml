@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Crmps-mapper">
+    <cache />
+        <select id="crmps_select" resultMap="crmpsMap">
+            SELECT CRMPS_ID, CRMPS_PRODUCT_ID, CRMPS_STAGE_ID, CRMPS_SEQUENCE, CRMPS_IS_ACTIVE FROM ${schemaName}.CRM_PRODUCT_STAGES
+            <include refid="base.where_statement"></include>
+        </select>
+        <resultMap id="crmpsMap" type="com.squer.crm.entity.CRMProductStage" autoMapping="true">
+            <id property="id" column="CRMPS_ID" />
+            <result property="product" column="CRMPS_PRODUCT_ID" />
+            <result property="stage" column="CRMPS_STAGE_ID" />
+            <result property="sequence" column="CRMPS_SEQUENCE" />
+            <result property="active" column="CRMPS_IS_ACTIVE" />
+        </resultMap>
+        <insert id="crmcs_insert">
+            insert into ${schemaName}.CRM_CUSTOMER_STAGE(CRMCS_ID, CRMCS_STAGE_ID, CRMCS_ACTIVITY_ID, CRMCS_CUSTOMER_ID, CRMCS_PRODUCT_ID,
+                                           CRMCS_DATE_SUBMITTED, CRMCS_IS_CURRENT, CRMCS_IS_DROPOUT, CRMCS_DROPOUT_REASON)
+            values(#{entity.id.id}, #{entity.stage.id}, #{entity.activity.id}, #{entity.doctor.id}, #{entity.product.id},
+                   #{entity.sumbittedOn}, #{entity.current}, #{entity.dropOut}, #{entity.dropOutReason})
+        </insert>
+        <update id="crmcs_update">
+            update ${schemaName}.CRM_CUSTOMER_STAGE set CRMCS_IS_CURRENT = ? where CRMCS_CUSTOMER_ID = ? and CRMCS_PRODUCT_ID = ?
+        </update>
+</mapper>

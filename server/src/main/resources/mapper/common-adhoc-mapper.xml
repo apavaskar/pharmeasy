@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Common-adhoc-mapper">
+    <cache />
+
+    <select id="employee_profile_select" resultMap="employeeProfileResultMap">
+        SELECT EMPLY_DESIGNATION, EMPLY_DATE_OF_JOINING, EMPLY_DATE_OF_TERMINATION, EMPLY_USER_ID, EMPLY_GENDER_ID, EMPLY_MARITAL_STATUS_ID, EMPLY_DATE_OF_BIRTH, EMPLY_PERSON_CODE, EMPLY_IS_ACTIVE, EMPLY_NAME, EMPLY_CI_NAME, EMPLY_CREATED_BY, EMPLY_UPDATED_BY, EMPLY_CREATED_ON, EMPLY_UPDATED_ON, EMPLY_STALE_ID, EMPLY_ID,
+        EMPRF_EMPLOYEE_ID, EMPRF_LOCATION_ID, EMPRF_JOB_ROLE_ID, EMPRF_MANAGER_ID, EMPRF_FROM_DATE, EMPRF_TO_DATE, EMPRF_IS_ACTIVE, EMPRF_IS_DEFAULT, EMPRF_CREATED_BY, EMPRF_UPDATED_BY, EMPRF_CREATED_ON, EMPRF_UPDATED_ON, EMPRF_STALE_ID, EMPRF_ID
+        FROM ${schemaName}.CMT_EMPLOYEE_MASTER e
+        INNER JOIN ${schemaName}.CMT_EMPLOYEE_PROFILE p on e.emply_id = p.emprf_employee_id
+        <where>
+            <foreach item="item" index="index" collection="conditions"
+                     separator=" and ">
+                ${item.name} ${item.operator} #{item.value}
+            </foreach>
+        </where>
+    </select>
+
+    <resultMap id="employeeProfileResultMap" type="com.squer.sfe.common.entity.Employee" autoMapping="true">
+        <id property="id" column="EMPLY_ID" />
+        <result property="designation" column="EMPLY_DESIGNATION" />
+        <result property="dateOfJoining" column="EMPLY_DATE_OF_JOINING" />
+        <result property="dateOfTermination" column="EMPLY_DATE_OF_TERMINATION" />
+        <result property="userId" column="EMPLY_USER_ID" />
+        <result property="gender" column="EMPLY_GENDER_ID" />
+        <result property="materialStatus" column="EMPLY_MARITAL_STATUS_ID" />
+        <result property="dateOfBirth" column="EMPLY_DATE_OF_BIRTH" />
+        <result property="personCode" column="EMPLY_PERSON_CODE" />
+        <result property="isActive" column="EMPLY_IS_ACTIVE" />
+        <result property="name" column="EMPLY_NAME" />
+        <result property="ciName" column="EMPLY_CI_NAME" />
+        <result property="createdBy" column="EMPLY_CREATED_BY" />
+        <result property="updatedBy" column="EMPLY_UPDATED_BY" />
+        <result property="createdOn" column="EMPLY_CREATED_ON" />
+        <result property="updatedOn" column="EMPLY_UPDATED_ON" />
+        <result property="staleId" column="EMPLY_STALE_ID" />
+        <collection property="profiles" ofType="com.squer.sfe.common.entity.EmployeeProfile">
+            <id property="id" column="EMPRF_ID" />
+            <result property="employee" column="EMPRF_EMPLOYEE_ID" />
+            <result property="location" column="EMPRF_LOCATION_ID" />
+            <result property="jobRole" column="EMPRF_JOB_ROLE_ID" />
+            <result property="manager" column="EMPRF_MANAGER_ID" />
+            <result property="fromDate" column="EMPRF_FROM_DATE" />
+            <result property="toDate" column="EMPRF_TO_DATE" />
+            <result property="isActive" column="EMPRF_IS_ACTIVE" />
+            <result property="isDefault" column="EMPRF_IS_DEFAULT" />
+            <result property="createdBy" column="EMPRF_CREATED_BY" />
+            <result property="updatedBy" column="EMPRF_UPDATED_BY" />
+            <result property="createdOn" column="EMPRF_CREATED_ON" />
+            <result property="updatedOn" column="EMPRF_UPDATED_ON" />
+            <result property="staleId" column="EMPRF_STALE_ID" />
+        </collection>
+    </resultMap>
+
+    <select id="doctors_for_hierarchy_select" resultMap="Doctor-mapper.doctrMap">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+            DOCTR_UNIQUE_CODE, DOCTR_LOCATION_ID, DOCTR_BEAT_ID, DOCTR_SPECIALITY_ID, DOCTR_CLASSIFICATION_ID, DOCTR_STATUS_ID, DOCTR_REPORTING_MODE_ID, DOCTR_GENDER_ID, DOCTR_MARITAL_STATUS_ID, DOCTR_DATE_OF_BIRTH, DOCTR_PERSON_CODE, DOCTR_IS_ACTIVE, DOCTR_NAME, DOCTR_CI_NAME, DOCTR_CREATED_BY, DOCTR_UPDATED_BY, DOCTR_CREATED_ON, DOCTR_UPDATED_ON, DOCTR_STALE_ID, DOCTR_ID
+        from cmt_location_master l  inner join loc on l.locat_id = loc.locat_id
+        inner join cmt_doctor_master doc on doc.doctr_location_id = l.locat_id
+        where doc.doctr_is_active = true
+        order by DOCTR_NAME
+    </select>
+
+    <select id="doctor_contact_for_hierarchy_select" resultMap="Contact-mapper.contcMap">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+        CONTC_OWNER_ID, CONTC_TYPE_ID, CONTC_CONTACT_DETAIL, CONTC_ID
+        from cmt_location_master l  inner join loc on l.locat_id = loc.locat_id
+        inner join cmt_doctor_master doc on doc.doctr_location_id = l.locat_id
+        inner JOIN cmt_contact_master c on c.contc_owner_id = doc.doctr_id
+        where doc.doctr_is_active = TRUE
+    </select>
+
+    <select id="doctor_address_for_hierarchy_select" resultMap="Address-mapper.addrsMap">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+        ADDRS_BUILDING_NAME, ADDRS_ADDRESS_LINE1, ADDRS_ADDRESS_LINE2, ADDRS_TOWN_ID, ADDRS_STATE_ID, ADDRS_TYPE_ID, ADDRS_OWNER_ID, ADDRS_ID
+        from cmt_location_master l  inner join loc on l.locat_id = loc.locat_id
+        inner join cmt_doctor_master doc on doc.doctr_location_id = l.locat_id
+        inner JOIN cmt_address_master ad on ad.addrs_owner_id = doc.doctr_id
+        where doc.doctr_is_active = TRUE
+    </select>
+
+    <select id="chemist_for_hierarchy_select" resultMap="Chemist-mapper.chmstMap">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+        CHMST_LOCATION_ID, CHMST_STATUS_ID, CHMST_BEAT_ID, CHMST_GENDER_ID, CHMST_MARITAL_STATUS_ID, CHMST_DATE_OF_BIRTH, CHMST_PERSON_CODE, CHMST_IS_ACTIVE, CHMST_NAME, CHMST_CI_NAME, CHMST_CREATED_BY, CHMST_UPDATED_BY, CHMST_CREATED_ON, CHMST_UPDATED_ON, CHMST_STALE_ID, CHMST_ID
+        from cmt_location_master l  inner join loc on l.locat_id = loc.locat_id
+        inner join cmt_chemist_master ch on ch.chmst_location_id = l.locat_id
+        where CHMST_IS_ACTIVE = true
+        order by CHMST_NAME
+    </select>
+
+    <select id="chemist_contact_for_hierarchy_select" resultMap="Contact-mapper.contcMap">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+        CONTC_OWNER_ID, CONTC_TYPE_ID, CONTC_CONTACT_DETAIL, CONTC_ID
+        from cmt_location_master l  inner join loc on l.locat_id = loc.locat_id
+        inner join cmt_chemist_master cht on cht.chmst_location_id = l.locat_id
+        inner JOIN cmt_contact_master c on c.contc_owner_id = cht.chmst_id
+        where cht.chmst_is_active = TRUE;
+    </select>
+
+    <select id="chemist_address_for_hierarchy_select" resultMap="Address-mapper.addrsMap">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+        ADDRS_BUILDING_NAME, ADDRS_ADDRESS_LINE1, ADDRS_ADDRESS_LINE2, ADDRS_TOWN_ID, ADDRS_STATE_ID, ADDRS_TYPE_ID, ADDRS_OWNER_ID, ADDRS_ID
+        from cmt_location_master l  inner join loc on l.locat_id = loc.locat_id
+        inner join cmt_chemist_master cht on cht.chmst_location_id = l.locat_id
+        inner JOIN cmt_address_master ad on ad.addrs_owner_id = cht.chmst_id
+        where cht.chmst_is_active = TRUE;
+    </select>
+
+    <select id="doctors_for_chemist_select" resultType="Map">
+        with recursive loc as (
+            select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+            union all
+            select l.locat_id from cmt_location_master l
+            inner join loc on loc.locat_id=l.locat_parent_id
+            ) SELECT
+                DOCTR_ID, DOCTR_NAME, CHMST_ID
+            from cmt_chemist_master cm inner join loc on cm.chmst_location_id = loc.locat_id and cm.chmst_is_active = TRUE
+            inner JOIN cmt_doctor_chemist_association dc on dc.chemist_id  = cm.chmst_id
+            inner join cmt_doctor_master doc on doc.doctr_id = dc.doctor_id and doc.doctr_is_active = true
+        <where>
+            <if test="conditions['chemistId']!=null">
+                and dc.chemist_id = #{conditions.chemistId.value}
+            </if>
+            <if test="conditions['doctorId']!=null">
+                and dc.doctor_id = #{conditions.doctorId.value}
+            </if>
+        </where>
+    </select>
+
+    <select id="hospital_master_for_hierarchy_select" resultMap="Hospital-mapper.hsptlMap">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+            HSPTL_CODE, HSPTL_LOCATION_ID, HSPTL_ICU_BEDS, HSPTL_ICU_PATIENT_CAPACITY, HSPTL_IS_ACTIVE, HSPTL_NAME, HSPTL_CI_NAME, HSPTL_CREATED_BY, HSPTL_UPDATED_BY, HSPTL_CREATED_ON, HSPTL_UPDATED_ON, HSPTL_STALE_ID, HSPTL_ID
+        from cmt_location_master l  inner join loc on l.locat_id = loc.locat_id
+        inner join cmt_hospital_master hm on hm.hsptl_location_id = l.locat_id
+        where hm.hsptl_is_active = TRUE
+        order by hsptl_name
+    </select>
+
+    <select id="doctors_for_hospital_select" resultType="Map">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+        DOCTR_ID, DOCTR_NAME, HSPTL_ID
+        from cmt_hospital_master hm inner join loc on hm.hsptl_location_id = loc.locat_id and hm.hsptl_is_active = TRUE
+        inner JOIN cmt_doctor_hospital_association hc on hc.hospital_id = hm.hsptl_id
+        inner join cmt_doctor_master doc on doc.doctr_id = hc.doctor_id and doc.doctr_is_active = true
+        <where>
+            <if test="conditions['hospitalId']!=null">
+                and hc.hospital_id = #{conditions.hospitalId.value}
+            </if>
+            <if test="conditions['doctorId']!=null">
+                and hc.doctor_id = #{conditions.doctorId.value}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="my_team_select" resultType="Map">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+        l.locat_id, l.locat_name, e.emply_id,e.emply_name, j.jobrl_id,j.jobrl_name
+        from cmt_location_master l INNER JOIN loc on l.locat_id = loc.locat_id
+        inner join cmt_employee_profile ep on ep.emprf_location_id = l.locat_id and ep.emprf_is_active = true
+        INNER JOIN cmt_job_role j on ep.emprf_job_role_id = j.jobrl_id
+        INNER JOIN cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+        and l.locat_id != #{conditions.locationId.value}
+    </select>
+
+    <select id="my_managers_select" resultType="Map">
+        with recursive loc as (
+        select locat_id, locat_parent_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id, l.locat_parent_id from cmt_location_master l
+        inner join loc on loc.locat_parent_id =l.locat_id
+        ) SELECT
+        l.locat_id, l.locat_name, e.emply_id,e.emply_name, j.jobrl_id,j.jobrl_name
+        from cmt_location_master l INNER JOIN loc on l.locat_id = loc.locat_id
+        inner join cmt_employee_profile ep on ep.emprf_location_id = l.locat_id  and ep.emprf_is_active = true
+        INNER JOIN cmt_job_role j on ep.emprf_job_role_id = j.jobrl_id
+        INNER JOIN cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+        and l.locat_id !=#{conditions.locationId.value}
+    </select>
+
+    <select id="location_template_select" resultMap="DigitalCallTemplate-mapper.dictmMap">
+        SELECT
+            DICTM_BRAND_ID, DICTM_CALL_TYPE_ID, DICTM_TEMPLATE_TEXT, DICTM_IS_ACTIVE, DICTM_CREATED_BY, DICTM_UPDATED_BY, DICTM_CREATED_ON, DICTM_UPDATED_ON, DICTM_STALE_ID, DICTM_ID
+        from cmt_digital_call_templates t INNER JOIN cmt_brand_master b on t.dictm_brand_id = b.brand_id
+        INNER JOIN cmt_location_master l on l.locat_division_id = b.brand_division_id
+        where l.locat_id = #{conditions.locationId.value} and b.brand_is_active = TRUE and t.dictm_is_active=TRUE
+    </select>
+
+    <select id="location_marketing_activity_select" resultMap="MarketingActivity-mapper.mractMap">
+        SELECT
+            MRACT_DIVISION_ID, MRACT_IS_ACTIVE, MRACT_IN_CLINIC_ACTIVITY, MRACT_NAME, MRACT_CI_NAME, MRACT_CREATED_BY, MRACT_UPDATED_BY, MRACT_CREATED_ON, MRACT_UPDATED_ON, MRACT_STALE_ID, MRACT_ID
+        from cmt_location_master l
+        INNER JOIN cmt_marketing_activity_master m on m.mract_division_id = l.locat_division_id
+        <where>
+            <if test="conditions['locationId']!=null">
+                and l.locat_id = #{conditions.locationId.value}
+            </if>
+            <if test="conditions['isActive']!=null">
+                and m.mract_is_active = ${conditions.isActive.value}
+            </if>
+        </where>
+    </select>
+
+    <select id="location_hospital_select" resultMap="hospitalTarget_resultMap">
+        SELECT
+        h.hsptl_id,h.hsptl_name,h.hsptl_code,h.hsptl_icu_beds,h.hsptl_icu_patient_capacity,
+        COALESCE(t.hsptg_target,0) hsptg_target, d.doctr_id, d.doctr_name
+        from cmt_hospital_master h
+        inner join cmt_doctor_hospital_association hs on h.hsptl_id = hs.hospital_id
+        inner join cmt_doctor_master d on d.doctr_id = hs.doctor_id and d.doctr_is_active = TRUE
+        left JOIN rpt_hospital_patient_target t on h.hsptl_id = t.hsptg_hospital_id
+        where h.hsptl_location_id = #{conditions.locationId.value}
+        and h.hsptl_is_active = TRUE
+        order by hsptl_name
+    </select>
+
+    <resultMap id="hospitalTarget_resultMap" type="com.squer.sfe.common.controller.dto.HospitalTargetDTO">
+        <result column="hsptl_id" property="id"/>
+        <result column="hsptl_name" property="name"/>
+        <result column="hsptl_code" property="code"/>
+        <result column="hsptl_icu_beds" property="icuBeds"/>
+        <result column="hsptl_icu_patient_capacity" property="icuPatientCapacity"/>
+        <result column="hsptg_target" property="target"/>
+        <collection property="doctors"  ofType="com.squer.sfe.common.controller.dto.HospitalDoctor">
+            <result column="doctr_id" property="doctorId"/>
+            <result column="doctr_name" property="doctorName"/>
+        </collection>
+    </resultMap>
+
+    <select id="hospital_target_for_manager_select" resultType="map">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) select
+        COALESCE(count(h.hsptl_id),0) hospital_count, COALESCE(sum(h.hsptl_icu_beds),0) icu_beds, COALESCE(sum(t.hsptg_target),0)  target
+        from cmt_location_master l INNER JOIN loc on l.locat_id = loc.locat_id and l.locat_type_id='loctt00000000000000000000000000000003'
+        LEFT JOIN cmt_hospital_master h on h.hsptl_location_id = l.locat_id and h.hsptl_is_active = TRUE
+        LEFT JOIN rpt_hospital_patient_target t on t.hsptg_hospital_id = h.hsptl_id and t.hsptg_yyyy_mm = #{conditions.yyyyMM.value}
+    </select>
+
+    <select id="hospital_for_hierarchy_select" resultType="map">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) select
+        <if test="conditions['all']!=null">
+            zn.locat_id location_id,zn.locat_name location_name, zn.locat_type_id,
+        </if>
+        <if test="conditions['Zone']!=null">
+            rgn.locat_id location_id,rgn.locat_name location_name, rgn.locat_type_id,
+        </if>
+        <if test="conditions['Region']!=null">
+            l.locat_id location_id,l.locat_name location_name,l.locat_type_id,
+        </if>
+        <if test="conditions['Territory']!=null">
+            l.locat_id location_id,l.locat_name location_name,l.locat_type_id,
+        </if>
+        e.emply_person_code,e.emply_name,COALESCE(count(h.hsptl_id),0) hospital_count, COALESCE(sum(h.hsptl_icu_beds),0) icu_beds, COALESCE(sum(t.hsptg_target),0)  target
+        from cmt_location_master l INNER JOIN loc on l.locat_id = loc.locat_id and l.locat_type_id='loctt00000000000000000000000000000003'
+        inner join cmt_location_master rgn on rgn.locat_id = l.locat_parent_id
+        inner join cmt_location_master zn on zn.locat_id = rgn.locat_parent_id
+        LEFT JOIN cmt_hospital_master h on h.hsptl_location_id = l.locat_id and h.hsptl_is_active = TRUE
+        LEFT JOIN rpt_hospital_patient_target t on t.hsptg_hospital_id = h.hsptl_id and t.hsptg_yyyy_mm = #{conditions.yyyyMM.value}
+        <if test="conditions['all']!=null">
+            LEFT JOIN cmt_employee_profile ep on ep.emprf_location_id = zn.locat_id and ep.emprf_is_active = TRUE and ep.emprf_is_default = TRUE
+            left JOIN cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+            GROUP by zn.locat_id,zn.locat_name,e.emply_person_code,e.emply_name
+            ORDER BY zn.locat_name
+        </if>
+        <if test="conditions['Zone']!=null">
+            LEFT JOIN cmt_employee_profile ep on ep.emprf_location_id = rgn.locat_id and ep.emprf_is_active = TRUE and ep.emprf_is_default = TRUE
+            left JOIN cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+            GROUP by rgn.locat_id,rgn.locat_name,e.emply_person_code,e.emply_name
+            ORDER BY rgn.locat_name
+        </if>
+        <if test="conditions['Region']!=null">
+            LEFT JOIN cmt_employee_profile ep on ep.emprf_location_id = l.locat_id and ep.emprf_is_active = TRUE and ep.emprf_is_default = TRUE
+            left JOIN cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+            GROUP by l.locat_id,l.locat_name,e.emply_person_code,e.emply_name
+            ORDER BY l.locat_name
+        </if>
+        <if test="conditions['Territory']!=null">
+            LEFT JOIN cmt_employee_profile ep on ep.emprf_location_id = l.locat_id and ep.emprf_is_active = TRUE and ep.emprf_is_default = TRUE
+            left JOIN cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+            GROUP by l.locat_id,l.locat_name,e.emply_person_code,e.emply_name
+            ORDER BY l.locat_name
+        </if>
+    </select>
+
+    <select id="product_for_location_select" resultMap="Product-mapper.prcdtMap">
+        SELECT
+        PRCDT_BRAND_ID, PRCDT_IS_ACTIVE, PRCDT_NSP, PRCDT_NRV, PRCDT_MRP, PRCDT_SHOW_IN_DETAILING, PRCDT_SHOW_IN_RCPA, PRCDT_NAME, PRCDT_CI_NAME, PRCDT_CREATED_BY, PRCDT_UPDATED_BY, PRCDT_CREATED_ON, PRCDT_UPDATED_ON, PRCDT_STALE_ID, PRCDT_ID, PRCDT_RCPA_VALUE, PRCDT_RXN_UNITS
+        from cmt_product_master p inner join cmt_brand_master b on b.brand_id = p.prcdt_brand_id
+        <where>
+            and b.brand_is_active= TRUE and p.prcdt_is_active = TRUE
+            <if test="conditions['forRcpa']!=null">
+                and p.prcdt_show_in_rcpa = true
+            </if>
+            <if test="conditions['forDetailing']!=null">
+                and p.prcdt_show_in_detailing = true
+            </if>
+        </where>
+        and b.brand_division_id= #{conditions.divisionId.value}
+    </select>
+
+    <insert id="doctor_chemist_insert">
+        INSERT INTO cmt_doctor_chemist_association (doctor_id,chemist_id) VALUES
+        (#{doctorId},#{chemistId})
+    </insert>
+
+    <insert id="doctor_chemist_delete">
+        delete from cmt_doctor_chemist_association where doctor_id= #{doctorId}
+        and chemist_id = #{chemistId}
+    </insert>
+
+    <select id="hospital_by_location_select" resultMap="hospitalLoc_resultMap">
+        SELECT
+        hsptl_id, hsptl_name,hsptl_code,hsptl_icu_beds,hsptl_icu_patient_capacity, doc.doctr_id, doc.doctr_name
+        from cmt_hospital_master hp
+        left join cmt_doctor_hospital_association hs on hp.hsptl_id = hs.hospital_id and hp.hsptl_is_active = TRUE
+        left join cmt_doctor_master doc on doc.doctr_id = hs.doctor_id and doc.doctr_is_active = TRUE
+        where hp.hsptl_location_id= #{conditions.locationId.value} and hp.hsptl_is_active = TRUE
+        order by hsptl_id
+    </select>
+
+    <resultMap id="hospitalLoc_resultMap" type="com.squer.sfe.common.controller.dto.HospitalDTO">
+        <result column="hsptl_id" property="id"/>
+        <result column="hsptl_name" property="name"/>
+        <result column="hsptl_code" property="code"/>
+        <result column="hsptl_icu_beds" property="icuBeds"/>
+        <result column="hsptl_icu_patient_capacity" property="icuPatientCapacity"/>
+        <collection property="doctors"  ofType="com.squer.sfe.common.controller.dto.HospitalDoctor">
+            <result column="doctr_id" property="doctorId"/>
+            <result column="doctr_name" property="doctorName"/>
+        </collection>
+    </resultMap>
+
+    <select id="field_structure_select" resultMap="filedStructure_resultMap">
+        SELECT
+        dv.divsn_name,
+        zm.emply_person_code mgr1_pc, zm.emply_name mgr1_name , z.locat_name mgr1_loc, zt.loctt_name mgr1_loctp,
+        rm.emply_person_code mgr2_pc ,rm.emply_name mgr2_name, r.locat_name mgr2_loc, rt.loctt_name mgr2_loctp,
+        tm.emply_person_code emp_pc,tm.emply_name emp_name,t.locat_name emp_loc,tt.loctt_name emp_loctp, jt.jobrl_name emp_jr, t.locat_id tm_location_id,
+        to_char (tm.emply_date_of_joining ,'DD/MM/YYYY')emp_doj
+        from cmt_location_master t
+        INNER JOIN cmt_location_type tt on tt.loctt_id = t.locat_type_id
+        INNER JOIN cmt_division_master dv on dv.divsn_id = t.locat_division_id
+        LEFT join cmt_location_master r on r.locat_id = t.locat_parent_id and r.locat_is_active = TRUE
+        LEFT join cmt_location_master z on z.locat_id = r.locat_parent_id and z.locat_is_active = TRUE
+        LEFT JOIN cmt_location_type rt on rt.loctt_id = r.locat_type_id
+        LEFT JOIN cmt_location_type zt on zt.loctt_id = z.locat_type_id
+        left join cmt_employee_profile tmp on tmp.emprf_location_id = t.locat_id and tmp.emprf_is_default = true and tmp.emprf_is_active = TRUE
+        left join cmt_employee_profile rmp on rmp.emprf_location_id = r.locat_id and rmp.emprf_is_default = true and rmp.emprf_is_active = TRUE
+        left join cmt_employee_profile zmp on zmp.emprf_location_id = z.locat_id and zmp.emprf_is_default = true and tmp.emprf_is_active = TRUE
+        LEFT JOIN cmt_job_role jt on jt.jobrl_id = tmp.emprf_job_role_id
+        left join cmt_employee_master tm on tm.emply_id = tmp.emprf_employee_id
+        left join cmt_employee_master rm on rm.emply_id = rmp.emprf_employee_id
+        left join cmt_employee_master zm on zm.emply_id = zmp.emprf_employee_id
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) team on team.locat_id = t.locat_id
+        </if>
+        where 1 = 1
+        <if test="conditions.divisionId != null">
+            and dv.divsn_id = #{conditions.divisionId.value}
+        </if>
+
+    </select>
+
+    <resultMap id="filedStructure_resultMap" type="com.squer.sfe.common.controller.dto.FieldStructureDTO">
+        <result column="divsn_name" property="division"/>
+        <result column="mgr1_pc" property="manager1Code"/>
+        <result column="mgr1_name" property="manager1Name"/>
+        <result column="mgr1_loc" property="manager1Location"/>
+        <result column="mgr1_loctp" property="manager1LocationType"/>
+        <result column="mgr2_pc" property="manager2Code"/>
+        <result column="mgr2_name" property="manager2Name"/>
+        <result column="mgr2_loc" property="manager2Location"/>
+        <result column="mgr2_loctp" property="manager2LocationType"/>
+        <result column="emp_pc" property="empCode"/>
+        <result column="emp_name" property="empName"/>
+        <result column="emp_loc" property="empLocation"/>
+        <result column="emp_loctp" property="empLocationType"/>
+        <result column="emp_jr" property="empJobRole"/>
+        <result column="emp_doj" property="empDOJ"/>
+        <result column="tm_location_id" property="tmLocationId"/>
+    </resultMap>
+
+    <select id="dml_structure_select" resultMap="dmlStructure_resultMap">
+        SELECT
+        z.locat_name zn, r.locat_name rg, t.locat_name loc ,
+        tm.emply_person_code emp_pc, tm.emply_name emp_name,
+        d.doctr_unique_code doc_uid, d.doctr_person_code doc_code, d.doctr_name doc_name,
+        sp.syslv_name doc_speciality, cl.syslv_name doc_classification
+        from cmt_doctor_master d
+        inner join cmt_location_master t on t.locat_id = d.doctr_location_id
+        inner join cmt_location_master r on r.locat_id = t.locat_parent_id
+        inner join cmt_location_master z on z.locat_id = r.locat_parent_id
+        INNER JOIN cmt_division_master dv on dv.divsn_id = t.locat_division_id
+        inner join fmk_system_lov sp on sp.syslv_id = d.doctr_speciality_id
+        inner join fmk_system_lov cl on cl.syslv_id = d.doctr_classification_id
+        left join cmt_employee_profile tmp on tmp.emprf_location_id = t.locat_id and tmp.emprf_is_default = true and tmp.emprf_is_active = TRUE
+        left join cmt_employee_master tm on tm.emply_id = tmp.emprf_employee_id
+        where
+        t.locat_type_id='loctt00000000000000000000000000000003'
+        and d.doctr_status_id='syslv00000000000000000000000000000131'
+        <if test="conditions.divisionId != null">
+            and dv.divsn_id = #{conditions.divisionId.value}
+        </if>
+        <if test="conditions.locationId != null">
+            and d.doctr_location_id = #{conditions.locationId.value}
+        </if>
+    </select>
+
+    <resultMap id="dmlStructure_resultMap" type="com.squer.sfe.common.controller.dto.DmlStructureDTO">
+        <result column="zn" property="zone"/>
+        <result column="rg" property="region"/>
+        <result column="loc" property="location"/>
+        <result column="emp_pc" property="employeeCode"/>
+        <result column="emp_name" property="employeeName"/>
+        <result column="doc_uid" property="doctorUid"/>
+        <result column="doc_code" property="doctorCode"/>
+        <result column="doc_name" property="doctorName"/>
+        <result column="doc_speciality" property="doctorSpeciality"/>
+        <result column="doc_classification" property="doctorClassification"/>
+    </resultMap>
+
+    <select id="holidays_for_location_select" resultMap="HolidayDetails-mapper.hldtlMap">
+        select
+            HLDTL_HOLIDAY_ID, HLDTL_STATE_ID, HLDTL_JOB_ROLE_ID, HLDTL_YEAR, HLDTL_YYYY_MM, HLDTL_YYYY_MM_DD, HLDTL_CREATED_BY, HLDTL_UPDATED_BY, HLDTL_CREATED_ON, HLDTL_UPDATED_ON, HLDTL_STALE_ID, HLDTL_ID
+        from cmt_holiday_details d inner join cmt_town_master t on d.hldtl_state_id = t.towns_state_id
+        INNER JOIN cmt_location_master l on l.locat_town_id = t.towns_id
+        where l.locat_id= #{conditions.locationId.value}
+        and d.hldtl_job_role_id=#{conditions.jobId.value}
+        and d.hldtl_yyyy_mm= ${conditions.yearMonth.value}
+        order by hldtl_yyyy_mm_dd
+    </select>
+
+    <select id="dml_classification_select" resultType="map">
+        SELECT concat(doctr_location_id, doctr_classification_id) classificationKey, doctr_location_id locationId,
+                doctr_classification_id classificationId, count(doctr_id) cnt from
+        CMT_DOCTOR_MASTER inner join CMT_LOCATION_MASTER on locat_id = doctr_location_id
+        <include refid="base.where_statement"></include>
+        group by concat(doctr_location_id, doctr_classification_id), doctr_location_id ,
+        doctr_classification_id
+    </select>
+
+    <select id="location_town_select" resultMap="Town-mapper.townsMap">
+        SELECT TOWNS_STATE_ID, TOWNS_PIN_CODE, TOWNS_TYPE_ID, TOWNS_CLASSIFICATION_ID, TOWNS_NAME, TOWNS_CI_NAME, TOWNS_CREATED_BY, TOWNS_UPDATED_BY, TOWNS_CREATED_ON, TOWNS_UPDATED_ON, TOWNS_STALE_ID, TOWNS_ID
+        FROM ${schemaName}.CMT_TOWN_MASTER t inner join cmt_location_master l on t.towns_id = l.locat_town_id
+        where l.locat_id= #{conditions.locationId.value}
+    </select>
+
+    <select id="employee_profile_for_period_select" resultMap="profileList-map">
+        SELECT
+        emprf_location_id, locat_name,emprf_job_role_id, jobrl_name , to_char(emprf_to_date,'YYYYMMDD') emprf_to_date
+        from cmt_employee_profile p
+        inner JOIN cmt_location_master l on l.locat_id = p.emprf_location_id
+        inner join cmt_job_role j on j.jobrl_id = p.emprf_job_role_id
+        where emprf_employee_id = #{conditions.employeeId.value}
+            and #{conditions.yyyyMmDd.value} BETWEEN emprf_from_date and emprf_to_date
+        UNION ALL
+        SELECT
+        emprf_location_id, locat_name,emprf_job_role_id, jobrl_name , to_char(emprf_to_date,'YYYYMMDD') emprf_to_date
+        from cmt_employee_profile p
+        inner JOIN cmt_location_master l on l.locat_id = p.emprf_location_id
+        inner join cmt_job_role j on j.jobrl_id = p.emprf_job_role_id
+        where emprf_employee_id = #{conditions.employeeId.value}
+        and emprf_to_date is NULL
+    </select>
+
+    <resultMap id="profileList-map" type="com.squer.sfe.common.controller.dto.EmployeeProfileListDTO">
+        <result column="emprf_location_id" property="locationId"/>
+        <result column="locat_name" property="locationName"/>
+        <result column="emprf_job_role_id" property="jobRoleId"/>
+        <result column="jobrl_name" property="jobRoleName"/>
+        <result column="emprf_to_date" property="activeToDate"/>
+    </resultMap>
+
+    <select id="all_my_towns_select" resultMap="Town-mapper.townsMap">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+        DISTINCT  TOWNS_STATE_ID, TOWNS_PIN_CODE, TOWNS_TYPE_ID, TOWNS_CLASSIFICATION_ID, TOWNS_NAME, TOWNS_CI_NAME, TOWNS_CREATED_BY, TOWNS_UPDATED_BY, TOWNS_CREATED_ON, TOWNS_UPDATED_ON, TOWNS_STALE_ID, TOWNS_ID
+        from cmt_location_master l inner join loc on l.locat_id = loc.locat_id
+        <if test="conditions.ownerType.value == 'doc'">
+            inner join cmt_doctor_master doc on doc.doctr_location_id = l.locat_id and doc.doctr_is_active = true
+            INNER JOIN cmt_address_master adr on adr.addrs_owner_id = doc.doctr_id
+        </if>
+        <if test="conditions.ownerType.value == 'che'">
+            inner join cmt_chemist_master ch on ch.chmst_location_id = l.locat_id and ch.chmst_is_active = true
+            INNER JOIN cmt_address_master adr on adr.addrs_owner_id = ch.chmst_id
+        </if>
+        INNER JOIN cmt_town_master t on t.towns_id = adr.addrs_town_id
+    </select>
+
+
+    <select id="location_dml_select" resultType="map">
+        SELECT
+        locat_id,
+        count(1) FILTER (WHERE doctr_classification_id = 'syslv00000000000000000000000000000128') as core_count,
+        count(1) FILTER (WHERE doctr_classification_id = 'syslv00000000000000000000000000000129') as non_core_count,
+        count(1) FILTER (WHERE doctr_classification_id = 'syslv00000000000000000000000000000130') as super_core_count,
+        count(1) as total_count
+        from cmt_doctor_master
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) on locat_id = doctr_location_id
+        </if>
+        <if test="conditions.divisionId != null">
+            inner join cmt_location_master on locat_id = doctr_location_id
+        </if>
+            where doctr_is_active = true
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+        group by locat_id
+    </select>
+
+    <select id="all_locations_select" resultType="map">
+        select l.locat_id locat_id, l.locat_name locat_name, l.locat_type_id locat_type_id from
+        cmt_location_master l
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) team on team.locat_id = l.locat_id
+        </if>
+        where locat_is_active = true
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+    </select>
+
+    <select id="total_chemists_count_select" resultType="map">
+        SELECT chmst_location_id, count(1) chemist_count
+        from cmt_chemist_master
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) team on team.locat_id = chmst_location_id
+        </if>
+        <if test="conditions.divisionId != null">
+            inner join cmt_location_master on locat_id = chmst_location_id
+        </if>
+        where chmst_is_active = TRUE
+        group by chmst_location_id;
+    </select>
+
+    <select id="notif_select" resultMap="notifMap">
+        SELECT NOTIF_ID, NOTIF_TEXT, NOTIF_DOCUMENT_ID, NOTIF_IS_DOCUMENT_INLINE, NOTIF_VALID_UPTO
+        from CMT_NOTIFICATIONS
+        <include refid="base.where_statement"></include>
+    </select>
+    <resultMap id="notifMap" type="com.squer.sfe.common.entity.NotificationDashboard">
+        <result column="notif_id" property="id"/>
+        <result column="notif_text" property="text"/>
+        <result column="notif_document_id" property="documentId"/>
+        <result column="notif_is_document_inline" property="isInline"/>
+        <result column="notif_valid_upto" property="validUpto"/>
+    </resultMap>
+
+
+    <select id="location_hierarchy_select" resultMap="Location-mapper.locatMap">
+        SELECT
+            l.LOCAT_TYPE_ID, l.LOCAT_DIVISION_ID, l.LOCAT_TOWN_ID, l.LOCAT_IS_ACTIVE, l.LOCAT_PARENT_ID, LOCAT_EXTERNAL_CODE, l.LOCAT_EXTERNAL_NAME, l.LOCAT_NAME, l.LOCAT_CI_NAME, l.LOCAT_CREATED_BY, l.LOCAT_UPDATED_BY, l.LOCAT_CREATED_ON, l.LOCAT_UPDATED_ON, l.LOCAT_STALE_ID, l.LOCAT_ID
+        FROM ${schemaName}.CMT_LOCATION_MASTER l
+            inner JOIN get_all_team(#{conditions.locationId.value}) t on t.locat_id = l.locat_id
+            and l.locat_is_active = TRUE
+    </select>
+
+    <select id="holidays_by_state_select" resultType="map">
+        select  HLDTL_STATE_ID state_id,  HLDTL_YYYY_MM_DD holiday_date from cmt_holiday_details where hldtl_yyyy_mm_dd &gt;=#{conditions.fromDate.value}  and hldtl_yyyy_mm_dd &lt;= #{conditions.toDate.value} order by hldtl_yyyy_mm_dd
+    </select>
+
+    <select id="location_wise_state_select" resultType="map">
+        SELECT l.locat_id, s.state_id from cmt_location_master l inner join cmt_town_master t on l.locat_town_id = t.towns_id inner join cmt_state_master s on s.state_id = t.towns_state_id where l.locat_is_active = TRUE
+    </select>
+
+    <select id="blocking_entries_select" resultType="map">
+        SELECT
+            dv.divsn_name, z.locat_name zone_nm, r.locat_name rgn, l.locat_name hq,e.emply_name,e.emply_person_code, j.jobrl_name, b.slblk_missed_from_date,b.slblk_missed_to_date,b.slblk_missed_days
+        from CST_WOCKHARDT_SALARY_BLOCKING b
+        INNER JOIN cmt_employee_master e on e.emply_id = b.slblk_employee_id
+        INNER JOIN cmt_job_role j on j.jobrl_id = b.slblk_job_role_id
+        inner JOIN cmt_location_master l on l.locat_id = b.slblk_location_id
+        inner JOIN cmt_location_master r on r.locat_id = l.locat_parent_id
+        inner JOIN cmt_location_master z on z.locat_id = r.locat_parent_id
+        INNER JOIN cmt_division_master dv on dv.divsn_id = l.locat_division_id
+
+    </select>
+</mapper>

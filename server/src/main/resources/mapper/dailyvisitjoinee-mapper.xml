@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DailyVisitJoinee-mapper">
+    <cache />
+
+
+            <select id="dtvje_select" resultMap="dtvjeMap">
+                SELECT DTVJE_ATTENDEE_ID, DTVJE_MANAGER_ID, DTVJE_IS_ACTIVE, DTVJE_STATUS_ID, DTVJE_CREATED_BY, DTVJE_UPDATED_BY, DTVJE_CREATED_ON, DTVJE_UPDATED_ON, DTVJE_STALE_ID, DTVJE_ID FROM ${schemaName}.RPT_DAILY_VISIT_JOINEE
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="dtvjeMap" type="com.squer.sfe.reporting.entity.DailyVisitJoinee" autoMapping="true">
+            		<id property="id" column="DTVJE_ID" />
+			<result property="attendee" column="DTVJE_ATTENDEE_ID" />
+			<result property="manager" column="DTVJE_MANAGER_ID" />
+			<result property="isActive" column="DTVJE_IS_ACTIVE" />
+			<result property="status" column="DTVJE_STATUS_ID" />
+			<result property="createdBy" column="DTVJE_CREATED_BY" />
+			<result property="updatedBy" column="DTVJE_UPDATED_BY" />
+			<result property="createdOn" column="DTVJE_CREATED_ON" />
+			<result property="updatedOn" column="DTVJE_UPDATED_ON" />
+			<result property="staleId" column="DTVJE_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="dtvje_insert" >
+                INSERT INTO ${schemaName}.RPT_DAILY_VISIT_JOINEE(DTVJE_ATTENDEE_ID, DTVJE_MANAGER_ID, DTVJE_IS_ACTIVE, DTVJE_STATUS_ID, DTVJE_CREATED_BY, DTVJE_UPDATED_BY, DTVJE_CREATED_ON, DTVJE_UPDATED_ON, DTVJE_STALE_ID, DTVJE_ID)
+                VALUES (#{entity.attendee.id}, #{entity.manager.id}, #{entity.isActive}, #{entity.status.id}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="dtvje_update" >
+                UPDATE ${schemaName}.RPT_DAILY_VISIT_JOINEE set DTVJE_ATTENDEE_id = #{entity.attendee.id}, DTVJE_MANAGER_id = #{entity.manager.id}, DTVJE_IS_ACTIVE = #{entity.isActive}, DTVJE_STATUS_id = #{entity.status.id}, DTVJE_UPDATED_BY = #{entity.updatedBy}, DTVJE_UPDATED_ON = #{entity.updatedOn}, DTVJE_STALE_ID = #{entity.staleId} 
+                WHERE DTVJE_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="dtvje_delete" >
+                DELETE FROM  ${schemaName}.RPT_DAILY_VISIT_JOINEE <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

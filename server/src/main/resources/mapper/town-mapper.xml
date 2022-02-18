@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Town-mapper">
+    <cache />
+
+
+            <select id="towns_select" resultMap="townsMap">
+                SELECT TOWNS_STATE_ID, TOWNS_PIN_CODE, TOWNS_TYPE_ID, TOWNS_CLASSIFICATION_ID, TOWNS_NAME, TOWNS_CI_NAME, TOWNS_CREATED_BY, TOWNS_UPDATED_BY, TOWNS_CREATED_ON, TOWNS_UPDATED_ON, TOWNS_STALE_ID, TOWNS_ID FROM ${schemaName}.CMT_TOWN_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="townsMap" type="com.squer.sfe.common.entity.Town" autoMapping="true">
+            		<id property="id" column="TOWNS_ID" />
+			<result property="state" column="TOWNS_STATE_ID" />
+			<result property="pinCode" column="TOWNS_PIN_CODE" />
+			<result property="type" column="TOWNS_TYPE_ID" />
+			<result property="classification" column="TOWNS_CLASSIFICATION_ID" />
+			<result property="name" column="TOWNS_NAME" />
+			<result property="ciName" column="TOWNS_CI_NAME" />
+			<result property="createdBy" column="TOWNS_CREATED_BY" />
+			<result property="updatedBy" column="TOWNS_UPDATED_BY" />
+			<result property="createdOn" column="TOWNS_CREATED_ON" />
+			<result property="updatedOn" column="TOWNS_UPDATED_ON" />
+			<result property="staleId" column="TOWNS_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="towns_insert" >
+                INSERT INTO ${schemaName}.CMT_TOWN_MASTER(TOWNS_STATE_ID, TOWNS_PIN_CODE, TOWNS_TYPE_ID, TOWNS_CLASSIFICATION_ID, TOWNS_NAME, TOWNS_CI_NAME, TOWNS_CREATED_BY, TOWNS_UPDATED_BY, TOWNS_CREATED_ON, TOWNS_UPDATED_ON, TOWNS_STALE_ID, TOWNS_ID)
+                VALUES (#{entity.state.id}, #{entity.pinCode}, #{entity.type.id}, #{entity.classification.id}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="towns_update" >
+                UPDATE ${schemaName}.CMT_TOWN_MASTER set TOWNS_STATE_id = #{entity.state.id}, TOWNS_PIN_CODE = #{entity.pinCode}, TOWNS_TYPE_id = #{entity.type.id}, TOWNS_CLASSIFICATION_id = #{entity.classification.id}, TOWNS_NAME = #{entity.name}, TOWNS_CI_NAME = #{entity.ciName}, TOWNS_UPDATED_BY = #{entity.updatedBy}, TOWNS_UPDATED_ON = #{entity.updatedOn}, TOWNS_STALE_ID = #{entity.staleId} 
+                WHERE TOWNS_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="towns_delete" >
+                DELETE FROM  ${schemaName}.CMT_TOWN_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

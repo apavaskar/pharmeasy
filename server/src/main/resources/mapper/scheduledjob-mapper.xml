@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ScheduledJob-mapper">
+    <cache />
+
+
+            <select id="schjb_select" resultMap="schjbMap">
+                SELECT SCHJB_JOB_TYPE, SCHJB_START_TIME, SCHJB_END_TIME, SCHJB_STATUS, SCHJB_ERROR_STRING, SCHJB_CREATED_BY, SCHJB_UPDATED_BY, SCHJB_CREATED_ON, SCHJB_UPDATED_ON, SCHJB_STALE_ID, SCHJB_ID FROM ${schemaName}.CST_WOCKHARDT_SCHEDULE_JOB
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="schjbMap" type="com.squer.scheduledJob.custom.wockhardt.entity.ScheduledJob" autoMapping="true">
+            		<id property="id" column="SCHJB_ID" />
+			<result property="jobType" column="SCHJB_JOB_TYPE" />
+			<result property="startTime" column="SCHJB_START_TIME" />
+			<result property="endTime" column="SCHJB_END_TIME" />
+			<result property="status" column="SCHJB_STATUS" />
+			<result property="errorString" column="SCHJB_ERROR_STRING" />
+			<result property="createdBy" column="SCHJB_CREATED_BY" />
+			<result property="updatedBy" column="SCHJB_UPDATED_BY" />
+			<result property="createdOn" column="SCHJB_CREATED_ON" />
+			<result property="updatedOn" column="SCHJB_UPDATED_ON" />
+			<result property="staleId" column="SCHJB_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="schjb_insert" >
+                INSERT INTO ${schemaName}.CST_WOCKHARDT_SCHEDULE_JOB(SCHJB_JOB_TYPE, SCHJB_START_TIME, SCHJB_END_TIME, SCHJB_STATUS, SCHJB_ERROR_STRING, SCHJB_CREATED_BY, SCHJB_UPDATED_BY, SCHJB_CREATED_ON, SCHJB_UPDATED_ON, SCHJB_STALE_ID, SCHJB_ID)
+                VALUES (#{entity.jobType}, #{entity.startTime}, #{entity.endTime}, #{entity.status}, #{entity.errorString}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="schjb_update" >
+                UPDATE ${schemaName}.CST_WOCKHARDT_SCHEDULE_JOB set SCHJB_JOB_TYPE = #{entity.jobType}, SCHJB_START_TIME = #{entity.startTime}, SCHJB_END_TIME = #{entity.endTime}, SCHJB_STATUS = #{entity.status}, SCHJB_ERROR_STRING = #{entity.errorString}, SCHJB_UPDATED_BY = #{entity.updatedBy}, SCHJB_UPDATED_ON = #{entity.updatedOn}, SCHJB_STALE_ID = #{entity.staleId} 
+                WHERE SCHJB_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="schjb_delete" >
+                DELETE FROM  ${schemaName}.CST_WOCKHARDT_SCHEDULE_JOB <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

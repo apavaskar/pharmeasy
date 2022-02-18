@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EffortConsolidation-mapper">
+    <cache />
+    <select id="doctor_classification_select" resultType="map">
+        SELECT doctr_id, doctr_classification_id from ${schemaName}.cmt_doctor_master
+        where doctr_location_id = #{conditions.doctr_location_id.value} and doctr_is_active = true
+    </select>
+
+    <select id="doctor_attendee_select" resultType="map">
+        SELECT distinct dtvat_yyyy_mm_dd, dtvat_customer_id, dtvat_visit_type_id, doctr_classification_id from ${schemaName}.rpt_daily_visit_attendee
+        inner join ${schemaName}.cmt_doctor_master on doctr_id = dtvat_customer_id
+        <include refid="base.where_statement"></include>
+    </select>
+
+    <select id="effort_report_location_select" resultType="com.squer.sfe.reports.controller.dto.EffortReportRow">
+        select sum(meffr_count_super_core_dr) countTotalSuperCoreDr, sum(meffr_count_core_dr) countTotalCoreDr,
+               sum(meffr_count_non_core_dr) countTotalNonCoreDr, sum(meffr_count_super_core_dr_reported) countSuperCoreDrMet,
+               sum(meffr_count_core_dr_reported) countCoreDrMet,  sum(meffr_count_non_core_dr_reported) countNonCoreDrMet,
+               sum(meffr_count_total_dr) countTotalDr, sum(meffr_count_total_dr_reported) countTotalDrMet
+        from con_monthly_effort_row m
+        <include refid="base.where_statement"></include>
+    </select>
+
+    <select id="effort_report_select" resultType="com.squer.sfe.reports.controller.dto.EffortReportRow">
+        select sum(meffr_count_super_core_dr) countTotalSuperCoreDr, sum(meffr_count_core_dr) countTotalCoreDr,
+        sum(meffr_count_non_core_dr) countTotalNonCoreDr, sum(meffr_count_super_core_dr_reported) countSuperCoreDrMet,
+        sum(meffr_count_core_dr_reported) countCoreDrMet,  sum(meffr_count_non_core_dr_reported) countNonCoreDrMet,
+        sum(meffr_count_total_dr) countTotalDr, sum(meffr_count_total_dr_reported) countTotalDrMet
+        from con_monthly_effort_row m
+        inner join
+        (<include refid="base.location_heirarchy" />) t
+        on m.meffr_location_id = t.locat_id
+    </select>
+
+
+    <delete id="daily_report_delete">
+        DELETE from con_daily_effort_row
+        where deffr_location_id = #{deffr_location_id} and deffr_reporting_date_yyyy_mm_dd = #{deffr_month_year_date}
+    </delete>
+
+    <delete id="monthly_report_delete">
+        DELETE from con_monthly_effort_row
+        where meffr_location_id = #{meffr_location_id} and meffr_month_year = #{meffr_month_year}
+    </delete>
+
+    <select id="daily_location_visit_select" resultType="map">
+        SELECT distinct deffr_location_id from con_daily_effort_row
+        <include refid="base.where_statement"></include>
+    </select>
+
+    <select id="month_location_visit_select" resultType="map">
+        SELECT distinct meffr_location_id from con_monthly_effort_row
+        <include refid="base.where_statement"></include>
+    </select>
+
+
+    <select id="doctor_by_classification_select" resultType="map">
+        select doctr_location_id, doctr_classification_id, count(1) cnt from cmt_doctor_master where doctr_is_active = true group by doctr_location_id, doctr_classification_id
+    </select>
+
+</mapper>

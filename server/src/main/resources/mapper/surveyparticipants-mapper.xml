@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SurveyParticipants-mapper">
+    <cache />
+
+
+            <select id="srpat_select" resultMap="srpatMap">
+                SELECT SRPAT_SURVEY_ID, SRPAT_PUBLISHER, SRPAT_CONSUMNER, SRPAT_CREATED_BY, SRPAT_UPDATED_BY, SRPAT_CREATED_ON, SRPAT_UPDATED_ON, SRPAT_STALE_ID, SRPAT_ID FROM ${schemaName}.SRY_SURVEY_PARTICIPANTS
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="srpatMap" type="com.squer.sfe.survey.entity.SurveyParticipants" autoMapping="true">
+            		<id property="id" column="SRPAT_ID" />
+			<result property="survey" column="SRPAT_SURVEY_ID" />
+			<result property="publisher" column="SRPAT_PUBLISHER" />
+			<result property="consumner" column="SRPAT_CONSUMNER" />
+			<result property="createdBy" column="SRPAT_CREATED_BY" />
+			<result property="updatedBy" column="SRPAT_UPDATED_BY" />
+			<result property="createdOn" column="SRPAT_CREATED_ON" />
+			<result property="updatedOn" column="SRPAT_UPDATED_ON" />
+			<result property="staleId" column="SRPAT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="srpat_insert" >
+                INSERT INTO ${schemaName}.SRY_SURVEY_PARTICIPANTS(SRPAT_SURVEY_ID, SRPAT_PUBLISHER, SRPAT_CONSUMNER, SRPAT_CREATED_BY, SRPAT_UPDATED_BY, SRPAT_CREATED_ON, SRPAT_UPDATED_ON, SRPAT_STALE_ID, SRPAT_ID)
+                VALUES (#{entity.survey.id}, #{entity.publisher}, #{entity.consumner}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="srpat_update" >
+                UPDATE ${schemaName}.SRY_SURVEY_PARTICIPANTS set SRPAT_SURVEY_id = #{entity.survey.id}, SRPAT_PUBLISHER = #{entity.publisher}, SRPAT_CONSUMNER = #{entity.consumner}, SRPAT_UPDATED_BY = #{entity.updatedBy}, SRPAT_UPDATED_ON = #{entity.updatedOn}, SRPAT_STALE_ID = #{entity.staleId} 
+                WHERE SRPAT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="srpat_delete" >
+                DELETE FROM  ${schemaName}.SRY_SURVEY_PARTICIPANTS <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

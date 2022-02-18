@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SurveyCategory-mapper">
+    <cache />
+
+
+            <select id="srcat_select" resultMap="srcatMap">
+                SELECT SRCAT_SURVEY_ID, SRCAT_TITLE, SRCAT_DISPLAY_ORDER, SRCAT_IS_ACTIVE, SRCAT_CREATED_BY, SRCAT_UPDATED_BY, SRCAT_CREATED_ON, SRCAT_UPDATED_ON, SRCAT_STALE_ID, SRCAT_ID FROM ${schemaName}.SRY_SURVEY_CATEGORY
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="srcatMap" type="com.squer.sfe.survey.entity.SurveyCategory" autoMapping="true">
+            		<id property="id" column="SRCAT_ID" />
+			<result property="survey" column="SRCAT_SURVEY_ID" />
+			<result property="title" column="SRCAT_TITLE" />
+			<result property="displayOrder" column="SRCAT_DISPLAY_ORDER" />
+			<result property="isActive" column="SRCAT_IS_ACTIVE" />
+			<result property="createdBy" column="SRCAT_CREATED_BY" />
+			<result property="updatedBy" column="SRCAT_UPDATED_BY" />
+			<result property="createdOn" column="SRCAT_CREATED_ON" />
+			<result property="updatedOn" column="SRCAT_UPDATED_ON" />
+			<result property="staleId" column="SRCAT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="srcat_insert" >
+                INSERT INTO ${schemaName}.SRY_SURVEY_CATEGORY(SRCAT_SURVEY_ID, SRCAT_TITLE, SRCAT_DISPLAY_ORDER, SRCAT_IS_ACTIVE, SRCAT_CREATED_BY, SRCAT_UPDATED_BY, SRCAT_CREATED_ON, SRCAT_UPDATED_ON, SRCAT_STALE_ID, SRCAT_ID)
+                VALUES (#{entity.survey.id}, #{entity.title}, #{entity.displayOrder}, #{entity.isActive}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="srcat_update" >
+                UPDATE ${schemaName}.SRY_SURVEY_CATEGORY set SRCAT_SURVEY_id = #{entity.survey.id}, SRCAT_TITLE = #{entity.title}, SRCAT_DISPLAY_ORDER = #{entity.displayOrder}, SRCAT_IS_ACTIVE = #{entity.isActive}, SRCAT_UPDATED_BY = #{entity.updatedBy}, SRCAT_UPDATED_ON = #{entity.updatedOn}, SRCAT_STALE_ID = #{entity.staleId} 
+                WHERE SRCAT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="srcat_delete" >
+                DELETE FROM  ${schemaName}.SRY_SURVEY_CATEGORY <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

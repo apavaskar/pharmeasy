@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DetailingStat-mapper">
+    <cache />
+
+
+            <select id="dtlst_select" resultMap="dtlstMap">
+                SELECT DTLST_DETAIL_MASTER_ID, DTLST_FILE_ID, DTLST_START_TIME, DTLST_END_TIME, DTLST_REMARKS, DTLST_RATING, DTLST_CREATED_BY, DTLST_UPDATED_BY, DTLST_CREATED_ON, DTLST_UPDATED_ON, DTLST_STALE_ID, DTLST_ID FROM ${schemaName}.DTL_STAT_DETAILS
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="dtlstMap" type="com.squer.sfe.edetailing.entity.DetailingStat" autoMapping="true">
+            		<id property="id" column="DTLST_ID" />
+			<result property="detailMaster" column="DTLST_DETAIL_MASTER_ID" />
+			<result property="file" column="DTLST_FILE_ID" />
+			<result property="startTime" column="DTLST_START_TIME" />
+			<result property="endTime" column="DTLST_END_TIME" />
+			<result property="remarks" column="DTLST_REMARKS" />
+			<result property="rating" column="DTLST_RATING" />
+			<result property="createdBy" column="DTLST_CREATED_BY" />
+			<result property="updatedBy" column="DTLST_UPDATED_BY" />
+			<result property="createdOn" column="DTLST_CREATED_ON" />
+			<result property="updatedOn" column="DTLST_UPDATED_ON" />
+			<result property="staleId" column="DTLST_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="dtlst_insert" >
+                INSERT INTO ${schemaName}.DTL_STAT_DETAILS(DTLST_DETAIL_MASTER_ID, DTLST_FILE_ID, DTLST_START_TIME, DTLST_END_TIME, DTLST_REMARKS, DTLST_RATING, DTLST_CREATED_BY, DTLST_UPDATED_BY, DTLST_CREATED_ON, DTLST_UPDATED_ON, DTLST_STALE_ID, DTLST_ID)
+                VALUES (#{entity.detailMaster.id}, #{entity.file.id}, #{entity.startTime}, #{entity.endTime}, #{entity.remarks}, #{entity.rating}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="dtlst_update" >
+                UPDATE ${schemaName}.DTL_STAT_DETAILS set DTLST_DETAIL_MASTER_id = #{entity.detailMaster.id}, DTLST_FILE_id = #{entity.file.id}, DTLST_START_TIME = #{entity.startTime}, DTLST_END_TIME = #{entity.endTime}, DTLST_REMARKS = #{entity.remarks}, DTLST_RATING = #{entity.rating}, DTLST_UPDATED_BY = #{entity.updatedBy}, DTLST_UPDATED_ON = #{entity.updatedOn}, DTLST_STALE_ID = #{entity.staleId} 
+                WHERE DTLST_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="dtlst_delete" >
+                DELETE FROM  ${schemaName}.DTL_STAT_DETAILS <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

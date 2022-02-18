@@ -1,0 +1,38 @@
+package $controllerPackageName
+
+import $entityPath
+import $servicePath
+import com.squer.platform.business.entity.SquerId
+import com.squer.platform.persistence.repository.SquerRepository
+import com.squer.platform.services.exception.SquerException
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.*
+import kotlin.jvm.Throws
+
+@RequestMapping("/$requestName")
+@RestController
+class $controllerName {
+    @Autowired
+    lateinit var repository: SquerRepository
+
+    @Autowired
+    lateinit var entityService: $serviceName
+
+    @Throws(SquerException::class)
+    @GetMapping("/{id}")
+    fun getById(@PathVariable id: String): $entityName {
+        return entityService.findById(id)
+    }
+
+    @Throws(SquerException::class)
+    @PostMapping("/create")
+    fun createEntity(@RequestBody entity: $entityName): $entityName {
+        return entityService.create(entity)
+    }
+
+    @Throws(SquerException::class)
+    @PutMapping("/update")
+    fun updateEntity(@RequestBody entity: $entityName): $entityName {
+        return entityService.update(entity)
+    }
+}

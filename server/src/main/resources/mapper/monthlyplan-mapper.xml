@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MonthlyPlan-mapper">
+    <cache />
+
+
+            <select id="mtpln_select" resultMap="mtplnMap">
+                SELECT MTPLN_YEAR_MONTH, MTPLN_YEAR, MTPLN_LOCATION_ID, MTPLN_EMPLOYEE_ID, MTPLN_STATUS_ID, MTPLN_CREATED_BY, MTPLN_UPDATED_BY, MTPLN_CREATED_ON, MTPLN_UPDATED_ON, MTPLN_STALE_ID, MTPLN_ID FROM ${schemaName}.RPT_MONTHLY_PLAN
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="mtplnMap" type="com.squer.sfe.reporting.entity.MonthlyPlan" autoMapping="true">
+            		<id property="id" column="MTPLN_ID" />
+			<result property="yearMonth" column="MTPLN_YEAR_MONTH" />
+			<result property="year" column="MTPLN_YEAR" />
+			<result property="location" column="MTPLN_LOCATION_ID" />
+			<result property="employee" column="MTPLN_EMPLOYEE_ID" />
+			<result property="status" column="MTPLN_STATUS_ID" />
+			<result property="createdBy" column="MTPLN_CREATED_BY" />
+			<result property="updatedBy" column="MTPLN_UPDATED_BY" />
+			<result property="createdOn" column="MTPLN_CREATED_ON" />
+			<result property="updatedOn" column="MTPLN_UPDATED_ON" />
+			<result property="staleId" column="MTPLN_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="mtpln_insert" >
+                INSERT INTO ${schemaName}.RPT_MONTHLY_PLAN(MTPLN_YEAR_MONTH, MTPLN_YEAR, MTPLN_LOCATION_ID, MTPLN_EMPLOYEE_ID, MTPLN_STATUS_ID, MTPLN_CREATED_BY, MTPLN_UPDATED_BY, MTPLN_CREATED_ON, MTPLN_UPDATED_ON, MTPLN_STALE_ID, MTPLN_ID)
+                VALUES (#{entity.yearMonth}, #{entity.year}, #{entity.location.id}, #{entity.employee.id}, #{entity.status.id}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="mtpln_update" >
+                UPDATE ${schemaName}.RPT_MONTHLY_PLAN set MTPLN_YEAR_MONTH = #{entity.yearMonth}, MTPLN_YEAR = #{entity.year}, MTPLN_LOCATION_id = #{entity.location.id}, MTPLN_EMPLOYEE_id = #{entity.employee.id}, MTPLN_STATUS_id = #{entity.status.id}, MTPLN_UPDATED_BY = #{entity.updatedBy}, MTPLN_UPDATED_ON = #{entity.updatedOn}, MTPLN_STALE_ID = #{entity.staleId} 
+                WHERE MTPLN_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="mtpln_delete" >
+                DELETE FROM  ${schemaName}.RPT_MONTHLY_PLAN <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

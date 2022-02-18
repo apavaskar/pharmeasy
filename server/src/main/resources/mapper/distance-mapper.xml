@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Distance-mapper">
+    <cache />
+
+
+            <select id="distn_select" resultMap="distnMap">
+                SELECT DISTN_FROM_TOWN_ID, DISTN_TO_TOWN_ID, DISTN_FROM_STATE_ID, DISTN_TO_STATE_ID, DISTN_KMS, DISTN_FROM_TO_LOC, DISTN_TO_FROM_LOC, DISTN_CREATED_BY, DISTN_UPDATED_BY, DISTN_CREATED_ON, DISTN_UPDATED_ON, DISTN_STALE_ID, DISTN_ID FROM ${schemaName}.EXP_DISTANCE_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="distnMap" type="com.squer.sfe.expense.entity.Distance" autoMapping="true">
+            		<id property="id" column="DISTN_ID" />
+			<result property="fromTown" column="DISTN_FROM_TOWN_ID" />
+			<result property="toTown" column="DISTN_TO_TOWN_ID" />
+			<result property="fromState" column="DISTN_FROM_STATE_ID" />
+			<result property="toState" column="DISTN_TO_STATE_ID" />
+			<result property="kms" column="DISTN_KMS" />
+			<result property="fromToLoc" column="DISTN_FROM_TO_LOC" />
+			<result property="toFromLoc" column="DISTN_TO_FROM_LOC" />
+			<result property="createdBy" column="DISTN_CREATED_BY" />
+			<result property="updatedBy" column="DISTN_UPDATED_BY" />
+			<result property="createdOn" column="DISTN_CREATED_ON" />
+			<result property="updatedOn" column="DISTN_UPDATED_ON" />
+			<result property="staleId" column="DISTN_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="distn_insert" >
+                INSERT INTO ${schemaName}.EXP_DISTANCE_MASTER(DISTN_FROM_TOWN_ID, DISTN_TO_TOWN_ID, DISTN_FROM_STATE_ID, DISTN_TO_STATE_ID, DISTN_KMS, DISTN_FROM_TO_LOC, DISTN_TO_FROM_LOC, DISTN_CREATED_BY, DISTN_UPDATED_BY, DISTN_CREATED_ON, DISTN_UPDATED_ON, DISTN_STALE_ID, DISTN_ID)
+                VALUES (#{entity.fromTown.id}, #{entity.toTown.id}, #{entity.fromState.id}, #{entity.toState.id}, #{entity.kms}, #{entity.fromToLoc}, #{entity.toFromLoc}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="distn_update" >
+                UPDATE ${schemaName}.EXP_DISTANCE_MASTER set DISTN_FROM_TOWN_id = #{entity.fromTown.id}, DISTN_TO_TOWN_id = #{entity.toTown.id}, DISTN_FROM_STATE_id = #{entity.fromState.id}, DISTN_TO_STATE_id = #{entity.toState.id}, DISTN_KMS = #{entity.kms}, DISTN_FROM_TO_LOC = #{entity.fromToLoc}, DISTN_TO_FROM_LOC = #{entity.toFromLoc}, DISTN_UPDATED_BY = #{entity.updatedBy}, DISTN_UPDATED_ON = #{entity.updatedOn}, DISTN_STALE_ID = #{entity.staleId} 
+                WHERE DISTN_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="distn_delete" >
+                DELETE FROM  ${schemaName}.EXP_DISTANCE_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

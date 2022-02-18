@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SurveyConfig-mapper">
+    <cache />
+
+
+            <select id="srcfg_select" resultMap="srcfgMap">
+                SELECT SRCFG_SURVEY_ID, SRCFG_PUBLISHER_QUERY, SRCFG_CONSUMER_QUERY, SRCFG_CREATED_BY, SRCFG_UPDATED_BY, SRCFG_CREATED_ON, SRCFG_UPDATED_ON, SRCFG_STALE_ID, SRCFG_ID FROM ${schemaName}.SRY_SURVEY_CONFIG
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="srcfgMap" type="com.squer.sfe.survey.entity.SurveyConfig" autoMapping="true">
+            		<id property="id" column="SRCFG_ID" />
+			<result property="survey" column="SRCFG_SURVEY_ID" />
+			<result property="publisherQuery" column="SRCFG_PUBLISHER_QUERY" />
+			<result property="consumerQuery" column="SRCFG_CONSUMER_QUERY" />
+			<result property="createdBy" column="SRCFG_CREATED_BY" />
+			<result property="updatedBy" column="SRCFG_UPDATED_BY" />
+			<result property="createdOn" column="SRCFG_CREATED_ON" />
+			<result property="updatedOn" column="SRCFG_UPDATED_ON" />
+			<result property="staleId" column="SRCFG_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="srcfg_insert" >
+                INSERT INTO ${schemaName}.SRY_SURVEY_CONFIG(SRCFG_SURVEY_ID, SRCFG_PUBLISHER_QUERY, SRCFG_CONSUMER_QUERY, SRCFG_CREATED_BY, SRCFG_UPDATED_BY, SRCFG_CREATED_ON, SRCFG_UPDATED_ON, SRCFG_STALE_ID, SRCFG_ID)
+                VALUES (#{entity.survey.id}, #{entity.publisherQuery}, #{entity.consumerQuery}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="srcfg_update" >
+                UPDATE ${schemaName}.SRY_SURVEY_CONFIG set SRCFG_SURVEY_id = #{entity.survey.id}, SRCFG_PUBLISHER_QUERY = #{entity.publisherQuery}, SRCFG_CONSUMER_QUERY = #{entity.consumerQuery}, SRCFG_UPDATED_BY = #{entity.updatedBy}, SRCFG_UPDATED_ON = #{entity.updatedOn}, SRCFG_STALE_ID = #{entity.staleId} 
+                WHERE SRCFG_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="srcfg_delete" >
+                DELETE FROM  ${schemaName}.SRY_SURVEY_CONFIG <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

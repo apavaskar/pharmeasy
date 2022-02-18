@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DetailingFaqs-mapper">
+    <cache />
+
+
+            <select id="dtlfq_select" resultMap="dtlfqMap">
+                SELECT DTLFQ_DETAIL_STAT_ID, DTLFQ_QUESTION, DTLFQ_ANSWER, DTLFQ_CREATED_BY, DTLFQ_UPDATED_BY, DTLFQ_CREATED_ON, DTLFQ_UPDATED_ON, DTLFQ_STALE_ID, DTLFQ_ID FROM ${schemaName}.DTL_DETAILING_FAQ
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="dtlfqMap" type="com.squer.sfe.edetailing.entity.DetailingFaqs" autoMapping="true">
+            		<id property="id" column="DTLFQ_ID" />
+			<result property="detailStat" column="DTLFQ_DETAIL_STAT_ID" />
+			<result property="question" column="DTLFQ_QUESTION" />
+			<result property="answer" column="DTLFQ_ANSWER" />
+			<result property="createdBy" column="DTLFQ_CREATED_BY" />
+			<result property="updatedBy" column="DTLFQ_UPDATED_BY" />
+			<result property="createdOn" column="DTLFQ_CREATED_ON" />
+			<result property="updatedOn" column="DTLFQ_UPDATED_ON" />
+			<result property="staleId" column="DTLFQ_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="dtlfq_insert" >
+                INSERT INTO ${schemaName}.DTL_DETAILING_FAQ(DTLFQ_DETAIL_STAT_ID, DTLFQ_QUESTION, DTLFQ_ANSWER, DTLFQ_CREATED_BY, DTLFQ_UPDATED_BY, DTLFQ_CREATED_ON, DTLFQ_UPDATED_ON, DTLFQ_STALE_ID, DTLFQ_ID)
+                VALUES (#{entity.detailStat.id}, #{entity.question}, #{entity.answer}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="dtlfq_update" >
+                UPDATE ${schemaName}.DTL_DETAILING_FAQ set DTLFQ_DETAIL_STAT_id = #{entity.detailStat.id}, DTLFQ_QUESTION = #{entity.question}, DTLFQ_ANSWER = #{entity.answer}, DTLFQ_UPDATED_BY = #{entity.updatedBy}, DTLFQ_UPDATED_ON = #{entity.updatedOn}, DTLFQ_STALE_ID = #{entity.staleId} 
+                WHERE DTLFQ_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="dtlfq_delete" >
+                DELETE FROM  ${schemaName}.DTL_DETAILING_FAQ <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HospitalRcpa-mapper">
+    <cache />
+
+
+            <select id="hrcpa_select" resultMap="hrcpaMap">
+                SELECT HRCPA_HOSPITAL_ID, HRCPA_LOCATION_ID, HRCPA_EMPLOYEE_ID, HRCPA_YYYY_MM, HRCPA_YYYY_MM_DD, HRCPA_ICU_PATIENTS, HRCPA_EMROK_PATIENTS, HRCPA_TEICOPLANIN_PATIENTS, HRCPA_IS_ACTIVE, HRCPA_STATUS_ID, HRCPA_CREATED_BY, HRCPA_UPDATED_BY, HRCPA_CREATED_ON, HRCPA_UPDATED_ON, HRCPA_STALE_ID, HRCPA_ID FROM ${schemaName}.RPT_HOSPITAL_RCPA
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="hrcpaMap" type="com.squer.sfe.reporting.entity.HospitalRcpa" autoMapping="true">
+            		<id property="id" column="HRCPA_ID" />
+			<result property="hospital" column="HRCPA_HOSPITAL_ID" />
+			<result property="location" column="HRCPA_LOCATION_ID" />
+			<result property="employee" column="HRCPA_EMPLOYEE_ID" />
+			<result property="yyyyMm" column="HRCPA_YYYY_MM" />
+			<result property="yyyyMmDd" column="HRCPA_YYYY_MM_DD" />
+			<result property="icuPatients" column="HRCPA_ICU_PATIENTS" />
+			<result property="emrokPatients" column="HRCPA_EMROK_PATIENTS" />
+			<result property="teicoplaninPatients" column="HRCPA_TEICOPLANIN_PATIENTS" />
+			<result property="isActive" column="HRCPA_IS_ACTIVE" />
+			<result property="status" column="HRCPA_STATUS_ID" />
+			<result property="createdBy" column="HRCPA_CREATED_BY" />
+			<result property="updatedBy" column="HRCPA_UPDATED_BY" />
+			<result property="createdOn" column="HRCPA_CREATED_ON" />
+			<result property="updatedOn" column="HRCPA_UPDATED_ON" />
+			<result property="staleId" column="HRCPA_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="hrcpa_insert" >
+                INSERT INTO ${schemaName}.RPT_HOSPITAL_RCPA(HRCPA_HOSPITAL_ID, HRCPA_LOCATION_ID, HRCPA_EMPLOYEE_ID, HRCPA_YYYY_MM, HRCPA_YYYY_MM_DD, HRCPA_ICU_PATIENTS, HRCPA_EMROK_PATIENTS, HRCPA_TEICOPLANIN_PATIENTS, HRCPA_IS_ACTIVE, HRCPA_STATUS_ID, HRCPA_CREATED_BY, HRCPA_UPDATED_BY, HRCPA_CREATED_ON, HRCPA_UPDATED_ON, HRCPA_STALE_ID, HRCPA_ID)
+                VALUES (#{entity.hospital.id}, #{entity.location.id}, #{entity.employee.id}, #{entity.yyyyMm}, #{entity.yyyyMmDd}, #{entity.icuPatients}, #{entity.emrokPatients}, #{entity.teicoplaninPatients}, #{entity.isActive}, #{entity.status.id}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="hrcpa_update" >
+                UPDATE ${schemaName}.RPT_HOSPITAL_RCPA set HRCPA_HOSPITAL_id = #{entity.hospital.id}, HRCPA_LOCATION_id = #{entity.location.id}, HRCPA_EMPLOYEE_id = #{entity.employee.id}, HRCPA_YYYY_MM = #{entity.yyyyMm}, HRCPA_YYYY_MM_DD = #{entity.yyyyMmDd}, HRCPA_ICU_PATIENTS = #{entity.icuPatients}, HRCPA_EMROK_PATIENTS = #{entity.emrokPatients}, HRCPA_TEICOPLANIN_PATIENTS = #{entity.teicoplaninPatients}, HRCPA_IS_ACTIVE = #{entity.isActive}, HRCPA_STATUS_id = #{entity.status.id}, HRCPA_UPDATED_BY = #{entity.updatedBy}, HRCPA_UPDATED_ON = #{entity.updatedOn}, HRCPA_STALE_ID = #{entity.staleId} 
+                WHERE HRCPA_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="hrcpa_delete" >
+                DELETE FROM  ${schemaName}.RPT_HOSPITAL_RCPA <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

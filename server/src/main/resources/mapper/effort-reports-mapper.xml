@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="effort-reports">
+    <cache />
+
+    <!-- Here -->
+    <select id="dml_coverage_count_select" resultType="map">
+        select
+        dtvat_location_id,
+        cast(count(dtvat_customer_id) FILTER (WHERE doctr_classification_id = 'syslv00000000000000000000000000000128' and dates >= 2) as bigint) as core_count,
+        cast(count(dtvat_customer_id) FILTER (WHERE doctr_classification_id = 'syslv00000000000000000000000000000129'  and dates >= 0) as bigint) as non_core_count,
+        cast(count(dtvat_customer_id) FILTER (WHERE doctr_classification_id = 'syslv00000000000000000000000000000130'  and dates >= 3) as bigint) as super_core_count,
+        cast(count(dtvat_customer_id) as bigint) as total_count
+        from (
+        select distinct dtvat_location_id, doctr_classification_id, dtvat_customer_id, count(distinct dtvat_yyyy_mm_dd) dates
+        from rpt_daily_visit_attendee
+            inner join cmt_doctor_master on doctr_id = dtvat_customer_id
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) on locat_id = dtvat_location_id
+        </if>
+        <if test="conditions.divisionId != null">
+            inner join cmt_location_master on locat_id = dtvat_location_id
+        </if>
+        where dtvat_is_reported = true and doctr_is_active = true
+        and dtvat_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+        group by dtvat_location_id, doctr_classification_id, dtvat_customer_id
+        ) a group by dtvat_location_id
+    </select>
+
+    <select id="dml_call_count_select" resultType="map">
+        select
+        dtvat_location_id,
+        cast(count(customer_counts) FILTER (WHERE doctr_classification_id = 'syslv00000000000000000000000000000128') as bigint) as core_count,
+        cast(count(customer_counts) FILTER (WHERE doctr_classification_id = 'syslv00000000000000000000000000000129') as bigint) as non_core_count,
+        cast(count(customer_counts) FILTER (WHERE doctr_classification_id = 'syslv00000000000000000000000000000130') as bigint) as super_core_count
+        from (
+        select dtvat_location_id,
+            doctr_classification_id,
+            dtvat_customer_id customer_counts
+        from rpt_daily_visit_attendee
+        inner join cmt_doctor_master on doctr_id = dtvat_customer_id
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) on locat_id = dtvat_location_id
+        </if>
+        <if test="conditions.divisionId != null">
+            inner join cmt_location_master on locat_id = dtvat_location_id
+        </if>
+        where dtvat_is_reported = true and doctr_is_active = true
+        and dtvat_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+        ) a group by dtvat_location_id
+    </select>
+
+    <select id="dml_call_type_count_select" resultType="map">
+        select dtvat_location_id,
+        cast(count(tot_doc_count) filter (where type_id = 'syslv00000000000000000000000000000027') as bigint) as digital_doctors,
+        cast(count(distinct tot_doc_count) filter (where type_id = 'syslv00000000000000000000000000000027') as bigint) as distinct_digital_doctors,
+        cast(count(tot_doc_count) filter (where type_id = 'syslv00000000000000000000000000000028') as bigint) as physical_doctors,
+        cast(count(distinct tot_doc_count) filter (where type_id = 'syslv00000000000000000000000000000028') as bigint) as distinct_physical_doctors
+        from (
+        SELECT dtvat_location_id, dtvat_visit_type_id type_id,
+        dtvat_customer_id  tot_doc_count
+        from rpt_daily_visit_attendee att
+        inner join cmt_doctor_master doc on doc.doctr_id = att.dtvat_customer_id
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) on locat_id = dtvat_location_id
+        </if>
+        <if test="conditions.divisionId != null">
+            inner join cmt_location_master on locat_id = dtvat_location_id
+        </if>
+        where dtvat_is_reported = true and doctr_is_active = true
+        and dtvat_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+        ) a group by dtvat_location_id
+    </select>
+
+    <select id="dml_call_type_days_select" resultType="map">
+        select dtvat_location_id, count(dtvat_yyyy_mm_dd) count_days from (
+        select distinct dtvat_location_id, dtvat_yyyy_mm_dd from rpt_daily_visit_attendee
+            <if test="conditions.locationId != null">
+                inner join get_all_team(#{conditions.locationId.value}) on locat_id = dtvat_location_id
+            </if>
+            <if test="conditions.divisionId != null">
+                inner join cmt_location_master on locat_id = dtvat_location_id
+            </if>
+                where dtvat_is_reported = true
+                    and dtvat_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+                    and dtvat_activity_type_id = #{conditions.type1.value}
+            <if test="conditions.divisionId != null">
+                and locat_division_id = #{conditions.divisionId.value}
+            </if>
+        ${conditions.action.value}
+        select distinct dtvat_location_id, dtvat_yyyy_mm_dd from rpt_daily_visit_attendee
+            <if test="conditions.locationId != null">
+                inner join get_all_team(#{conditions.locationId.value}) on locat_id = dtvat_location_id
+            </if>
+            <if test="conditions.divisionId != null">
+                inner join cmt_location_master on locat_id = dtvat_location_id
+            </if>
+            where dtvat_is_reported = true
+            and dtvat_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+            and dtvat_activity_type_id = #{conditions.type2.value}
+            <if test="conditions.divisionId != null">
+                and locat_division_id = #{conditions.divisionId.value}
+            </if>
+        ) a group by dtvat_location_id
+    </select>
+
+    <select id="chemist_call_count" resultType="map">
+        SELECT dtvat_location_id, count(distinct concat(vrcpa_chemist_id, dtvat_yyyy_mm_dd)) chemist_calls FROM (
+        SELECT
+        DISTINCT dtvat_location_id, dtvat_yyyy_mm_dd, vrcpa_chemist_id
+        from rpt_visit_rcpa
+        inner join rpt_daily_visit_attendee on vrcpa_attendee_id = dtvat_id
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) on locat_id = dtvat_location_id
+        </if>
+        <if test="conditions.divisionId != null">
+            inner join cmt_location_master on locat_id = dtvat_location_id
+        </if>
+        where dtvat_is_reported = true
+        and dtvat_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+        ) a group by dtvat_location_id;
+    </select>
+
+    <select id="chemist_coverage_count" resultType="map">
+        SELECT dtvat_location_id, count( distinct vrcpa_chemist_id) chemist_calls FROM (
+        SELECT
+        DISTINCT dtvat_location_id, vrcpa_chemist_id
+        from rpt_visit_rcpa
+        inner join rpt_daily_visit_attendee on vrcpa_attendee_id = dtvat_id
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) on locat_id = dtvat_location_id
+        </if>
+        <if test="conditions.divisionId != null">
+            inner join cmt_location_master on locat_id = dtvat_location_id
+        </if>
+        where dtvat_is_reported = true
+        and dtvat_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+        ) a group by dtvat_location_id;
+    </select>
+
+    <select id="joint_visit_days_select" resultType="map">
+        SELECT  dtvat_location_id, count(DISTINCT dtvat_yyyy_mm_dd) count_days
+            from rpt_daily_visit_attendee
+            inner join rpt_daily_visit_joinee
+            on dtvat_id = dtvje_attendee_id and dtvje_is_active = TRUE and dtvje_status_id = 'syslv00000000000000000000000000000032'
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) on locat_id = dtvat_location_id
+        </if>
+        <if test="conditions.divisionId != null">
+            inner join cmt_location_master on locat_id = dtvat_location_id
+        </if>
+        where dtvat_is_reported = true
+        and dtvat_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+        group by dtvat_location_id
+    </select>
+
+    <select id="leave_day_select" resultType="map">
+        select dtvat_location_id, count(dtvat_yyyy_mm_dd) count_days
+        from rpt_daily_visit_attendee
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) on locat_id = dtvat_location_id
+        </if>
+        <if test="conditions.divisionId != null">
+            inner join cmt_location_master on locat_id = dtvat_location_id
+        </if>
+        where dtvat_activity_type_id = 'syslv00000000000000000000000000000026'
+        and dtvat_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+        group by dtvat_location_id
+    </select>
+
+    <select id="holiday_count_select" resultType="map">
+        SELECT  l.locat_id locat_id, count(1) hoilday_count
+        from cmt_location_master l
+        inner JOIN cmt_town_master on locat_town_id = towns_id
+        inner join cmt_holiday_details on hldtl_state_id = towns_state_id
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) t on t.locat_id = l.locat_id
+        </if>
+        where hldtl_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+        group by l.locat_id;
+    </select>
+
+    <select id="physical_digital_call_type_days_select" resultType="map">
+        select dtvat_location_id, count(dtvat_yyyy_mm_dd) count_days from (
+        select distinct dtvat_location_id, dtvat_yyyy_mm_dd from rpt_daily_visit_attendee
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) on locat_id = dtvat_location_id
+        </if>
+        <if test="conditions.divisionId != null">
+            inner join cmt_location_master on locat_id = dtvat_location_id
+        </if>
+        where dtvat_is_reported = true
+        and dtvat_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+        and dtvat_visit_type_id = #{conditions.type1.value}
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+        ${conditions.action.value}
+        select distinct dtvat_location_id, dtvat_yyyy_mm_dd from rpt_daily_visit_attendee
+        <if test="conditions.locationId != null">
+            inner join get_all_team(#{conditions.locationId.value}) on locat_id = dtvat_location_id
+        </if>
+        <if test="conditions.divisionId != null">
+            inner join cmt_location_master on locat_id = dtvat_location_id
+        </if>
+        where dtvat_is_reported = true
+        and dtvat_yyyy_mm = #{conditions.dtvat_yyyy_mm.value}
+        and dtvat_visit_type_id = #{conditions.type2.value}
+        <if test="conditions.divisionId != null">
+            and locat_division_id = #{conditions.divisionId.value}
+        </if>
+        ) a group by dtvat_location_id
+    </select>
+
+    <select id="missed_call_select" resultType="map">
+        select distinct locat_id, a.doctr_id, doctr_name, doctr_person_code, beats_name, locat_name
+        from (
+            select l.locat_id, doctr_id, t.locat_name locat_name
+            from cmt_location_master l
+            inner join cmt_doctor_master on doctr_location_id = l.locat_id
+            inner join get_all_team(#{conditions.locationId.value}) t on t.locat_id = l.locat_id
+            where doctr_is_active = true
+            except
+            select dtvat_location_id locat_id, dtvat_customer_id doctr_id, t.locat_name locat_name
+            from rpt_daily_visit_attendee
+            inner join get_all_team(#{conditions.locationId.value}) t on t.locat_id = dtvat_location_id
+            where dtvat_is_reported = true and dtvat_yyyy_mm = #{conditions.yearMonth.value}
+        ) a
+        inner join cmt_doctor_master doctor on a.doctr_id = doctor.doctr_id
+        inner join cmt_beat_master beat on beat.beats_id = doctor.doctr_beat_id
+    </select>
+
+    <select id="daily_report_select" resultType="map">
+        select divsn, znnm,rgn,locat,emply,empcd,jobrl,actdt,actyp,actnm from(
+            SELECT
+            dv.divsn_name divsn, z.locat_name znnm, r.locat_name rgn ,l.locat_name locat ,
+            e.emply_name emply,e.emply_person_code empcd ,j.jobrl_name jobrl,
+            to_date(att.dtvat_yyyy_mm_dd::text, 'YYYYMMDD') actdt, act.syslv_name actyp,doc.doctr_name actnm
+            from rpt_monthly_plan pl
+            inner join rpt_daily_visit_attendee att on att.dtvat_plan_id = pl.mtpln_id
+            inner join cmt_location_master l on l.locat_id = pl.mtpln_location_id
+            inner join cmt_location_master r on r.locat_id = l.locat_parent_id
+            inner join cmt_location_master z on z.locat_id = r.locat_parent_id
+            INNER JOIN cmt_division_master dv on dv.divsn_id = l.locat_division_id
+            inner join cmt_doctor_master doc on doc.doctr_id = att.dtvat_customer_id
+            inner join fmk_system_lov act on act.syslv_id = att.dtvat_activity_type_id
+            left join cmt_employee_profile ep on ep.emprf_employee_id = pl.mtpln_employee_id and ep.emprf_is_default = true and ep.emprf_is_active = TRUE
+            left join cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+            left join cmt_job_role j on j.jobrl_id = ep.emprf_job_role_id
+            where att.dtvat_is_reported = TRUE
+            and l.locat_id = #{conditions.locationId.value}
+            and dtvat_yyyy_mm = #{conditions.yearMonth.value}
+            and att.dtvat_activity_type_id = 'syslv00000000000000000000000000000024'
+            UNION ALL
+            SELECT
+            dv.divsn_name divsn, z.locat_name znnm, r.locat_name rgn ,l.locat_name locat ,e.emply_name emply,e.emply_person_code empcd ,j.jobrl_name jobrl,
+            to_date(att.dtvat_yyyy_mm_dd::text, 'YYYYMMDD') actdt, act.syslv_name actyp,c.chmst_name actnm
+            from rpt_monthly_plan pl
+            inner join rpt_daily_visit_attendee att on att.dtvat_plan_id = pl.mtpln_id
+            inner join cmt_location_master l on l.locat_id = pl.mtpln_location_id
+            inner join cmt_location_master r on r.locat_id = l.locat_parent_id
+            inner join cmt_location_master z on z.locat_id = r.locat_parent_id
+            INNER JOIN cmt_division_master dv on dv.divsn_id = l.locat_division_id
+            inner join cmt_chemist_master c on c.chmst_id = att.dtvat_customer_id
+            inner join fmk_system_lov act on act.syslv_id = att.dtvat_activity_type_id
+            left join cmt_employee_profile ep on ep.emprf_employee_id = pl.mtpln_employee_id and ep.emprf_is_default = true and ep.emprf_is_active = TRUE
+            left join cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+            left join cmt_job_role j on j.jobrl_id = ep.emprf_job_role_id
+            where att.dtvat_is_reported = TRUE
+            and dtvat_yyyy_mm = #{conditions.yearMonth.value}
+            and l.locat_id = #{conditions.locationId.value}
+            and att.dtvat_activity_type_id = 'syslv00000000000000000000000000000024'
+            UNION ALL
+            SELECT
+            dv.divsn_name divsn, z.locat_name znnm, r.locat_name rgn ,l.locat_name locat ,e.emply_name emply,e.emply_person_code empcd ,j.jobrl_name jobrl,
+            to_date(att.dtvat_yyyy_mm_dd::text, 'YYYYMMDD') actdt,  act.syslv_name actyp,tp.syslv_name actnm
+            from rpt_monthly_plan pl
+            inner join rpt_daily_visit_attendee att on att.dtvat_plan_id = pl.mtpln_id
+            inner join cmt_location_master l on l.locat_id = pl.mtpln_location_id
+            inner join cmt_location_master r on r.locat_id = l.locat_parent_id
+            inner join cmt_location_master z on z.locat_id = r.locat_parent_id
+            INNER JOIN cmt_division_master dv on dv.divsn_id = l.locat_division_id
+            inner join fmk_system_lov act on act.syslv_id = att.dtvat_activity_type_id
+            inner join fmk_system_lov tp on tp.syslv_id = att.dtvat_activity_type_id_id
+            left join cmt_employee_profile ep on ep.emprf_employee_id = pl.mtpln_employee_id and ep.emprf_is_default = true and ep.emprf_is_active = TRUE
+            left join cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+            left join cmt_job_role j on j.jobrl_id = ep.emprf_job_role_id
+            where att.dtvat_is_reported = TRUE
+            and dtvat_yyyy_mm = #{conditions.yearMonth.value}
+            and l.locat_id = #{conditions.locationId.value}
+            and att.dtvat_activity_type_id = 'syslv00000000000000000000000000000025'
+            UNION ALL
+            SELECT
+            dv.divsn_name divsn, z.locat_name znnm, r.locat_name rgn ,l.locat_name locat ,e.emply_name emply,e.emply_person_code empcd ,j.jobrl_name jobrl,
+            to_date(att.dtvat_yyyy_mm_dd::text, 'YYYYMMDD') actdt, act.syslv_name actyp ,lt.syslv_name actnm
+            from rpt_monthly_plan pl
+            inner join rpt_daily_visit_attendee att on att.dtvat_plan_id = pl.mtpln_id
+            inner join cmt_location_master l on l.locat_id = pl.mtpln_location_id
+            inner join cmt_location_master r on r.locat_id = l.locat_parent_id
+            inner join cmt_location_master z on z.locat_id = r.locat_parent_id
+            INNER JOIN cmt_division_master dv on dv.divsn_id = l.locat_division_id
+            inner join fmk_system_lov act on act.syslv_id = att.dtvat_activity_type_id
+            inner join lev_leaves_applied lv on lv.leave_id = att.dtvat_activity_type_id_id
+            inner join fmk_system_lov lt on lt.syslv_id = lv.leave_leave_type_id
+            left join cmt_employee_profile ep on ep.emprf_employee_id = pl.mtpln_employee_id and ep.emprf_is_default = true and ep.emprf_is_active = TRUE
+            left join cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+            left join cmt_job_role j on j.jobrl_id = ep.emprf_job_role_id
+            where att.dtvat_is_reported = TRUE
+            and dtvat_yyyy_mm = #{conditions.yearMonth.value}
+            and l.locat_id = #{conditions.locationId.value}
+            and att.dtvat_activity_type_id = 'syslv00000000000000000000000000000026'
+        )  a order by divsn, znnm,rgn,locat,emply,empcd,jobrl,actdt,actyp,actnm
+    </select>
+
+    <select id="doctor_visit_report_select" resultType="map">
+        SELECT
+        dv.divsn_name, z.locat_name znnm, r.locat_name rgnm, l.locat_name locnm,e.emply_name empnm,e.emply_person_code empcode,j.jobrl_name jobrole,
+        lv.syslv_name calltype,doc.doctr_unique_code docuid,
+        doc.doctr_person_code,doc.doctr_name, cl.syslv_name clnm, sp.syslv_name spnm, to_date(att.dtvat_yyyy_mm_dd::text, 'YYYYMMDD') actdt,
+        att.dtvat_updated_on updt
+        from rpt_monthly_plan pl
+        inner join rpt_daily_visit_attendee att on att.dtvat_plan_id = pl.mtpln_id
+        inner join cmt_doctor_master doc on doc.doctr_id = att.dtvat_customer_id
+        inner join cmt_location_master l on l.locat_id = pl.mtpln_location_id
+        inner join cmt_location_master r on r.locat_id = l.locat_parent_id
+        inner join cmt_location_master z on z.locat_id = r.locat_parent_id
+        INNER JOIN cmt_division_master dv on dv.divsn_id = l.locat_division_id
+        INNER join fmk_system_lov sp on sp.syslv_id = doc.doctr_speciality_id
+        INNER join fmk_system_lov cl on cl.syslv_id = doc.doctr_classification_id
+        left join cmt_employee_profile ep on ep.emprf_location_id = l.locat_id and ep.emprf_is_default = true and ep.emprf_is_active = TRUE
+        left join cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+        left join cmt_job_role j on j.jobrl_id = ep.emprf_job_role_id
+        left join fmk_system_lov lv on lv.syslv_id = att.dtvat_visit_type_id
+        where  att.dtvat_is_reported = TRUE
+        and pl.mtpln_year_month = #{conditions.yearMonth.value}
+        and l.locat_id = #{conditions.locationId.value}
+        order by dv.divsn_name, r.locat_name,l.locat_name,e.emply_name,e.emply_person_code,j.jobrl_name,
+        att.dtvat_yyyy_mm_dd
+    </select>
+
+    <select id="all_location_select" resultType="map">
+        SELECT l.locat_id, l.locat_name, emply_person_code, emply_name
+        from CMT_LOCATION_MASTER l             inner join CMT_EMPLOYEE_PROFILE on emprf_location_id = locat_id
+        inner join CMT_EMPLOYEE_MASTER  on emply_id = emprf_employee_id
+        inner join get_all_team(#{conditions.locationId.value}) t on t.locat_id = l.locat_id
+    </select>
+    <select id="planned_visits_select" resultType="map">
+        select dtvat_location_id, dtvat_yyyy_mm_dd, count(dtvat_customer_id) cnt
+         from RPT_DAILY_VISIT_ATTENDEE
+        inner join get_all_team(#{conditions.locationId.value}) t on t.locat_id = dtvat_location_id
+        where dtvat_yyyy_mm = #{conditions.yyyyMM.value}
+        group by dtvat_location_id, dtvat_yyyy_mm_dd
+    </select>
+    <select id="reported_visits_select" resultType="map">
+        select dtvat_location_id, dtvat_yyyy_mm_dd, count(dtvat_customer_id) cnt
+        from RPT_DAILY_VISIT_ATTENDEE
+        inner join get_all_team(#{conditions.locationId.value}) t on t.locat_id = dtvat_location_id
+        where dtvat_yyyy_mm = #{conditions.yyyyMM.value} and dtvat_is_reported = true
+        group by dtvat_location_id, dtvat_yyyy_mm_dd
+    </select>
+</mapper>

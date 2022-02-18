@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VisitMarketingActivity-mapper">
+    <cache />
+
+
+            <select id="mract_select" resultMap="mractMap">
+                SELECT MRACT_ATTENDEE_ID, MRACT_ACTIVITY_ID, MRACT_DURATION, MRACT_IN_CLINIC_ACTIVITY, MRACT_IS_ACTIVE, MRACT_CREATED_BY, MRACT_UPDATED_BY, MRACT_CREATED_ON, MRACT_UPDATED_ON, MRACT_STALE_ID, MRACT_ID FROM ${schemaName}.RPT_MARKETING_ACTIVITY
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="mractMap" type="com.squer.sfe.reporting.entity.VisitMarketingActivity" autoMapping="true">
+            		<id property="id" column="MRACT_ID" />
+			<result property="attendee" column="MRACT_ATTENDEE_ID" />
+			<result property="activity" column="MRACT_ACTIVITY_ID" />
+			<result property="duration" column="MRACT_DURATION" />
+			<result property="inClinicActivity" column="MRACT_IN_CLINIC_ACTIVITY" />
+			<result property="isActive" column="MRACT_IS_ACTIVE" />
+			<result property="createdBy" column="MRACT_CREATED_BY" />
+			<result property="updatedBy" column="MRACT_UPDATED_BY" />
+			<result property="createdOn" column="MRACT_CREATED_ON" />
+			<result property="updatedOn" column="MRACT_UPDATED_ON" />
+			<result property="staleId" column="MRACT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="mract_insert" >
+                INSERT INTO ${schemaName}.RPT_MARKETING_ACTIVITY(MRACT_ATTENDEE_ID, MRACT_ACTIVITY_ID, MRACT_DURATION, MRACT_IN_CLINIC_ACTIVITY, MRACT_IS_ACTIVE, MRACT_CREATED_BY, MRACT_UPDATED_BY, MRACT_CREATED_ON, MRACT_UPDATED_ON, MRACT_STALE_ID, MRACT_ID)
+                VALUES (#{entity.attendee.id}, #{entity.activity.id}, #{entity.duration}, #{entity.inClinicActivity}, #{entity.isActive}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="mract_update" >
+                UPDATE ${schemaName}.RPT_MARKETING_ACTIVITY set MRACT_ATTENDEE_id = #{entity.attendee.id}, MRACT_ACTIVITY_id = #{entity.activity.id}, MRACT_DURATION = #{entity.duration}, MRACT_IN_CLINIC_ACTIVITY = #{entity.inClinicActivity}, MRACT_IS_ACTIVE = #{entity.isActive}, MRACT_UPDATED_BY = #{entity.updatedBy}, MRACT_UPDATED_ON = #{entity.updatedOn}, MRACT_STALE_ID = #{entity.staleId} 
+                WHERE MRACT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="mract_delete" >
+                DELETE FROM  ${schemaName}.RPT_MARKETING_ACTIVITY <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Document-mapper">
+    <cache />
+
+
+            <select id="docmt_select" resultMap="docmtMap">
+                SELECT DOCMT_TYPE, DOCMT_DOC_PATH, DOCMT_OWNER_ID, DOCMT_NAME, DOCMT_CI_NAME, DOCMT_CREATED_BY, DOCMT_UPDATED_BY, DOCMT_CREATED_ON, DOCMT_UPDATED_ON, DOCMT_STALE_ID, DOCMT_ID FROM ${schemaName}.CMT_DOCUMENT_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="docmtMap" type="com.squer.sfe.common.entity.Document" autoMapping="true">
+            		<id property="id" column="DOCMT_ID" />
+			<result property="type" column="DOCMT_TYPE" />
+			<result property="docPath" column="DOCMT_DOC_PATH" />
+			<result property="owner" column="DOCMT_OWNER_ID" />
+			<result property="name" column="DOCMT_NAME" />
+			<result property="ciName" column="DOCMT_CI_NAME" />
+			<result property="createdBy" column="DOCMT_CREATED_BY" />
+			<result property="updatedBy" column="DOCMT_UPDATED_BY" />
+			<result property="createdOn" column="DOCMT_CREATED_ON" />
+			<result property="updatedOn" column="DOCMT_UPDATED_ON" />
+			<result property="staleId" column="DOCMT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="docmt_insert" >
+                INSERT INTO ${schemaName}.CMT_DOCUMENT_MASTER(DOCMT_TYPE, DOCMT_DOC_PATH, DOCMT_OWNER_ID, DOCMT_NAME, DOCMT_CI_NAME, DOCMT_CREATED_BY, DOCMT_UPDATED_BY, DOCMT_CREATED_ON, DOCMT_UPDATED_ON, DOCMT_STALE_ID, DOCMT_ID)
+                VALUES (#{entity.type}, #{entity.docPath}, #{entity.owner.id}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="docmt_update" >
+                UPDATE ${schemaName}.CMT_DOCUMENT_MASTER set DOCMT_TYPE = #{entity.type}, DOCMT_DOC_PATH = #{entity.docPath}, DOCMT_OWNER_id = #{entity.owner.id}, DOCMT_NAME = #{entity.name}, DOCMT_CI_NAME = #{entity.ciName}, DOCMT_UPDATED_BY = #{entity.updatedBy}, DOCMT_UPDATED_ON = #{entity.updatedOn}, DOCMT_STALE_ID = #{entity.staleId} 
+                WHERE DOCMT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="docmt_delete" >
+                DELETE FROM  ${schemaName}.CMT_DOCUMENT_MASTER where docmt_id = #{entity.id}
+            </delete>    
+        
+
+</mapper>

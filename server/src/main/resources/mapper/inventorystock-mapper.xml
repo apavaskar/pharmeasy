@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InventoryStock-mapper">
+    <cache />
+
+
+            <select id="invst_select" resultMap="invstMap">
+                SELECT INVST_ITEM_ID, INVST_DOCUMENT_NUMBER, INVST_ITEM_NUMBER, INVST_LOCATION_ID, INVST_EMPLOYEE_ID, INVST_INVENTORY_DATE, INVST_BATCH_NUMBER, INVST_EXPIRY_DATE, INVST_SAP_DOWNLOAD_DATE, INVST_NET_VALUE, INVST_QUANTITY_ADDED, INVST_DISTRIBUTED, INVST_BALANCE, INVST_CREATED_BY, INVST_UPDATED_BY, INVST_CREATED_ON, INVST_UPDATED_ON, INVST_STALE_ID, INVST_ID FROM ${schemaName}.INV_INVENTORY_STOCK
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="invstMap" type="com.squer.sfe.inventory.entity.InventoryStock" autoMapping="true">
+            		<id property="id" column="INVST_ID" />
+			<result property="item" column="INVST_ITEM_ID" />
+			<result property="documentNumber" column="INVST_DOCUMENT_NUMBER" />
+			<result property="itemNumber" column="INVST_ITEM_NUMBER" />
+			<result property="location" column="INVST_LOCATION_ID" />
+			<result property="employee" column="INVST_EMPLOYEE_ID" />
+			<result property="inventoryDate" column="INVST_INVENTORY_DATE" />
+			<result property="batchNumber" column="INVST_BATCH_NUMBER" />
+			<result property="expiryDate" column="INVST_EXPIRY_DATE" />
+			<result property="sapDownloadDate" column="INVST_SAP_DOWNLOAD_DATE" />
+			<result property="netValue" column="INVST_NET_VALUE" />
+			<result property="quantityAdded" column="INVST_QUANTITY_ADDED" />
+			<result property="distributed" column="INVST_DISTRIBUTED" />
+			<result property="balance" column="INVST_BALANCE" />
+			<result property="createdBy" column="INVST_CREATED_BY" />
+			<result property="updatedBy" column="INVST_UPDATED_BY" />
+			<result property="createdOn" column="INVST_CREATED_ON" />
+			<result property="updatedOn" column="INVST_UPDATED_ON" />
+			<result property="staleId" column="INVST_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="invst_insert" >
+                INSERT INTO ${schemaName}.INV_INVENTORY_STOCK(INVST_ITEM_ID, INVST_DOCUMENT_NUMBER, INVST_ITEM_NUMBER, INVST_LOCATION_ID, INVST_EMPLOYEE_ID, INVST_INVENTORY_DATE, INVST_BATCH_NUMBER, INVST_EXPIRY_DATE, INVST_SAP_DOWNLOAD_DATE, INVST_NET_VALUE, INVST_QUANTITY_ADDED, INVST_DISTRIBUTED, INVST_BALANCE, INVST_CREATED_BY, INVST_UPDATED_BY, INVST_CREATED_ON, INVST_UPDATED_ON, INVST_STALE_ID, INVST_ID)
+                VALUES (#{entity.item.id}, #{entity.documentNumber}, #{entity.itemNumber}, #{entity.location.id}, #{entity.employee.id}, #{entity.inventoryDate}, #{entity.batchNumber}, #{entity.expiryDate}, #{entity.sapDownloadDate}, #{entity.netValue}, #{entity.quantityAdded}, #{entity.distributed}, #{entity.balance}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="invst_update" >
+                UPDATE ${schemaName}.INV_INVENTORY_STOCK set INVST_ITEM_id = #{entity.item.id}, INVST_DOCUMENT_NUMBER = #{entity.documentNumber}, INVST_ITEM_NUMBER = #{entity.itemNumber}, INVST_LOCATION_id = #{entity.location.id}, INVST_EMPLOYEE_id = #{entity.employee.id}, INVST_INVENTORY_DATE = #{entity.inventoryDate}, INVST_BATCH_NUMBER = #{entity.batchNumber}, INVST_EXPIRY_DATE = #{entity.expiryDate}, INVST_SAP_DOWNLOAD_DATE = #{entity.sapDownloadDate}, INVST_NET_VALUE = #{entity.netValue}, INVST_QUANTITY_ADDED = #{entity.quantityAdded}, INVST_DISTRIBUTED = #{entity.distributed}, INVST_BALANCE = #{entity.balance}, INVST_UPDATED_BY = #{entity.updatedBy}, INVST_UPDATED_ON = #{entity.updatedOn}, INVST_STALE_ID = #{entity.staleId} 
+                WHERE INVST_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="invst_delete" >
+                DELETE FROM  ${schemaName}.INV_INVENTORY_STOCK <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

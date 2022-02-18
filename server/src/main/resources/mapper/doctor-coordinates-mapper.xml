@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Doctor-Coordinate-mapper">
+    <cache />
+	<select id="dcoor_select" resultMap="dcoorMap">
+		SELECT DCOOR_ID, DCOOR_DOCTOR_ID, DCOOR_LAT, DCOOR_LONG, DCOOR_IS_PRIMARY,
+			   DCOOR_CREATED_BY, DCOOR_CREATED_ON, DCOOR_UPDATED_BY, DCOOR_UPDATED_ON, DCOOR_STALE_ID, DCOOR_ADDRESS
+		FROM ${schemaName}.CMT_DOCTOR_COORDINATES
+		<include refid="base.where_statement"></include>
+	</select>
+	<resultMap id="dcoorMap" type="com.squer.sfe.common.entity.DoctorCoordinates" autoMapping="true">
+		<id property="id" column="DCOOR_ID" />
+		<result property="doctor" column="DCOOR_DOCTOR_ID" />
+		<result property="longitude" column="DCOOR_LONG" />
+		<result property="latitude" column="DCOOR_LAT" />
+		<result property="isPrimary" column="DCOOR_IS_PRIMARY"/>
+		<result property="createdBy" column="DCOOR_CREATED_BY" />
+		<result property="updatedBy" column="DCOOR_UPDATED_BY" />
+		<result property="createdOn" column="DCOOR_CREATED_ON" />
+		<result property="updatedOn" column="DCOOR_UPDATED_ON" />
+		<result property="staleId" column="DCOOR_STALE_ID" />
+		<result property="dcoor_address" column="DCOOR_ADDRESS" />
+	</resultMap>
+
+	<insert id="dcoor_insert" >
+		INSERT INTO ${schemaName}.CMT_DOCTOR_COORDINATES(DCOOR_ID, DCOOR_DOCTOR_ID, DCOOR_LAT, DCOOR_LONG, DCOOR_IS_PRIMARY,
+								DCOOR_CREATED_BY, DCOOR_CREATED_ON, DCOOR_UPDATED_BY, DCOOR_UPDATED_ON, DCOOR_STALE_ID, DCOOR_ADDRESS)
+		VALUES (#{entity.uniqueCode}, #{entity.id}, #{entity.doctor.id}, #{entity.latitude}, #{entity.longitude}, #{entity.isPrimary},
+								#{entity.createdBy}, #{entity.createdOn},  #{entity.updatedBy}, #{entity.updatedOn}, #{entity.staleId},
+								#{entity.address})
+	</insert>
+
+	<update id="dcoor_update" >
+		UPDATE ${schemaName}.CMT_DOCTOR_COORDINATES set DCOOR_LAT = #{entity.latitude}, DCOOR_LONG = #{entity.longitude},
+						DCOOR_IS_PRIMARY = #{entity.isPrimary}, DCOOR_UPDATED_BY = #{entity.updatedBy},
+						DCOOR_UPDATED_ON = #{entity.updatedOn}, DCOOR_STALE_ID = #{entity.staleId}, DCOOR_ADDRESS = #{entity.address}
+		where DCOOR_ID = #{entity.id}
+	</update>
+
+</mapper>

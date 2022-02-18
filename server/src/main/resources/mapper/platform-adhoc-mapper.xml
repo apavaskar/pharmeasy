@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Platform-adhoc-mapper">
+    <cache />
+
+    <select id="my-config_select" resultMap="Configurations-mapper.confgMap">
+        with recursive loc as (
+        select locat_id, locat_parent_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id, l.locat_parent_id from cmt_location_master l
+        inner join loc on loc.locat_parent_id =l.locat_id
+        ) SELECT
+            confg_value, confg_config_name_id, confg_location_id, confg_config_type_id, confg_is_active, confg_name, confg_ci_name, confg_created_by, confg_updated_by, confg_created_on, confg_updated_on, confg_stale_id, confg_id
+        from cmt_location_master l INNER JOIN loc on l.locat_id = loc.locat_id
+        inner join cmt_location_type lt on lt.loctt_id = l.locat_type_id
+        inner join fmk_config_master cm on cm.confg_location_id = l.locat_id
+        <where>
+             and cm.confg_is_active = TRUE
+            <if test="conditions['configNameId']!=null">
+               and cm.confg_config_name_id= #{conditions.configNameId.value}
+            </if>
+        </where>
+        order by lt.loctt_level
+    </select>
+</mapper>

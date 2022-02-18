@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Doctor-mapper">
+    <cache />
+
+	<select id="doctr_select" resultMap="doctrMap">
+		SELECT DOCTR_UNIQUE_CODE, DOCTR_LOCATION_ID, DOCTR_BEAT_ID, DOCTR_SPECIALITY_ID, DOCTR_CLASSIFICATION_ID, DOCTR_STATUS_ID, DOCTR_REPORTING_MODE_ID, DOCTR_GENDER_ID, DOCTR_MARITAL_STATUS_ID, DOCTR_DATE_OF_BIRTH, DOCTR_PERSON_CODE, DOCTR_IS_ACTIVE, DOCTR_NAME, DOCTR_CI_NAME, DOCTR_CREATED_BY, DOCTR_UPDATED_BY, DOCTR_CREATED_ON, DOCTR_UPDATED_ON, DOCTR_STALE_ID, DOCTR_ID FROM ${schemaName}.CMT_DOCTOR_MASTER
+		<include refid="base.where_statement"></include>
+	</select>
+	<resultMap id="doctrMap" type="com.squer.sfe.common.entity.Doctor" autoMapping="true">
+		<id property="id" column="DOCTR_ID" />
+		<result property="uniqueCode" column="DOCTR_UNIQUE_CODE" />
+		<result property="location" column="DOCTR_LOCATION_ID" />
+		<result property="beat" column="DOCTR_BEAT_ID" />
+		<result property="speciality" column="DOCTR_SPECIALITY_ID" />
+		<result property="classification" column="DOCTR_CLASSIFICATION_ID" />
+		<result property="status" column="DOCTR_STATUS_ID" />
+		<result property="reportingMode" column="DOCTR_REPORTING_MODE_ID" />
+		<result property="gender" column="DOCTR_GENDER_ID" />
+		<result property="maritalStatus" column="DOCTR_MARITAL_STATUS_ID" />
+		<result property="dateOfBirth" column="DOCTR_DATE_OF_BIRTH" />
+		<result property="personCode" column="DOCTR_PERSON_CODE" />
+		<result property="isActive" column="DOCTR_IS_ACTIVE" />
+		<result property="name" column="DOCTR_NAME" />
+		<result property="ciName" column="DOCTR_CI_NAME" />
+		<result property="createdBy" column="DOCTR_CREATED_BY" />
+		<result property="updatedBy" column="DOCTR_UPDATED_BY" />
+		<result property="createdOn" column="DOCTR_CREATED_ON" />
+		<result property="updatedOn" column="DOCTR_UPDATED_ON" />
+		<result property="staleId" column="DOCTR_STALE_ID" />
+	</resultMap>
+
+	<insert id="doctr_insert" >
+		INSERT INTO ${schemaName}.CMT_DOCTOR_MASTER(DOCTR_UNIQUE_CODE, DOCTR_LOCATION_ID, DOCTR_BEAT_ID, DOCTR_SPECIALITY_ID, DOCTR_CLASSIFICATION_ID, DOCTR_STATUS_ID, DOCTR_REPORTING_MODE_ID, DOCTR_GENDER_ID, DOCTR_MARITAL_STATUS_ID, DOCTR_DATE_OF_BIRTH, DOCTR_PERSON_CODE, DOCTR_IS_ACTIVE, DOCTR_NAME, DOCTR_CI_NAME, DOCTR_CREATED_BY, DOCTR_UPDATED_BY, DOCTR_CREATED_ON, DOCTR_UPDATED_ON, DOCTR_STALE_ID, DOCTR_ID)
+		VALUES (#{entity.uniqueCode}, #{entity.location.id}, #{entity.beat.id}, #{entity.speciality.id}, #{entity.classification.id}, #{entity.status.id}, #{entity.reportingMode.id}, #{entity.gender.id}, #{entity.maritalStatus.id}, #{entity.dateOfBirth}, #{entity.personCode}, #{entity.isActive}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+	</insert>
+
+	<update id="doctr_update" >
+		UPDATE ${schemaName}.CMT_DOCTOR_MASTER set DOCTR_UNIQUE_CODE = #{entity.uniqueCode}, DOCTR_LOCATION_id = #{entity.location.id}, DOCTR_BEAT_id = #{entity.beat.id}, DOCTR_SPECIALITY_id = #{entity.speciality.id}, DOCTR_CLASSIFICATION_id = #{entity.classification.id}, DOCTR_STATUS_id = #{entity.status.id}, DOCTR_REPORTING_MODE_id = #{entity.reportingMode.id}, DOCTR_GENDER_id = #{entity.gender.id}, DOCTR_MARITAL_STATUS_id = #{entity.maritalStatus.id}, DOCTR_DATE_OF_BIRTH = #{entity.dateOfBirth}, DOCTR_PERSON_CODE = #{entity.personCode}, DOCTR_IS_ACTIVE = #{entity.isActive}, DOCTR_NAME = #{entity.name}, DOCTR_CI_NAME = #{entity.ciName}, DOCTR_UPDATED_BY = #{entity.updatedBy}, DOCTR_UPDATED_ON = #{entity.updatedOn}, DOCTR_STALE_ID = #{entity.staleId}
+		WHERE DOCTR_ID = #{entity.id}
+	</update>
+
+	<delete id="doctr_delete" >
+		DELETE FROM  ${schemaName}.CMT_DOCTOR_MASTER <include refid="base.delete_where_statement"></include>
+	</delete>
+</mapper>

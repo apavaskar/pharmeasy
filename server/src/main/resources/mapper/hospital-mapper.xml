@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Hospital-mapper">
+    <cache />
+
+
+            <select id="hsptl_select" resultMap="hsptlMap">
+                SELECT HSPTL_CODE, HSPTL_LOCATION_ID, HSPTL_ICU_BEDS, HSPTL_ICU_PATIENT_CAPACITY, HSPTL_IS_ACTIVE, HSPTL_NAME, HSPTL_CI_NAME, HSPTL_CREATED_BY, HSPTL_UPDATED_BY, HSPTL_CREATED_ON, HSPTL_UPDATED_ON, HSPTL_STALE_ID, HSPTL_ID FROM ${schemaName}.CMT_HOSPITAL_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="hsptlMap" type="com.squer.sfe.common.entity.Hospital" autoMapping="true">
+            		<id property="id" column="HSPTL_ID" />
+			<result property="code" column="HSPTL_CODE" />
+			<result property="location" column="HSPTL_LOCATION_ID" />
+			<result property="icuBeds" column="HSPTL_ICU_BEDS" />
+			<result property="icuPatientCapacity" column="HSPTL_ICU_PATIENT_CAPACITY" />
+			<result property="isActive" column="HSPTL_IS_ACTIVE" />
+			<result property="name" column="HSPTL_NAME" />
+			<result property="ciName" column="HSPTL_CI_NAME" />
+			<result property="createdBy" column="HSPTL_CREATED_BY" />
+			<result property="updatedBy" column="HSPTL_UPDATED_BY" />
+			<result property="createdOn" column="HSPTL_CREATED_ON" />
+			<result property="updatedOn" column="HSPTL_UPDATED_ON" />
+			<result property="staleId" column="HSPTL_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="hsptl_insert" >
+                INSERT INTO ${schemaName}.CMT_HOSPITAL_MASTER(HSPTL_CODE, HSPTL_LOCATION_ID, HSPTL_ICU_BEDS, HSPTL_ICU_PATIENT_CAPACITY, HSPTL_IS_ACTIVE, HSPTL_NAME, HSPTL_CI_NAME, HSPTL_CREATED_BY, HSPTL_UPDATED_BY, HSPTL_CREATED_ON, HSPTL_UPDATED_ON, HSPTL_STALE_ID, HSPTL_ID)
+                VALUES (#{entity.code}, #{entity.location.id}, #{entity.icuBeds}, #{entity.icuPatientCapacity}, #{entity.isActive}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="hsptl_update" >
+                UPDATE ${schemaName}.CMT_HOSPITAL_MASTER set HSPTL_CODE = #{entity.code}, HSPTL_LOCATION_id = #{entity.location.id}, HSPTL_ICU_BEDS = #{entity.icuBeds}, HSPTL_ICU_PATIENT_CAPACITY = #{entity.icuPatientCapacity}, HSPTL_IS_ACTIVE = #{entity.isActive}, HSPTL_NAME = #{entity.name}, HSPTL_CI_NAME = #{entity.ciName}, HSPTL_UPDATED_BY = #{entity.updatedBy}, HSPTL_UPDATED_ON = #{entity.updatedOn}, HSPTL_STALE_ID = #{entity.staleId} 
+                WHERE HSPTL_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="hsptl_delete" >
+                DELETE FROM  ${schemaName}.CMT_HOSPITAL_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="client">
+    <cache />
+    <select id="my_menu_select" resultMap="myMenusMap">
+        SELECT M.ID ID, AMENU_NAME, AMENU_CI_NAME, ICON_NAME, ACTION_URL, PRIVILEGE_ID, UI_INTERFACE, PARENT_ACTION_MENU_ID,
+        DISPLAY_ORDER from FMK_ACTION_MENU M
+        inner join FMK_SECURITY_ROLE_PRIVILEGE RP on RP.SPRIV_ID = M.PRIVILEGE_ID
+        inner join FMK_SECURITY_USER_ROLE UR on UR.SROLE_ID = RP.SROLE_ID
+        where USERS_ID = #{conditions.userId.value} and UI_INTERFACE = #{conditions.uiInterface.value}
+        union
+        SELECT M.ID ID, AMENU_NAME, AMENU_CI_NAME, ICON_NAME, ACTION_URL, PRIVILEGE_ID, UI_INTERFACE, PARENT_ACTION_MENU_ID,
+        DISPLAY_ORDER from FMK_ACTION_MENU M
+        where parent_action_menu_id is null and UI_INTERFACE =  #{conditions.uiInterface.value}
+    </select>
+    <resultMap id="myMenusMap" type="com.squer.platform.appframework.entity.ActionMenu" autoMapping="true">
+        <id property="id" column="ID" />
+        <result property="name" column="AMENU_NAME" />
+        <result property="ciName" column="AMENU_CI_NAME" />
+        <result property="iconName" column="ICON_NAME" />
+        <result property="actionUrl" column="ACTION_URL" />
+        <result property="privilegeId" column="PRIVILEGE_ID" />
+        <result property="uiInterface" column="UI_INTERFACE" />
+        <result property="parentMenuId" column="PARENT_ACTION_MENU_ID" />
+        <result property="displayOrder" column="DISPLAY_ORDER" />
+    </resultMap>
+</mapper>

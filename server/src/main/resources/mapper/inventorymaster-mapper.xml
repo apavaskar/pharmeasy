@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InventoryMaster-mapper">
+    <cache />
+
+
+            <select id="invmt_select" resultMap="invmtMap">
+                SELECT INVMT_INVENTORY_CODE, INVMT_TYPE_ID, INVMT_IS_ACTIVE, INVMT_NAME, INVMT_CI_NAME, INVMT_CREATED_BY, INVMT_UPDATED_BY, INVMT_CREATED_ON, INVMT_UPDATED_ON, INVMT_STALE_ID, INVMT_ID FROM ${schemaName}.INV_INVENTORY_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="invmtMap" type="com.squer.sfe.inventory.entity.InventoryMaster" autoMapping="true">
+            		<id property="id" column="INVMT_ID" />
+			<result property="inventoryCode" column="INVMT_INVENTORY_CODE" />
+			<result property="type" column="INVMT_TYPE_ID" />
+			<result property="isActive" column="INVMT_IS_ACTIVE" />
+			<result property="name" column="INVMT_NAME" />
+			<result property="ciName" column="INVMT_CI_NAME" />
+			<result property="createdBy" column="INVMT_CREATED_BY" />
+			<result property="updatedBy" column="INVMT_UPDATED_BY" />
+			<result property="createdOn" column="INVMT_CREATED_ON" />
+			<result property="updatedOn" column="INVMT_UPDATED_ON" />
+			<result property="staleId" column="INVMT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="invmt_insert" >
+                INSERT INTO ${schemaName}.INV_INVENTORY_MASTER(INVMT_INVENTORY_CODE, INVMT_TYPE_ID, INVMT_IS_ACTIVE, INVMT_NAME, INVMT_CI_NAME, INVMT_CREATED_BY, INVMT_UPDATED_BY, INVMT_CREATED_ON, INVMT_UPDATED_ON, INVMT_STALE_ID, INVMT_ID)
+                VALUES (#{entity.inventoryCode}, #{entity.type.id}, #{entity.isActive}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="invmt_update" >
+                UPDATE ${schemaName}.INV_INVENTORY_MASTER set INVMT_INVENTORY_CODE = #{entity.inventoryCode}, INVMT_TYPE_id = #{entity.type.id}, INVMT_IS_ACTIVE = #{entity.isActive}, INVMT_NAME = #{entity.name}, INVMT_CI_NAME = #{entity.ciName}, INVMT_UPDATED_BY = #{entity.updatedBy}, INVMT_UPDATED_ON = #{entity.updatedOn}, INVMT_STALE_ID = #{entity.staleId} 
+                WHERE INVMT.ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="invmt_delete" >
+                DELETE FROM  ${schemaName}.INV_INVENTORY_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

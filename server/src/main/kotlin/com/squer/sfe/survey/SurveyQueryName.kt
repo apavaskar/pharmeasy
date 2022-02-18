@@ -1,0 +1,47 @@
+package com.squer.sfe.survey
+
+import com.squer.platform.persistence.AdhocQueryName
+import com.squer.platform.persistence.SquerQuery
+enum class SurveyQueryName (override val query: AdhocQueryName): SquerQuery {
+SURVY_SELECT (AdhocQueryName("survy_select")),
+SURVY_INSERT (AdhocQueryName("survy_insert")),
+SURVY_UPDATE (AdhocQueryName("survy_update")),
+SURVY_DELETE (AdhocQueryName("survy_delete")),
+SRCAT_SELECT (AdhocQueryName("srcat_select")),
+SRCAT_INSERT (AdhocQueryName("srcat_insert")),
+SRCAT_UPDATE (AdhocQueryName("srcat_update")),
+SRCAT_DELETE (AdhocQueryName("srcat_delete")),
+SRANS_SELECT (AdhocQueryName("srans_select")),
+SRANS_INSERT (AdhocQueryName("srans_insert")),
+SRANS_UPDATE (AdhocQueryName("srans_update")),
+SRANS_DELETE (AdhocQueryName("srans_delete")),
+SRQUE_SELECT (AdhocQueryName("srque_select")),
+SRQUE_INSERT (AdhocQueryName("srque_insert")),
+SRQUE_UPDATE (AdhocQueryName("srque_update")),
+SRQUE_DELETE (AdhocQueryName("srque_delete")),
+SRVAN_SELECT (AdhocQueryName("srvan_select")),
+SRVAN_INSERT (AdhocQueryName("srvan_insert")),
+SRVAN_UPDATE (AdhocQueryName("srvan_update")),
+SRVAN_DELETE (AdhocQueryName("srvan_delete")),
+SRVRD_SELECT (AdhocQueryName("srvrd_select")),
+SRVRD_INSERT (AdhocQueryName("srvrd_insert")),
+SRVRD_UPDATE (AdhocQueryName("srvrd_update")),
+SRVRD_DELETE (AdhocQueryName("srvrd_delete")),
+SRVRM_SELECT (AdhocQueryName("srvrm_select")),
+SRVRM_INSERT (AdhocQueryName("srvrm_insert")),
+SRVRM_UPDATE (AdhocQueryName("srvrm_update")),
+SRVRM_DELETE (AdhocQueryName("srvrm_delete")),
+SRCFG_SELECT (AdhocQueryName("srcfg_select")),
+SRCFG_INSERT (AdhocQueryName("srcfg_insert")),
+SRCFG_UPDATE (AdhocQueryName("srcfg_update")),
+SRCFG_DELETE (AdhocQueryName("srcfg_delete")),
+SRPAT_SELECT (AdhocQueryName("srpat_select")),
+SRPAT_INSERT (AdhocQueryName("srpat_insert")),
+SRPAT_UPDATE (AdhocQueryName("srpat_update")),
+SRPAT_DELETE (AdhocQueryName("srpat_delete")),
+/*===ADD TO FILE===*/
+SURVY_DETAILS_SELECT (AdhocQueryName("survey_details_select")),
+SURVY_RESPONSE_SELECT(AdhocQueryName("survey_response_select")),
+SURVY_LIST_SELECT(AdhocQueryName("survey_list_select")),
+TEAM_EB_LIST_SELECT(AdhocQueryName("team_eb_list_select"))
+;}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HolidayDetails-mapper">
+    <cache />
+
+
+            <select id="hldtl_select" resultMap="hldtlMap">
+                SELECT HLDTL_HOLIDAY_ID, HLDTL_STATE_ID, HLDTL_JOB_ROLE_ID, HLDTL_YEAR, HLDTL_YYYY_MM, HLDTL_YYYY_MM_DD, HLDTL_CREATED_BY, HLDTL_UPDATED_BY, HLDTL_CREATED_ON, HLDTL_UPDATED_ON, HLDTL_STALE_ID, HLDTL_ID FROM ${schemaName}.CMT_HOLIDAY_DETAILS
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="hldtlMap" type="com.squer.sfe.common.entity.HolidayDetails" autoMapping="true">
+            		<id property="id" column="HLDTL_ID" />
+			<result property="holiday" column="HLDTL_HOLIDAY_ID" />
+			<result property="state" column="HLDTL_STATE_ID" />
+			<result property="jobRole" column="HLDTL_JOB_ROLE_ID" />
+			<result property="year" column="HLDTL_YEAR" />
+			<result property="yyyyMM" column="HLDTL_YYYY_MM" />
+			<result property="yyyyMmDd" column="HLDTL_YYYY_MM_DD" />
+			<result property="createdBy" column="HLDTL_CREATED_BY" />
+			<result property="updatedBy" column="HLDTL_UPDATED_BY" />
+			<result property="createdOn" column="HLDTL_CREATED_ON" />
+			<result property="updatedOn" column="HLDTL_UPDATED_ON" />
+			<result property="staleId" column="HLDTL_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="hldtl_insert" >
+                INSERT INTO ${schemaName}.CMT_HOLIDAY_DETAILS(HLDTL_HOLIDAY_ID, HLDTL_STATE_ID, HLDTL_JOB_ROLE_ID, HLDTL_YEAR, HLDTL_YYYY_MM, HLDTL_YYYY_MM_DD, HLDTL_CREATED_BY, HLDTL_UPDATED_BY, HLDTL_CREATED_ON, HLDTL_UPDATED_ON, HLDTL_STALE_ID, HLDTL_ID)
+                VALUES (#{entity.holiday.id}, #{entity.state.id}, #{entity.jobRole.id}, #{entity.year}, #{entity.yyyyMM}, #{entity.yyyyMmDd}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="hldtl_update" >
+                UPDATE ${schemaName}.CMT_HOLIDAY_DETAILS set HLDTL_HOLIDAY_id = #{entity.holiday.id}, HLDTL_STATE_id = #{entity.state.id}, HLDTL_JOB_ROLE_id = #{entity.jobRole.id}, HLDTL_YEAR = #{entity.year}, HLDTL_YYYY_MM = #{entity.yyyyMM}, HLDTL_YYYY_MM_DD = #{entity.yyyyMmDd}, HLDTL_UPDATED_BY = #{entity.updatedBy}, HLDTL_UPDATED_ON = #{entity.updatedOn}, HLDTL_STALE_ID = #{entity.staleId} 
+                WHERE HLDTL_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="hldtl_delete" >
+                DELETE FROM  ${schemaName}.CMT_HOLIDAY_DETAILS <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

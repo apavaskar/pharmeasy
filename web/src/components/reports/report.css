@@ -1,0 +1,11 @@
+.effort-table .superCoreVisits {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+.effort-table .coreVisits {
+    background-color: rgba(0, 0, 0, 0.10) !important;
+}
+
+.effort-table .nonCoreVisits {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}

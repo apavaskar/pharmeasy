@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Division-mapper">
+    <cache />
+
+
+            <select id="divsn_select" resultMap="divsnMap">
+                SELECT DIVSN_CODE, DIVSN_IS_ACTIVE, DIVSN_NAME, DIVSN_CI_NAME, DIVSN_CREATED_BY, DIVSN_UPDATED_BY, DIVSN_CREATED_ON, DIVSN_UPDATED_ON, DIVSN_STALE_ID, DIVSN_ID FROM ${schemaName}.CMT_DIVISION_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="divsnMap" type="com.squer.sfe.common.entity.Division" autoMapping="true">
+            		<id property="id" column="DIVSN_ID" />
+			<result property="code" column="DIVSN_CODE" />
+			<result property="isActive" column="DIVSN_IS_ACTIVE" />
+			<result property="name" column="DIVSN_NAME" />
+			<result property="ciName" column="DIVSN_CI_NAME" />
+			<result property="createdBy" column="DIVSN_CREATED_BY" />
+			<result property="updatedBy" column="DIVSN_UPDATED_BY" />
+			<result property="createdOn" column="DIVSN_CREATED_ON" />
+			<result property="updatedOn" column="DIVSN_UPDATED_ON" />
+			<result property="staleId" column="DIVSN_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="divsn_insert" >
+                INSERT INTO ${schemaName}.CMT_DIVISION_MASTER(DIVSN_CODE, DIVSN_IS_ACTIVE, DIVSN_NAME, DIVSN_CI_NAME, DIVSN_CREATED_BY, DIVSN_UPDATED_BY, DIVSN_CREATED_ON, DIVSN_UPDATED_ON, DIVSN_STALE_ID, DIVSN_ID)
+                VALUES (#{entity.code}, #{entity.isActive}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="divsn_update" >
+                UPDATE ${schemaName}.CMT_DIVISION_MASTER set DIVSN_CODE = #{entity.code}, DIVSN_IS_ACTIVE = #{entity.isActive}, DIVSN_NAME = #{entity.name}, DIVSN_CI_NAME = #{entity.ciName}, DIVSN_UPDATED_BY = #{entity.updatedBy}, DIVSN_UPDATED_ON = #{entity.updatedOn}, DIVSN_STALE_ID = #{entity.staleId} 
+                WHERE DIVSN_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="divsn_delete" >
+                DELETE FROM  ${schemaName}.CMT_DIVISION_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

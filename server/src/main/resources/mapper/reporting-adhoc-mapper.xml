@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Reporting-adhoc-mapper">
+    <cache />
+    <select id="attendee_for_period_select" resultMap="DailyVisitAttendee-mapper.dtvatMap">
+        SELECT
+            DTVAT_PLAN_ID, DTVAT_CUSTOMER_ID, DTVAT_ACTIVITY_TYPE_ID, DTVAT_ACTIVITY_TYPE_ID_ID, DTVAT_DURATION, DTVAT_YYYY_MM, DTVAT_YYYY_MM_DD, DTVAT_LOCATION_ID, DTVAT_EMPLOYEE_ID, DTVAT_IS_PLANNED, DTVAT_IS_REPORTED, DTVAT_IS_JOINT, DTVAT_IS_RCPA_DONE, DTVAT_IS_VIDEO_SHOWN, DTVAT_VISIT_TYPE_ID, DTVAT_REMARKS, DTVAT_IS_ACTIVE, DTVAT_JOINEE_REFERENCE_ID, DTVAT_CREATED_BY, DTVAT_UPDATED_BY, DTVAT_CREATED_ON, DTVAT_UPDATED_ON, DTVAT_STALE_ID, DTVAT_ID
+        from rpt_monthly_plan p
+        INNER JOIN rpt_daily_visit_attendee a on a.dtvat_plan_id = p.mtpln_id
+        INNER JOIN cmt_employee_profile ep on ep.emprf_location_id = p.mtpln_location_id and ep.emprf_is_active = TRUE
+        where 1=1
+        <if test="conditions['manager']!=null">
+            and  ep.emprf_manager_id =  #{conditions.employeeId.value}
+        </if>
+        <if test="conditions['employee']!=null">
+            and  ep.emprf_location_id =  #{conditions.locationId.value}
+        </if>
+        <if test="conditions['byMonth']!=null">
+            and p.mtpln_year_month &gt;=#{conditions.fromDate.value} and p.mtpln_year_month &lt;= #{conditions.toDate.value}
+        </if>
+        <if test="conditions['byDate']!=null">
+            and a.DTVAT_YYYY_MM_DD &gt;=#{conditions.fromDate.value} and a.DTVAT_YYYY_MM_DD &lt;= #{conditions.toDate.value}
+        </if>
+        <if test="conditions['isReported']!=null">
+            and a.DTVAT_IS_REPORTED = true and a.DTVAT_IS_ACTIVE = true
+        </if>
+        <if test="conditions['isActive']!=null">
+            and a.DTVAT_IS_ACTIVE = true
+        </if>
+        order by dtvat_yyyy_mm_dd, dtvat_employee_id
+    </select>
+
+    <select id="manager_visited_joinee_select" resultMap="joineeResultMap">
+        SELECT
+        va.dtvat_id,doctr_id, doctr_name,locat_id,locat_name,va.dtvat_yyyy_mm_dd,lv.syslv_id
+        FROM
+        rpt_daily_visit_attendee va
+        inner join rpt_daily_visit_joinee vj on va.dtvat_joinee_reference_id = vj.dtvje_attendee_id
+        inner join fmk_system_lov lv on lv.syslv_id = vj.dtvje_status_id
+        inner join cmt_doctor_master d on d.doctr_id = va.dtvat_customer_id
+        inner join cmt_location_master l on l.locat_id = d.doctr_location_id
+        where va.dtvat_location_id = #{conditions.locationId.value}
+        and va.dtvat_yyyy_mm = #{conditions.yyyyMM.value}
+        and vj.dtvje_is_active = TRUE
+    </select>
+
+    <select id="manager_not_visited_joinee_select" resultMap="joineeResultMap">
+        SELECT
+         null dtvat_id,doctr_id, doctr_name,locat_id,locat_name,va.dtvat_yyyy_mm_dd,lv.syslv_id, dtvje_id
+        from rpt_daily_visit_joinee vj inner join rpt_daily_visit_attendee va on vj.dtvje_attendee_id = va.dtvat_id
+        inner join fmk_system_lov lv on lv.syslv_id = vj.dtvje_status_id
+        inner join cmt_doctor_master d on d.doctr_id = va.dtvat_customer_id
+        inner join cmt_location_master l on l.locat_id = d.doctr_location_id
+        where vj.dtvje_manager_id= #{conditions.managerId.value}
+        and va.dtvat_yyyy_mm= #{conditions.yyyyMM.value}
+        and vj.dtvje_is_active= TRUE
+    </select>
+
+    <select id="manager_not_visited_joinee_date_select" resultMap="joineeResultMap">
+        SELECT
+        null dtvat_id,doctr_id, doctr_name,locat_id,locat_name,va.dtvat_yyyy_mm_dd,lv.syslv_id, dtvje_id
+        from rpt_daily_visit_joinee vj inner join rpt_daily_visit_attendee va on vj.dtvje_attendee_id = va.dtvat_id
+        inner join fmk_system_lov lv on lv.syslv_id = vj.dtvje_status_id
+        inner join cmt_doctor_master d on d.doctr_id = va.dtvat_customer_id
+        inner join cmt_location_master l on l.locat_id = d.doctr_location_id
+        where vj.dtvje_manager_id= #{conditions.managerId.value}
+        and va.dtvat_yyyy_mm_dd= #{conditions.yyyyMMDd.value}
+        and vj.dtvje_is_active= TRUE
+    </select>
+
+
+    <resultMap id="joineeResultMap" type="com.squer.sfe.reporting.controller.dto.ManagerJoineeDTO">
+        <result column="dtvat_id" property="attendeeId"/>
+        <result column="doctr_id" property="customerId"/>
+        <result column="doctr_name" property="customerName"/>
+        <result column="locat_id" property="locationId"/>
+        <result column="locat_name" property="locationName"/>
+        <result column="dtvat_yyyy_mm_dd" property="yyyyMmDd"/>
+        <result column="syslv_id" property="statusId"/>
+        <result column="dtvje_id" property="jointVisitId" />
+    </resultMap>
+
+    <select id="rcpa_for_employee_select" resultMap="VisitRcpa-mapper.vrcpaMap">
+        SELECT
+        VRCPA_ATTENDEE_ID, VRCPA_CHEMIST_ID, VRCPA_DOCTOR_ID, VRCPA_BRAND_ID, VRCPA_PRODUCT_ID, VRCPA_QUANTITY, VRCPA_RXN, VRCPA_VALUE, VRCPA_COMPETITION_QUANTITY, VRCPA_COMPETITION_RXN, VRCPA_COMPETITION_VALUE, VRCPA_TYPE_ID, VRCPA_IS_ACTIVE, VRCPA_CREATED_BY, VRCPA_UPDATED_BY, VRCPA_CREATED_ON, VRCPA_UPDATED_ON, VRCPA_STALE_ID, VRCPA_ID
+        FROM ${schemaName}.RPT_VISIT_RCPA rcpa inner join ${schemaName}.rpt_daily_visit_attendee att on rcpa.vrcpa_attendee_id = att.dtvat_id
+        where att.dtvat_location_id= #{conditions.locationId.value}
+        and att.dtvat_yyyy_mm &gt;= #{conditions.fromMonth.value}
+        and att.dtvat_yyyy_mm &lt;= #{conditions.toMonth.value}
+        and vrcpa_is_active = true
+    </select>
+
+   <select id="input_for_employee_select" resultMap="VisitInputs-resultMap">
+       SELECT st.invst_item_id, input.vinpt_attendee_id,input.vinpt_quantity
+       FROM ${schemaName}.RPT_VISIT_INPUTS input inner join ${schemaName}.rpt_daily_visit_attendee att on input.vinpt_attendee_id = att.dtvat_id
+       inner join ${schemaName}.inv_inventory_stock st on st.invst_id = input.vinpt_input_id
+       where att.dtvat_location_id= #{conditions.locationId.value}
+       and att.dtvat_yyyy_mm &gt;= #{conditions.fromMonth.value}
+       and att.dtvat_yyyy_mm &lt;= #{conditions.toMonth.value}
+       and vinpt_is_active = true
+   </select>
+
+    <resultMap id="VisitInputs-resultMap" type="com.squer.sfe.reporting.controller.dto.InputDTO">
+        <result column="invst_item_id" property="inputId"/>
+        <result column="vinpt_attendee_id" property="attendeeId"/>
+        <result column="vinpt_quantity" property="quantity"/>
+    </resultMap>
+
+    <select id="pob_for_employee_select" resultMap="VisitPob-mapper.vtpobMap">
+        SELECT VTPOB_ATTENDEE_ID, VTPOB_PRODUCT_ID, VTPOB_QUANTITY, VTPOB_IS_ACTIVE, VTPOB_CREATED_BY, VTPOB_UPDATED_BY, VTPOB_CREATED_ON, VTPOB_UPDATED_ON, VTPOB_STALE_ID, VTPOB_ID
+        FROM ${schemaName}.RPT_VISIT_POB pob inner join ${schemaName}.rpt_daily_visit_attendee att on pob.vtpob_attendee_id = att.dtvat_id
+        where att.dtvat_location_id= #{conditions.locationId.value}
+        and att.dtvat_yyyy_mm &gt;= #{conditions.fromMonth.value}
+        and att.dtvat_yyyy_mm &lt;= #{conditions.toMonth.value}
+    </select>
+
+    <select id="joinee_for_employee_select" resultMap="DailyVisitJoinee-mapper.dtvjeMap">
+        SELECT DTVJE_ATTENDEE_ID, DTVJE_MANAGER_ID, DTVJE_IS_ACTIVE, DTVJE_STATUS_ID, DTVJE_CREATED_BY, DTVJE_UPDATED_BY, DTVJE_CREATED_ON, DTVJE_UPDATED_ON, DTVJE_STALE_ID, DTVJE_ID
+        from ${schemaName}.rpt_daily_visit_joinee joinee
+        inner join ${schemaName}.rpt_daily_visit_attendee att on joinee.dtvje_attendee_id = att.dtvat_id
+        where att.dtvat_location_id= #{conditions.locationId.value}
+        and att.dtvat_yyyy_mm &gt;= #{conditions.fromMonth.value}
+        and att.dtvat_yyyy_mm &lt;= #{conditions.toMonth.value}
+        and  joinee.dtvje_is_active = true
+    </select>
+
+    <select id="detailing_for_employee_select" resultMap="VisitDetailing-mapper.vdetlMap">
+        SELECT VDETL_ATTENDEE_ID, VDETL_SEQUENCE, VDETL_BRAND_ID, VDETL_MESSAGE_TYPE_ID, VDETL_PRESCRIPTION_LEVEL, VDETL_IS_ACTIVE, VDETL_CREATED_BY, VDETL_UPDATED_BY, VDETL_CREATED_ON, VDETL_UPDATED_ON, VDETL_STALE_ID, VDETL_ID
+        from ${schemaName}.rpt_visit_detailing del
+        inner join ${schemaName}.rpt_daily_visit_attendee att on del.vdetl_attendee_id = att.dtvat_id
+        where att.dtvat_location_id= #{conditions.locationId.value}
+        and att.dtvat_yyyy_mm &gt;= #{conditions.fromMonth.value}
+        and att.dtvat_yyyy_mm &lt;= #{conditions.toMonth.value}
+        and  del.vdetl_is_active = true
+    </select>
+
+    <select id="digitalVisit_for_employee_select" resultMap="DigitalVisit-mapper.digvsMap">
+        SELECT
+        DIGVS_ATTENDEE_ID, DIGVS_IS_ACTIVE, DIGVS_VISIT_MODE_ID, DIGVS_START_TIME, DIGVS_DURATION, DIGVS_TEMPLATE_ID_ID, DIGVS_CREATED_BY, DIGVS_UPDATED_BY, DIGVS_CREATED_ON, DIGVS_UPDATED_ON, DIGVS_STALE_ID, DIGVS_ID
+        from ${schemaName}.rpt_digital_visit dig
+        inner join ${schemaName}.rpt_daily_visit_attendee att on dig.digvs_attendee_id = att.dtvat_id
+        where att.dtvat_location_id= #{conditions.locationId.value}
+        and att.dtvat_yyyy_mm &gt;= #{conditions.fromMonth.value}
+        and att.dtvat_yyyy_mm &lt;= #{conditions.toMonth.value}
+        and  dig.digvs_is_active = true
+    </select>
+
+    <select id="hierarchy_hospital_select" resultMap="locationHospitalCount_ResultMap">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+        l.locat_id,e.emply_id,l.locat_name, l.locat_type_id, e.emply_name, count(h.hsptl_id) hospital_count, 0 hospital_visit
+        from cmt_location_master l  inner join loc on l.locat_id = loc.locat_id and locat_type_id='loctt00000000000000000000000000000003'
+        left join cmt_hospital_master h on h.hsptl_location_id = l.locat_id and h.hsptl_is_active = TRUE
+        left JOIN cmt_employee_profile ep on ep.emprf_location_id = l.locat_id and ep.emprf_is_active = TRUE and emprf_is_default = TRUE
+        LEFT JOIN cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+        GROUP BY   l.locat_id,e.emply_id,l.locat_name, e.emply_name
+        order by e.emply_name
+    </select>
+
+    <resultMap id="locationHospitalCount_ResultMap" type="com.squer.sfe.reporting.controller.dto.LocationHospitalVisitDTO">
+        <result property="locationId" column="locat_id"/>
+        <result property="locationTypeId" column="locat_type_id"/>
+        <result property="employeeId" column="emply_id"/>
+        <result property="location" column="locat_name"/>
+        <result property="employee" column="emply_name"/>
+        <result property="hospitalCount" column="hospital_count"/>
+        <result property="hospitalVisited" column="hospital_visit"/>
+    </resultMap>
+
+    <select id="daily_hospital_rcpa_for_manager_select" resultType="map">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT COALESCE(count(DISTINCT r.hdrcp_hospital_id)) hospital_count,
+        COALESCE(sum(hdrcp_emrok_iv_patients),0) emrok_iv, COALESCE(sum(hdrcp_emrok_opatients),0) emrok_o,
+        COALESCE(sum(hdrcp_both_patients),0) both_pat
+        from rpt_hospital_daily_rcpa r inner join loc on r.hdrcp_location_id = loc.locat_id
+        where r.hdrcp_yyyy_mm= ${conditions.yyyyMM.value} and r.hdrcp_is_active = true
+    </select>
+
+    <select id="daily_hospital_rcpa_visit_count_select" resultType="map">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT r.hdrcp_location_id location_id, count(DISTINCT r.hdrcp_hospital_id) count
+        from rpt_hospital_daily_rcpa r inner join loc on r.hdrcp_location_id = loc.locat_id
+        where r.hdrcp_yyyy_mm= ${conditions.yyyyMM.value}
+        GROUP by r.hdrcp_location_id
+    </select>
+
+    <select id="hospital_rcpa_status_select" resultMap="hospitalRcpaStatus_resultMap">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+        r.hrcpa_id, l.locat_name,e.emply_name,h.hsptl_name,r.hrcpa_yyyy_mm_dd,h.hsptl_icu_beds,h.hsptl_icu_patient_capacity,
+        r.hrcpa_icu_patients,r.hrcpa_emrok_patients,r.hrcpa_teicoplanin_patients
+        from cmt_location_master l inner join loc on l.locat_id = loc.locat_id
+        inner join rpt_hospital_rcpa r on r.hrcpa_location_id = l.locat_id and r.hrcpa_is_active = TRUE
+        INNER JOIN cmt_hospital_master h on h.hsptl_id = r.hrcpa_hospital_id and h.hsptl_is_active = TRUE
+        LEFT JOIN cmt_employee_profile ep on ep.emprf_location_id = l.locat_id and ep.emprf_is_active = TRUE
+        LEFT JOIN cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+        where r.hrcpa_status_id= #{conditions.statusId.value}
+    </select>
+
+    <resultMap id="hospitalRcpaStatus_resultMap" type="com.squer.sfe.reporting.controller.dto.HospitalApprovalDTO">
+        <result column="hrcpa_id" property="entityId"/>
+        <result column="locat_name" property="location"/>
+        <result column="emply_name" property="employee"/>
+        <result column="hsptl_name" property="hospital"/>
+        <result column="hrcpa_yyyy_mm_dd" property="rcpaDate"/>
+        <result column="hsptl_icu_beds" property="icuBeds"/>
+        <result column="hsptl_icu_patient_capacity" property="icuPatientCapacity"/>
+        <result column="hrcpa_icu_patients" property="icuPatients"/>
+        <result column="hrcpa_emrok_patients" property="emrokPatients"/>
+        <result column="hrcpa_teicoplanin_patients" property="teicoplaninPatients"/>
+    </resultMap>
+
+    <select id="hospital_monthly_dashboard_self_select" resultType="map">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) select
+        COALESCE(sum(r.hrcpa_icu_patients),0) icu_patients, COALESCE(sum(r.hrcpa_emrok_patients),0) emrok_patients , COALESCE(sum(r.hrcpa_teicoplanin_patients),0) tei_patients
+        from cmt_location_master l inner join loc on l.locat_id = loc. locat_id and l.locat_type_id='loctt00000000000000000000000000000003'
+        inner join rpt_hospital_rcpa r on r.hrcpa_location_id = l.locat_id and r.hrcpa_status_id='syslv00000000000000000000000000000047'
+    </select>
+
+    <select id="hospital_rcpa_for_hierarchy_select" resultType="map">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) select
+        <if test="conditions['all']!=null">
+            zn.locat_id location_id,
+        </if>
+        <if test="conditions['Zone']!=null">
+            rgn.locat_id location_id,
+        </if>
+        <if test="conditions['Region']!=null">
+            l.locat_id location_id,
+        </if>
+        <if test="conditions['Territory']!=null">
+            l.locat_id location_id,
+        </if>
+        COALESCE(sum(r.hrcpa_icu_patients),0) icu_patients, COALESCE(sum(r.hrcpa_emrok_patients),0) emrok_patients , COALESCE(sum(r.hrcpa_teicoplanin_patients),0) tei_patients
+        from cmt_location_master l inner join loc on l.locat_id = loc. locat_id and l.locat_type_id='loctt00000000000000000000000000000003'
+        inner join cmt_location_master rgn on rgn.locat_id = l.locat_parent_id
+        inner join cmt_location_master zn on zn.locat_id = rgn.locat_parent_id
+        inner join rpt_hospital_rcpa r on r.hrcpa_location_id = l.locat_id
+        where  r.hrcpa_yyyy_mm = #{conditions.yyyyMM.value} and hrcpa_is_active = true and r.hrcpa_status_id='syslv00000000000000000000000000000047'
+        <if test="conditions['all']!=null">
+            GROUP by zn.locat_id
+        </if>
+        <if test="conditions['Zone']!=null">
+            GROUP by rgn.locat_id
+        </if>
+        <if test="conditions['Region']!=null">
+            GROUP by l.locat_id
+        </if>
+        <if test="conditions['Territory']!=null">
+            GROUP by l.locat_id
+        </if>
+    </select>
+
+    <select id="hospital_daily_rcpa_for_hierarchy_select" resultType="map">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+            <if test="conditions['all']!=null">
+                zn.locat_id location_id,
+            </if>
+            <if test="conditions['Zone']!=null">
+                rgn.locat_id location_id,
+            </if>
+            <if test="conditions['Region']!=null">
+                l.locat_id location_id,
+            </if>
+            <if test="conditions['Territory']!=null">
+                l.locat_id location_id,
+            </if>
+            COALESCE(count(DISTINCT r.hdrcp_hospital_id),0) visit_count,
+            COALESCE(sum(r.hdrcp_emrok_iv_patients),0) emrok_iv_patients,
+            COALESCE(sum(r.hdrcp_emrok_opatients),0)emrok_opatients,
+            COALESCE(sum(r.hdrcp_both_patients),0)both_patients
+            from  cmt_location_master l inner join loc on l.locat_id = loc. locat_id and l.locat_type_id='loctt00000000000000000000000000000003'
+            inner join cmt_location_master rgn on rgn.locat_id = l.locat_parent_id
+            inner join cmt_location_master zn on zn.locat_id = rgn.locat_parent_id
+            inner join rpt_hospital_daily_rcpa r on r.hdrcp_location_id = l.locat_id
+        where r.hdrcp_is_active = TRUE and r.hdrcp_yyyy_mm= #{conditions.yyyyMM.value}
+        <if test="conditions['all']!=null">
+            GROUP by zn.locat_id
+        </if>
+        <if test="conditions['Zone']!=null">
+            GROUP by rgn.locat_id
+        </if>
+        <if test="conditions['Region']!=null">
+            GROUP by l.locat_id
+        </if>
+        <if test="conditions['Territory']!=null">
+            GROUP by l.locat_id
+        </if>
+    </select>
+
+    <select id="manager_joint_visit_by_customer_select" resultMap="DailyVisitJoinee-mapper.dtvjeMap">
+    SELECT DTVJE_ATTENDEE_ID, DTVJE_MANAGER_ID, DTVJE_IS_ACTIVE, DTVJE_STATUS_ID, DTVJE_CREATED_BY, DTVJE_UPDATED_BY, DTVJE_CREATED_ON, DTVJE_UPDATED_ON, DTVJE_STALE_ID, DTVJE_ID FROM ${schemaName}.RPT_DAILY_VISIT_JOINEE je
+     INNER JOIN ${schemaName}.rpt_daily_visit_attendee att on je.dtvje_attendee_id = att.dtvat_id
+        where att.dtvat_customer_id=#{conditions.customerId.value} and je.dtvje_manager_id=#{conditions.managerId.value}
+    </select>
+
+</mapper>
+

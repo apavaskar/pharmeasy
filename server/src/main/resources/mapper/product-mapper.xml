@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Product-mapper">
+    <cache />
+
+
+            <select id="prcdt_select" resultMap="prcdtMap">
+                SELECT PRCDT_BRAND_ID, PRCDT_IS_ACTIVE, PRCDT_NSP, PRCDT_NRV, PRCDT_MRP, PRCDT_SHOW_IN_DETAILING, PRCDT_SHOW_IN_RCPA, PRCDT_RCPA_VALUE, PRCDT_RXN_UNITS, PRCDT_NAME, PRCDT_CI_NAME, PRCDT_CREATED_BY, PRCDT_UPDATED_BY, PRCDT_CREATED_ON, PRCDT_UPDATED_ON, PRCDT_STALE_ID, PRCDT_ID FROM ${schemaName}.CMT_PRODUCT_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="prcdtMap" type="com.squer.sfe.common.entity.Product" autoMapping="true">
+            		<id property="id" column="PRCDT_ID" />
+			<result property="brand" column="PRCDT_BRAND_ID" />
+			<result property="isActive" column="PRCDT_IS_ACTIVE" />
+			<result property="nsp" column="PRCDT_NSP" />
+			<result property="nrv" column="PRCDT_NRV" />
+			<result property="mrp" column="PRCDT_MRP" />
+			<result property="showInDetailing" column="PRCDT_SHOW_IN_DETAILING" />
+			<result property="showInRcpa" column="PRCDT_SHOW_IN_RCPA" />
+			<result property="rcpaValue" column="PRCDT_RCPA_VALUE" />
+			<result property="rxnUnits" column="PRCDT_RXN_UNITS" />
+			<result property="name" column="PRCDT_NAME" />
+			<result property="ciName" column="PRCDT_CI_NAME" />
+			<result property="createdBy" column="PRCDT_CREATED_BY" />
+			<result property="updatedBy" column="PRCDT_UPDATED_BY" />
+			<result property="createdOn" column="PRCDT_CREATED_ON" />
+			<result property="updatedOn" column="PRCDT_UPDATED_ON" />
+			<result property="staleId" column="PRCDT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="prcdt_insert" >
+                INSERT INTO ${schemaName}.CMT_PRODUCT_MASTER(PRCDT_BRAND_ID, PRCDT_IS_ACTIVE, PRCDT_NSP, PRCDT_NRV, PRCDT_MRP, PRCDT_SHOW_IN_DETAILING, PRCDT_SHOW_IN_RCPA, PRCDT_RCPA_VALUE, PRCDT_RXN_UNITS, PRCDT_NAME, PRCDT_CI_NAME, PRCDT_CREATED_BY, PRCDT_UPDATED_BY, PRCDT_CREATED_ON, PRCDT_UPDATED_ON, PRCDT_STALE_ID, PRCDT_ID)
+                VALUES (#{entity.brand.id}, #{entity.isActive}, #{entity.nsp}, #{entity.nrv}, #{entity.mrp}, #{entity.showInDetailing}, #{entity.showInRcpa}, #{entity.rcpaValue}, #{entity.rxnUnits}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="prcdt_update" >
+                UPDATE ${schemaName}.CMT_PRODUCT_MASTER set PRCDT_BRAND_id = #{entity.brand.id}, PRCDT_IS_ACTIVE = #{entity.isActive}, PRCDT_NSP = #{entity.nsp}, PRCDT_NRV = #{entity.nrv}, PRCDT_MRP = #{entity.mrp}, PRCDT_SHOW_IN_DETAILING = #{entity.showInDetailing}, PRCDT_SHOW_IN_RCPA = #{entity.showInRcpa}, PRCDT_RCPA_VALUE = #{entity.rcpaValue}, PRCDT_RXN_UNITS = #{entity.rxnUnits}, PRCDT_NAME = #{entity.name}, PRCDT_CI_NAME = #{entity.ciName}, PRCDT_UPDATED_BY = #{entity.updatedBy}, PRCDT_UPDATED_ON = #{entity.updatedOn}, PRCDT_STALE_ID = #{entity.staleId} 
+                WHERE PRCDT.ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="prcdt_delete" >
+                DELETE FROM  ${schemaName}.CMT_PRODUCT_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

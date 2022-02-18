@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ExpenseDetails-mapper">
+    <cache />
+
+
+            <select id="expdt_select" resultMap="expdtMap">
+                SELECT EXPDT_EXPENSE_ID, EXPDT_EMPLOYEE_ID, EXPDT_LOCATION_ID, EXPDT_YYYY_MM, EXPDT_YYYY_MM_DD, EXPDT_EXPENSE_TYPE_ID, EXPDT_LOCATION_TYPE_ID, EXPDT_AMOUNT, EXPDT_REMARKS, EXPDT_CREATED_BY, EXPDT_UPDATED_BY, EXPDT_CREATED_ON, EXPDT_UPDATED_ON, EXPDT_STALE_ID, EXPDT_ID FROM ${schemaName}.EXP_EXPENSE_DETAILS
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="expdtMap" type="com.squer.sfe.expense.entity.ExpenseDetails" autoMapping="true">
+                <id property="id" column="EXPDT_ID" />
+                <result property="expense" column="EXPDT_EXPENSE_ID" />
+                <result property="employee" column="EXPDT_EMPLOYEE_ID" />
+                <result property="location" column="EXPDT_LOCATION_ID" />
+                <result property="yyyyMm" column="EXPDT_YYYY_MM" />
+                <result property="yyyyMmDd" column="EXPDT_YYYY_MM_DD" />
+                <result property="expenseType" column="EXPDT_EXPENSE_TYPE_ID" />
+                <result property="locationType" column="EXPDT_LOCATION_TYPE_ID" />
+                <result property="amount" column="EXPDT_AMOUNT" />
+                <result property="remarks" column="EXPDT_REMARKS" />
+                <result property="createdBy" column="EXPDT_CREATED_BY" />
+                <result property="updatedBy" column="EXPDT_UPDATED_BY" />
+                <result property="createdOn" column="EXPDT_CREATED_ON" />
+                <result property="updatedOn" column="EXPDT_UPDATED_ON" />
+                <result property="staleId" column="EXPDT_STALE_ID" />
+            </resultMap>         
+        
+
+
+            <insert id="expdt_insert" >
+                INSERT INTO ${schemaName}.EXP_EXPENSE_DETAILS(EXPDT_EXPENSE_ID, EXPDT_EMPLOYEE_ID, EXPDT_LOCATION_ID, EXPDT_YYYY_MM, EXPDT_YYYY_MM_DD, EXPDT_EXPENSE_TYPE_ID, EXPDT_LOCATION_TYPE_ID, EXPDT_AMOUNT, EXPDT_REMARKS, EXPDT_CREATED_BY, EXPDT_UPDATED_BY, EXPDT_CREATED_ON, EXPDT_UPDATED_ON, EXPDT_STALE_ID, EXPDT_ID)
+                VALUES (#{entity.expense.id}, #{entity.employee.id}, #{entity.location.id}, #{entity.yyyyMm}, #{entity.yyyyMmDd}, #{entity.expenseType.id}, #{entity.locationType.id}, #{entity.amount}, #{entity.remarks}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="expdt_update" >
+                UPDATE ${schemaName}.EXP_EXPENSE_DETAILS set EXPDT_EXPENSE_id = #{entity.expense.id}, EXPDT_EMPLOYEE_id = #{entity.employee.id}, EXPDT_LOCATION_id = #{entity.location.id}, EXPDT_YYYY_MM = #{entity.yyyyMm}, EXPDT_YYYY_MM_DD = #{entity.yyyyMmDd}, EXPDT_EXPENSE_TYPE_id = #{entity.expenseType.id}, EXPDT_LOCATION_TYPE_id = #{entity.locationType.id}, EXPDT_AMOUNT = #{entity.amount}, EXPDT_REMARKS = #{entity.remarks}, EXPDT_UPDATED_BY = #{entity.updatedBy}, EXPDT_UPDATED_ON = #{entity.updatedOn}, EXPDT_STALE_ID = #{entity.staleId} 
+                WHERE EXPDT_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="expdt_delete" >
+                DELETE FROM  ${schemaName}.EXP_EXPENSE_DETAILS where expdt_id = #{entity.id}
+            </delete>    
+        
+
+</mapper>

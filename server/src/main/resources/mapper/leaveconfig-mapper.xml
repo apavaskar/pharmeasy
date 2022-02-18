@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LeaveConfig-mapper">
+    <cache />
+
+
+            <select id="lvcfg_select" resultMap="lvcfgMap">
+                SELECT LVCFG_LEAVE_TYPE_ID, LVCFG_TOTAL_COUNT, LVCFG_APPLY_IN_ADVANCE, LVCFG_ACCUMULATE, LVCFG_ENCASHABLE, LVCFG_MIN_DAYS, LVCFG_MAX_DAYS, LVCFG_CARRY_FORWARD, LVCFG_CREATED_BY, LVCFG_UPDATED_BY, LVCFG_CREATED_ON, LVCFG_UPDATED_ON, LVCFG_STALE_ID, LVCFG_ID FROM ${schemaName}.LEV_LEAVE_CONFIG
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="lvcfgMap" type="com.squer.sfe.leave.entity.LeaveConfig" autoMapping="true">
+            		<id property="id" column="LVCFG_ID" />
+			<result property="leaveType" column="LVCFG_LEAVE_TYPE_ID" />
+			<result property="totalCount" column="LVCFG_TOTAL_COUNT" />
+			<result property="applyInAdvance" column="LVCFG_APPLY_IN_ADVANCE" />
+			<result property="accumulate" column="LVCFG_ACCUMULATE" />
+			<result property="encashable" column="LVCFG_ENCASHABLE" />
+			<result property="minDays" column="LVCFG_MIN_DAYS" />
+			<result property="maxDays" column="LVCFG_MAX_DAYS" />
+			<result property="carryForward" column="LVCFG_CARRY_FORWARD" />
+			<result property="createdBy" column="LVCFG_CREATED_BY" />
+			<result property="updatedBy" column="LVCFG_UPDATED_BY" />
+			<result property="createdOn" column="LVCFG_CREATED_ON" />
+			<result property="updatedOn" column="LVCFG_UPDATED_ON" />
+			<result property="staleId" column="LVCFG_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="lvcfg_insert" >
+                INSERT INTO ${schemaName}.LEV_LEAVE_CONFIG(LVCFG_LEAVE_TYPE_ID, LVCFG_TOTAL_COUNT, LVCFG_APPLY_IN_ADVANCE, LVCFG_ACCUMULATE, LVCFG_ENCASHABLE, LVCFG_MIN_DAYS, LVCFG_MAX_DAYS, LVCFG_CARRY_FORWARD, LVCFG_CREATED_BY, LVCFG_UPDATED_BY, LVCFG_CREATED_ON, LVCFG_UPDATED_ON, LVCFG_STALE_ID, LVCFG_ID)
+                VALUES (#{entity.leaveType.id}, #{entity.totalCount}, #{entity.applyInAdvance}, #{entity.accumulate}, #{entity.encashable}, #{entity.minDays}, #{entity.maxDays}, #{entity.carryForward}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="lvcfg_update" >
+                UPDATE ${schemaName}.LEV_LEAVE_CONFIG set LVCFG_LEAVE_TYPE_id = #{entity.leaveType.id}, LVCFG_TOTAL_COUNT = #{entity.totalCount}, LVCFG_APPLY_IN_ADVANCE = #{entity.applyInAdvance}, LVCFG_ACCUMULATE = #{entity.accumulate}, LVCFG_ENCASHABLE = #{entity.encashable}, LVCFG_MIN_DAYS = #{entity.minDays}, LVCFG_MAX_DAYS = #{entity.maxDays}, LVCFG_CARRY_FORWARD = #{entity.carryForward}, LVCFG_UPDATED_BY = #{entity.updatedBy}, LVCFG_UPDATED_ON = #{entity.updatedOn}, LVCFG_STALE_ID = #{entity.staleId} 
+                WHERE LVCFG_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="lvcfg_delete" >
+                DELETE FROM  ${schemaName}.LEV_LEAVE_CONFIG <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

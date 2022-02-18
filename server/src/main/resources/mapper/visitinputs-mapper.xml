@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VisitInputs-mapper">
+    <cache />
+
+
+            <select id="vinpt_select" resultMap="vinptMap">
+                SELECT VINPT_ATTENDEE_ID, VINPT_INPUT_ID, VINPT_QUANTITY, VINPT_IS_ACTIVE, VINPT_CREATED_BY, VINPT_UPDATED_BY, VINPT_CREATED_ON, VINPT_UPDATED_ON, VINPT_STALE_ID, VINPT_ID FROM ${schemaName}.RPT_VISIT_INPUTS
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="vinptMap" type="com.squer.sfe.reporting.entity.VisitInputs" autoMapping="true">
+            		<id property="id" column="VINPT_ID" />
+			<result property="attendee" column="VINPT_ATTENDEE_ID" />
+			<result property="input" column="VINPT_INPUT_ID" />
+			<result property="quantity" column="VINPT_QUANTITY" />
+			<result property="isActive" column="VINPT_IS_ACTIVE" />
+			<result property="createdBy" column="VINPT_CREATED_BY" />
+			<result property="updatedBy" column="VINPT_UPDATED_BY" />
+			<result property="createdOn" column="VINPT_CREATED_ON" />
+			<result property="updatedOn" column="VINPT_UPDATED_ON" />
+			<result property="staleId" column="VINPT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="vinpt_insert" >
+                INSERT INTO ${schemaName}.RPT_VISIT_INPUTS(VINPT_ATTENDEE_ID, VINPT_INPUT_ID, VINPT_QUANTITY, VINPT_IS_ACTIVE, VINPT_CREATED_BY, VINPT_UPDATED_BY, VINPT_CREATED_ON, VINPT_UPDATED_ON, VINPT_STALE_ID, VINPT_ID)
+                VALUES (#{entity.attendee.id}, #{entity.input.id}, #{entity.quantity}, #{entity.isActive}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="vinpt_update" >
+                UPDATE ${schemaName}.RPT_VISIT_INPUTS set VINPT_ATTENDEE_id = #{entity.attendee.id}, VINPT_INPUT_id = #{entity.input.id}, VINPT_QUANTITY = #{entity.quantity}, VINPT_IS_ACTIVE = #{entity.isActive}, VINPT_UPDATED_BY = #{entity.updatedBy}, VINPT_UPDATED_ON = #{entity.updatedOn}, VINPT_STALE_ID = #{entity.staleId} 
+                WHERE VINPT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="vinpt_delete" >
+                DELETE FROM  ${schemaName}.RPT_VISIT_INPUTS <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

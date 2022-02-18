@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VisitRcpa-mapper">
+    <cache />
+
+
+            <select id="vrcpa_select" resultMap="vrcpaMap">
+                SELECT VRCPA_ATTENDEE_ID, VRCPA_CHEMIST_ID, VRCPA_DOCTOR_ID, VRCPA_BRAND_ID, VRCPA_PRODUCT_ID, VRCPA_QUANTITY, VRCPA_RXN, VRCPA_VALUE, VRCPA_COMPETITION_QUANTITY, VRCPA_COMPETITION_RXN, VRCPA_COMPETITION_VALUE, VRCPA_TYPE_ID, VRCPA_IS_ACTIVE, VRCPA_CREATED_BY, VRCPA_UPDATED_BY, VRCPA_CREATED_ON, VRCPA_UPDATED_ON, VRCPA_STALE_ID, VRCPA_ID FROM ${schemaName}.RPT_VISIT_RCPA
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="vrcpaMap" type="com.squer.sfe.reporting.entity.VisitRcpa">
+            		<id property="id" column="VRCPA_ID" />
+			<result property="attendee" column="VRCPA_ATTENDEE_ID" />
+			<result property="chemist" column="VRCPA_CHEMIST_ID" />
+			<result property="doctor" column="VRCPA_DOCTOR_ID" />
+			<result property="brand" column="VRCPA_BRAND_ID" />
+			<result property="product" column="VRCPA_PRODUCT_ID" />
+			<result property="quantity" column="VRCPA_QUANTITY" />
+			<result property="rxn" column="VRCPA_RXN" />
+			<result property="value" column="VRCPA_VALUE" />
+			<result property="competitionQuantity" column="VRCPA_COMPETITION_QUANTITY" />
+			<result property="competitionRxn" column="VRCPA_COMPETITION_RXN" />
+			<result property="competitionValue" column="VRCPA_COMPETITION_VALUE" />
+			<result property="type" column="VRCPA_TYPE_ID" />
+			<result property="isActive" column="VRCPA_IS_ACTIVE" />
+			<result property="createdBy" column="VRCPA_CREATED_BY" />
+			<result property="updatedBy" column="VRCPA_UPDATED_BY" />
+			<result property="createdOn" column="VRCPA_CREATED_ON" />
+			<result property="updatedOn" column="VRCPA_UPDATED_ON" />
+			<result property="staleId" column="VRCPA_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="vrcpa_insert" >
+                INSERT INTO ${schemaName}.RPT_VISIT_RCPA(VRCPA_ATTENDEE_ID, VRCPA_CHEMIST_ID, VRCPA_DOCTOR_ID, VRCPA_BRAND_ID, VRCPA_PRODUCT_ID, VRCPA_QUANTITY, VRCPA_RXN, VRCPA_VALUE, VRCPA_COMPETITION_QUANTITY, VRCPA_COMPETITION_RXN, VRCPA_COMPETITION_VALUE, VRCPA_TYPE_ID, VRCPA_IS_ACTIVE, VRCPA_CREATED_BY, VRCPA_UPDATED_BY, VRCPA_CREATED_ON, VRCPA_UPDATED_ON, VRCPA_STALE_ID, VRCPA_ID)
+                VALUES (#{entity.attendee.id}, #{entity.chemist.id}, #{entity.doctor.id}, #{entity.brand.id}, #{entity.product.id}, #{entity.quantity}, #{entity.rxn}, #{entity.value}, #{entity.competitionQuantity}, #{entity.competitionRxn}, #{entity.competitionValue}, #{entity.type.id}, #{entity.isActive}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="vrcpa_update" >
+                UPDATE ${schemaName}.RPT_VISIT_RCPA set VRCPA_ATTENDEE_id = #{entity.attendee.id}, VRCPA_CHEMIST_id = #{entity.chemist.id}, VRCPA_DOCTOR_id = #{entity.doctor.id}, VRCPA_BRAND_id = #{entity.brand.id}, VRCPA_PRODUCT_id = #{entity.product.id}, VRCPA_QUANTITY = #{entity.quantity}, VRCPA_RXN = #{entity.rxn}, VRCPA_VALUE = #{entity.value}, VRCPA_COMPETITION_QUANTITY = #{entity.competitionQuantity}, VRCPA_COMPETITION_RXN = #{entity.competitionRxn}, VRCPA_COMPETITION_VALUE = #{entity.competitionValue}, VRCPA_TYPE_id = #{entity.type.id}, VRCPA_IS_ACTIVE = #{entity.isActive}, VRCPA_UPDATED_BY = #{entity.updatedBy}, VRCPA_UPDATED_ON = #{entity.updatedOn}, VRCPA_STALE_ID = #{entity.staleId} 
+                WHERE vrcpa_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="vrcpa_delete" >
+                DELETE FROM  ${schemaName}.RPT_VISIT_RCPA <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

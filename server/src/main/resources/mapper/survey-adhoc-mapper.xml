@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Survey-adhoc-mapper">
+    <cache />
+    <select id="survey_details_select" resultMap="surveyDetailsResultMap">
+        select
+        sm.survy_id, sm.survy_title,
+        sc.srcat_title,sc.srcat_display_order,
+        sq.srque_id,ant.syslv_name answer_type,sq.srque_question_text,sq.srque_display_order,sq.srque_max_score,
+        sa.srans_id,sa.srans_answer_text,sa.srans_display_order,sa.srans_score
+        from sry_survey_master sm
+        INNER JOIN sry_survey_category sc on sm.survy_id = sc.srcat_survey_id and sc.srcat_is_active = true
+        INNER JOIN sry_survey_questions sq on sq.srque_category_id = sc.srcat_id and sq.srque_is_active = true
+        INNER JOIN sry_survey_answers sa on sa.srans_question_id = sq.srque_id and sa.srans_is_active = TRUE
+        INNER JOIN fmk_system_lov ant on ant.syslv_id = sq.srque_answer_type_id
+        <where>
+            <if test="conditions['surveyId']!=null">
+                and sm.survy_id = #{conditions.surveyId.value}
+            </if>
+            <if test="conditions['typeId']!=null">
+                and sm.survy_type_id = #{conditions.typeId.value}
+            </if>
+        </where>
+        order by sc.srcat_display_order, sq.srque_display_order,sa.srans_display_order
+    </select>
+
+    <resultMap id="surveyDetailsResultMap" type="com.squer.sfe.survey.controller.dto.SurveyDetailsDTO">
+        <result column="survy_id" property="surveyId"/>
+        <result column="survy_title" property="surveyTitle"/>
+        <collection property="categories" ofType="com.squer.sfe.survey.controller.dto.SurveyCategoriesDTO">
+            <result column="srcat_title" property="categoryTitle"/>
+            <result column="srcat_display_order" property="categoryDisplayOrder"/>
+            <collection property="questions" ofType="com.squer.sfe.survey.controller.dto.SurveyQuestionDTO">
+                <result column="srque_id" property="questionId"/>
+                <result column="answer_type" property="answerType"/>
+                <result column="srque_question_text" property="questionText"/>
+                <result column="srcat_display_order" property="questionDisplayOrder"/>
+                <result column="srque_max_score" property="questionMaxScore"/>
+                <collection property="answers" ofType="com.squer.sfe.survey.controller.dto.SurveyAnswerDTO">
+                    <result column="srans_id" property="answerId"/>
+                    <result column="srans_answer_text" property="answerText"/>
+                    <result column="srans_display_order" property="answerDisplayOrder"/>
+                    <result column="srans_score" property="answerScore"/>
+                </collection>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="survey_response_select" resultMap="surveyResponseResultMap">
+        SELECT
+        rm.srvrm_survey_id,rm.srvrm_survey_by_id,rm.srvrm_survey_for_id,rm.srvrm_survey_date,
+        rd.srvrd_question_id,rd.srvrd_score,q.srque_answer_type_id
+        ra.srvan_answer_id,ra.srvan_answer
+        from sry_survey_response_master rm
+        INNER JOIN sry_survey_response_details rd on rm.srvrm_id = rd.srvrd_master_id
+        INNER JOIN sry_survey_response_answers ra on ra.srvan_details_id = rd.srvrd_id
+        inner join sry_survey_questions q on q.id = rd.srvrd_question_id
+        where rm.srvrm_id = #{conditions.masterId.value}
+    </select>
+
+    <resultMap id="surveyResponseResultMap" type="com.squer.sfe.survey.controller.dto.SurveyResponseDTO">
+        <result property="surveyId" column="srvrm_survey_id"/>
+        <result property="surveyBy" column="srvrm_survey_by_id"/>
+        <result property="surveyFor" column="srvrm_survey_for_id"/>
+        <result property="surveyDate" column="srvrm_survey_date"/>
+        <collection property="responseDetails" ofType="com.squer.sfe.survey.controller.dto.SurveyResponseDetailsDTO">
+            <result property="questionId" column="srvrd_question_id"/>
+            <result property="score" column="srvrd_score"/>
+            <result property="answerTypeId" column="srque_answer_type_id"/>
+            <collection property="answers" ofType="com.squer.sfe.survey.controller.dto.SurveyResponseAnswersDTO">
+                <result property="answerId" column="srvan_answer_id"/>
+                <result property="answerText" column="srvan_answer"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="survey_list_select" resultMap="SurveyMaster-mapper.survyMap">
+        SELECT
+            SURVY_TITLE, SURVY_FROM_DATE, SURVY_TO_DATE, SURVY_IS_ACTIVE, SURVY_TYPE_ID, SURVY_CREATED_BY, SURVY_UPDATED_BY, SURVY_CREATED_ON, SURVY_UPDATED_ON, SURVY_STALE_ID, SURVY_ID FROM ${schemaName}.SRY_SURVEY_MASTER
+        from sry_survey_participants p inner join sry_survey_master s on p.srpat_survey_id = s.survy_id and s.survy_is_active = TRUE
+        and p.srpat_publisher= #{conditions.employeeId.value} and s.SURVY_TYPE_ID = #{conditions.surveyTypeId.value}
+    </select>
+
+
+    <select id="team_eb_list_select" resultMap="tramEbList_resultMap">
+        with recursive loc as (
+        select locat_id from cmt_location_master where locat_id= #{conditions.locationId.value}
+        union all
+        select l.locat_id from cmt_location_master l
+        inner join loc on loc.locat_id=l.locat_parent_id
+        ) SELECT
+        l.locat_name, e.emply_name, j.jobrl_name,response.srvrm_id
+        from cmt_location_master l INNER JOIN loc on l.locat_id = loc.locat_id
+        inner join cmt_employee_profile ep on ep.emprf_location_id = l.locat_id and ep.emprf_is_active = true
+        INNER JOIN cmt_job_role j on ep.emprf_job_role_id = j.jobrl_id
+        INNER JOIN cmt_employee_master e on e.emply_id = ep.emprf_employee_id
+        left join
+        ( SELECT rm.srvrm_id , rm.srvrm_survey_for_id,rm.srvrm_survey_by_id, rm.srvrm_survey_date from sry_survey_master m
+            inner join sry_survey_response_master rm on rm.srvrm_survey_id = m.survy_id where m.survy_type_id= #{conditions.surveyTypeId.value}
+        ) response on response.srvrm_survey_for_id = e.emply_id and
+        response.srvrm_survey_by_id= #{conditions.managerId.value} and response.srvrm_survey_date = #{conditions.yyyyMMdd.value}
+        where l.locat_id != #{conditions.locationId.value}
+    </select>
+
+    <resultMap id="tramEbList_resultMap" type="com.squer.sfe.survey.controller.dto.TeamEBListDTO">
+        <result property="locationName" column="locat_name"/>
+        <result property="employeeName" column="emply_name"/>
+        <result property="jobName" column="jobrl_name"/>
+        <result property="surveyResponseId" column="srvrm_id"/>
+    </resultMap>
+</mapper>

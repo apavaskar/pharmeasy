@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="approval-mapper">
+    <cache />
+
+    <insert id="aprci_insert" >
+        INSERT INTO ${schemaName}.CMT_APPROVAL_CHAIN_INSTANCE(APRCI_ID, APRCI_CHAIN_TYPE, APRCI_OWNER_ID, APRCI_APPROVER_ID, APRCI_APPROVER_LEVEL, APRCI_APPROVAL_STATUS, APRCI_RECEIVED_ON,
+        APRCI_ACTION_ON, APRCI_CREATED_ON, APRCI_CREATED_BY, APRCI_UPDATED_ON, APRCI_UPDATED_BY, APRCI_STALE_ID)
+        VALUES (#{entity.id}, #{entity.chainType}, #{entity.owner.id}, #{entity.approver.id}, #{entity.approverLevel}, #{entity.approvalStatus}, #{entity.receivedOn},
+        #{entity.actionOn}, #{entity.createdOn}, #{entity.createdBy}, #{entity.updatedOn},  #{entity.updatedBy}, #{entity.staleId})
+    </insert>
+
+    <update id="aprci_update" >
+        UPDATE ${schemaName}.CMT_APPROVAL_CHAIN_INSTANCE set APRCI_CHAIN_TYPE = #{entity.chainType}, APRCI_OWNER_ID = #{entity.owner.id}, APRCI_APPROVER_ID = #{entity.approver.id},
+                                        APRCI_APPROVER_LEVEL = #{entity.approverLevel}, APRCI_APPROVAL_STATUS = #{entity.approvalStatus}, APRCI_RECEIVED_ON = #{entity.receivedOn},
+                                        APRCI_ACTION_ON = #{entity.actionOn}, APRCI_UPDATED_BY = #{entity.updatedBy}, APRCI_UPDATED_ON = #{entity.updatedOn},
+                                        APRCI_STALE_ID = #{entity.staleId}
+                        WHERE APRCI_ID = #{entity.id}
+    </update>
+    <select id="aprci_select" resultMap="aprci_result">
+        SELECT APRCI_ID, APRCI_CHAIN_TYPE, APRCI_OWNER_ID, APRCI_APPROVER_ID, APRCI_APPROVER_LEVEL, APRCI_APPROVAL_STATUS, APRCI_RECEIVED_ON,
+               APRCI_ACTION_ON, APRCI_CREATED_ON, APRCI_CREATED_BY, APRCI_UPDATED_ON, APRCI_UPDATED_BY, APRCI_STALE_ID
+        from ${schemaName}.CMT_APPROVAL_CHAIN_INSTANCE
+        <include refid="base.where_statement"></include>
+    </select>
+    <resultMap id="aprci_result" type="com.squer.sfe.common.entity.ApprovalChainInstance">
+        <id property="id" column="APRCI_ID" />
+        <result property="chainType" column="APRCI_CHAIN_TYPE" />
+        <result property="owner" column="APRCI_OWNER_ID" />
+        <result property="approver" column="APRCI_APPROVER_ID" />
+        <result property="approverLevel" column="APRCI_APPROVER_LEVEL" />
+        <result property="approvalStatus" column="APRCI_APPROVAL_STATUS" />
+        <result property="receivedOn" column="APRCI_RECEIVED_ON" />
+        <result property="actionOn" column="APRCI_ACTION_ON" />
+        <result property="createdBy" column="APRCI_CREATED_BY" />
+        <result property="updatedBy" column="APRCI_UPDATED_BY" />
+        <result property="createdOn" column="APRCI_CREATED_ON" />
+        <result property="updatedOn" column="APRCI_UPDATED_ON" />
+        <result property="staleId" column="APRCI_STALE_ID" />
+    </resultMap>
+
+    <delete id="aprci_by_criteria_delete">
+        delete from ${schemaName}.CMT_APPROVAL_CHAIN_INSTANCE
+            where aprci_owner_id = #{ownerId}
+    </delete>
+
+    <select id="aprci_by_type_select" resultType="map">
+        SELECT APRCI_ID, APRCI_CHAIN_TYPE, APRCI_OWNER_ID, APRCI_APPROVER_ID, APRCI_APPROVER_LEVEL, APRCI_APPROVAL_STATUS, APRCI_RECEIVED_ON,
+        APRCI_ACTION_ON, APRCI_CREATED_ON, APRCI_CREATED_BY, APRCI_UPDATED_ON, APRCI_UPDATED_BY, APRCI_STALE_ID, LEAVE_FROM_DATE, LEAVE_TO_DATE,
+        leave_leave_type_id, l.syslv_name, emply_name
+        from ${schemaName}.CMT_APPROVAL_CHAIN_INSTANCE c
+        inner join ${schemaName}.LEV_LEAVES_APPLIED m on m.leave_id = c.aprci_owner_id and c.aprci_chain_type = 'LEAVE'
+        inner join ${schemaName}.FMK_SYSTEM_LOV l on l.syslv_id = m.leave_leave_type_id
+        inner join ${schemaName}.CMT_EMPLOYEE_MASTER e on e.emply_id = c.APRCI_APPROVER_ID
+        where m.leave_owner_id = #{conditions.employeeId.value} and cast(m.leave_from_date/100 as INTEGER) = #{conditions.yearMonth.value}
+    </select>
+
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EntityTags-mapper">
+    <cache />
+    <select id="etags_select" resultMap="etagsMap">
+        SELECT ETAGS_ID, ETAGS_NAME, ETAGS_CI_NAME, ETAGS_OBJECT_TYPE, ETAGS_PURPOSE,
+               ETAGS_VALID_UPTO, ETAGS_VALID_UPTO_YYYY_MM, ETAGS_VALID_UPTO_YYYY_MM_DD, ETAGS_CREATED_ON,
+               ETAGS_CREATED_BY, ETAGS_UPDATED_ON, ETAGS_UPDATED_BY, ETAGS_STALE_ID
+        FROM ${schemaName}.CMT_ENTITY_TAG
+        <include refid="base.where_statement"></include>
+    </select>
+    <resultMap id="etagsMap" type="com.squer.sfe.common.entity.EntityTag" autoMapping="true">
+        <id property="id" column="ETAGS_ID" />
+        <result property="name" column="ETAGS_NAME" />
+        <result property="ciName" column="ETAGS_CI_NAME" />
+        <result property="objectType" column="ETAGS_OBJECT_TYPE" />
+        <result property="tagPurpose" column="ETAGS_PURPOSE" />
+        <result property="validUpto" column="ETAGS_VALID_UPTO" />
+        <result property="validUptoYyyyMm" column="ETAGS_VALID_UPTO_YYYY_MM" />
+        <result property="validUptoYyyyMmDd" column="ETAGS_VALID_UPTO_YYYY_MM_DD" />
+        <result property="createdBy" column="ETAGS_CREATED_BY" />
+        <result property="updatedBy" column="ETAGS_UPDATED_BY" />
+        <result property="createdOn" column="ETAGS_CREATED_ON" />
+        <result property="updatedOn" column="ETAGS_UPDATED_ON" />
+        <result property="staleId" column="ETAGS_STALE_ID" />
+    </resultMap>
+
+    <select id="etagr_select" resultMap="etagrMap">
+        select
+        ETAGR_ID ,
+        ETAGR_ETAGS_ID,
+        ETAGR_OWNER_ID
+        from ${schemaName}CMT_ENTITY_TAG_RELATION
+        <include refid="base.where_statement"></include>
+    </select>
+
+    <resultMap id="etagrMap" type="com.squer.sfe.common.entity.EntityTagRelation" autoMapping="true">
+        <id property="id" column="etagr_id"/>
+        <result property="owner" column="ETAGR_OWNER_ID"/>
+        <result property="tag" column="ETAGR_ETAGS_ID" />
+    </resultMap>
+
+</mapper>

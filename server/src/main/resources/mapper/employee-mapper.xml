@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Employee-mapper">
+    <cache />
+
+
+            <select id="emply_select" resultMap="emplyMap">
+                SELECT EMPLY_DESIGNATION, EMPLY_DATE_OF_JOINING, EMPLY_DATE_OF_TERMINATION, EMPLY_USER_ID, EMPLY_STATUS_ID, EMPLY_GENDER_ID, EMPLY_MARITAL_STATUS_ID, EMPLY_DATE_OF_BIRTH, EMPLY_PERSON_CODE, EMPLY_IS_ACTIVE, EMPLY_NAME, EMPLY_CI_NAME, EMPLY_CREATED_BY, EMPLY_UPDATED_BY, EMPLY_CREATED_ON, EMPLY_UPDATED_ON, EMPLY_STALE_ID, EMPLY_ID FROM ${schemaName}.CMT_EMPLOYEE_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="emplyMap" type="com.squer.sfe.common.entity.Employee" autoMapping="true">
+            		<id property="id" column="EMPLY_ID" />
+			<result property="designation" column="EMPLY_DESIGNATION" />
+			<result property="dateOfJoining" column="EMPLY_DATE_OF_JOINING" />
+			<result property="dateOfTermination" column="EMPLY_DATE_OF_TERMINATION" />
+			<result property="userId" column="EMPLY_USER_ID" />
+			<result property="status" column="EMPLY_STATUS_ID" />
+			<result property="gender" column="EMPLY_GENDER_ID" />
+			<result property="maritalStatus" column="EMPLY_MARITAL_STATUS_ID" />
+			<result property="dateOfBirth" column="EMPLY_DATE_OF_BIRTH" />
+			<result property="personCode" column="EMPLY_PERSON_CODE" />
+			<result property="isActive" column="EMPLY_IS_ACTIVE" />
+			<result property="name" column="EMPLY_NAME" />
+			<result property="ciName" column="EMPLY_CI_NAME" />
+			<result property="createdBy" column="EMPLY_CREATED_BY" />
+			<result property="updatedBy" column="EMPLY_UPDATED_BY" />
+			<result property="createdOn" column="EMPLY_CREATED_ON" />
+			<result property="updatedOn" column="EMPLY_UPDATED_ON" />
+			<result property="staleId" column="EMPLY_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="emply_insert" >
+                INSERT INTO ${schemaName}.CMT_EMPLOYEE_MASTER(EMPLY_DESIGNATION, EMPLY_DATE_OF_JOINING, EMPLY_DATE_OF_TERMINATION, EMPLY_USER_ID, EMPLY_STATUS_ID, EMPLY_GENDER_ID, EMPLY_MARITAL_STATUS_ID, EMPLY_DATE_OF_BIRTH, EMPLY_PERSON_CODE, EMPLY_IS_ACTIVE, EMPLY_NAME, EMPLY_CI_NAME, EMPLY_CREATED_BY, EMPLY_UPDATED_BY, EMPLY_CREATED_ON, EMPLY_UPDATED_ON, EMPLY_STALE_ID, EMPLY_ID)
+                VALUES (#{entity.designation}, #{entity.dateOfJoining}, #{entity.dateOfTermination}, #{entity.userId}, #{entity.status.id}, #{entity.gender.id}, #{entity.maritalStatus.id}, #{entity.dateOfBirth}, #{entity.personCode}, #{entity.isActive}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="emply_update" >
+                UPDATE ${schemaName}.CMT_EMPLOYEE_MASTER set EMPLY_DESIGNATION = #{entity.designation}, EMPLY_DATE_OF_JOINING = #{entity.dateOfJoining}, EMPLY_DATE_OF_TERMINATION = #{entity.dateOfTermination}, EMPLY_USER_ID = #{entity.userId}, EMPLY_STATUS_id = #{entity.status.id}, EMPLY_GENDER_id = #{entity.gender.id}, EMPLY_MARITAL_STATUS_id = #{entity.maritalStatus.id}, EMPLY_DATE_OF_BIRTH = #{entity.dateOfBirth}, EMPLY_PERSON_CODE = #{entity.personCode}, EMPLY_IS_ACTIVE = #{entity.isActive}, EMPLY_NAME = #{entity.name}, EMPLY_CI_NAME = #{entity.ciName}, EMPLY_UPDATED_BY = #{entity.updatedBy}, EMPLY_UPDATED_ON = #{entity.updatedOn}, EMPLY_STALE_ID = #{entity.staleId} 
+                WHERE EMPLY_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="emply_delete" >
+                DELETE FROM  ${schemaName}.CMT_EMPLOYEE_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

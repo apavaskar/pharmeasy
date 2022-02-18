@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="framework">
+    <cache />
+    <select id="appcg_select" resultType="com.squer.platform.business.entity.AppConfig">
+        SELECT APPCG.ID, ADMIN_PASSWORD adminPassword, APP_VERSION as version FROM ${schemaName}.FMK_APP_CONFIG APPCG
+    </select>
+
+    <select id="tenat_select" resultType="com.squer.platform.multitenancy.entity.TenantDefinition">
+        SELECT TEANT.ID, TENANT_CODE, TENAT_NAME, TENAT_CI_NAME, VALID_FROM, VALID_UPTO, DOCUMENT_URL,
+        RDBMS_URL, CREATED_BY, CREATED_ON, UPDATED_BY, UPDATED_ON, STALE_ID FROM FMK_TENANT_DEFINITION TEANT where ID = #{conditions.id.value}
+    </select>
+
+    <select id="named_id_select" resultType="map">
+        SELECT ${conditions.id_column.value} as id , ${conditions.name_column.value} as name from ${schemaName}.${conditions.table_name.value} where ${conditions.id_column.value} = #{conditions.id.value}
+    </select>
+
+</mapper>

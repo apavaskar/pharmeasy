@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Allowances-mapper">
+    <cache />
+
+
+            <select id="alwnc_select" resultMap="alwncMap">
+                SELECT ALWNC_ALLOWANCE_NAME_ID, ALWNC_EXPENSE_TYPE_ID, ALWNC_LOCATION_TYPE_ID, ALWNC_DIVISION_ID, ALWNC_JOB_TITLE_ID, ALWNC_TOWN_CATEGORY_ID, ALWNC_MIN_REQUIRED_LIMIT, ALWNC_MAX_REQUIRED_LIMIT, ALWNC_VALUE, ALWNC_MAX_VALUE, ALWNC_VALID_FROM, ALWNC_VALID_TO, ALWNC_CATEGORY_ID, ALWNC_PERIOD_CATEGORY_ID, ALWNC_IS_DOCUMENT_REQUIRED, ALWNC_IS_EDITABLE, ALWNC_IS_ACTIVE, ALWNC_CREATED_BY, ALWNC_UPDATED_BY, ALWNC_CREATED_ON, ALWNC_UPDATED_ON, ALWNC_STALE_ID, ALWNC_ID FROM ${schemaName}.EXP_EXPENSE_ALLOWANCES
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="alwncMap" type="com.squer.sfe.expense.entity.Allowances" autoMapping="true">
+            		<id property="id" column="ALWNC_ID" />
+			<result property="allowanceName" column="ALWNC_ALLOWANCE_NAME_ID" />
+			<result property="expenseType" column="ALWNC_EXPENSE_TYPE_ID" />
+			<result property="locationType" column="ALWNC_LOCATION_TYPE_ID" />
+			<result property="division" column="ALWNC_DIVISION_ID" />
+			<result property="jobTitle" column="ALWNC_JOB_TITLE_ID" />
+			<result property="townCategory" column="ALWNC_TOWN_CATEGORY_ID" />
+			<result property="minRequiredLimit" column="ALWNC_MIN_REQUIRED_LIMIT" />
+			<result property="maxRequiredLimit" column="ALWNC_MAX_REQUIRED_LIMIT" />
+			<result property="value" column="ALWNC_VALUE" />
+			<result property="maxValue" column="ALWNC_MAX_VALUE" />
+			<result property="validFrom" column="ALWNC_VALID_FROM" />
+			<result property="validTo" column="ALWNC_VALID_TO" />
+			<result property="category" column="ALWNC_CATEGORY_ID" />
+			<result property="periodCategory" column="ALWNC_PERIOD_CATEGORY_ID" />
+			<result property="isDocumentRequired" column="ALWNC_IS_DOCUMENT_REQUIRED" />
+			<result property="isEditable" column="ALWNC_IS_EDITABLE" />
+			<result property="isActive" column="ALWNC_IS_ACTIVE" />
+			<result property="createdBy" column="ALWNC_CREATED_BY" />
+			<result property="updatedBy" column="ALWNC_UPDATED_BY" />
+			<result property="createdOn" column="ALWNC_CREATED_ON" />
+			<result property="updatedOn" column="ALWNC_UPDATED_ON" />
+			<result property="staleId" column="ALWNC_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="alwnc_insert" >
+                INSERT INTO ${schemaName}.EXP_EXPENSE_ALLOWANCES(ALWNC_ALLOWANCE_NAME_ID, ALWNC_EXPENSE_TYPE_ID, ALWNC_LOCATION_TYPE_ID, ALWNC_DIVISION_ID, ALWNC_JOB_TITLE_ID, ALWNC_TOWN_CATEGORY_ID, ALWNC_MIN_REQUIRED_LIMIT, ALWNC_MAX_REQUIRED_LIMIT, ALWNC_VALUE, ALWNC_MAX_VALUE, ALWNC_VALID_FROM, ALWNC_VALID_TO, ALWNC_CATEGORY_ID, ALWNC_PERIOD_CATEGORY_ID, ALWNC_IS_DOCUMENT_REQUIRED, ALWNC_IS_EDITABLE, ALWNC_IS_ACTIVE, ALWNC_CREATED_BY, ALWNC_UPDATED_BY, ALWNC_CREATED_ON, ALWNC_UPDATED_ON, ALWNC_STALE_ID, ALWNC_ID)
+                VALUES (#{entity.allowanceName.id}, #{entity.expenseType.id}, #{entity.locationType.id}, #{entity.division.id}, #{entity.jobTitle.id}, #{entity.townCategory.id}, #{entity.minRequiredLimit}, #{entity.maxRequiredLimit}, #{entity.value}, #{entity.maxValue}, #{entity.validFrom}, #{entity.validTo}, #{entity.category.id}, #{entity.periodCategory.id}, #{entity.isDocumentRequired}, #{entity.isEditable}, #{entity.isActive}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="alwnc_update" >
+                UPDATE ${schemaName}.EXP_EXPENSE_ALLOWANCES set ALWNC_ALLOWANCE_NAME_id = #{entity.allowanceName.id}, ALWNC_EXPENSE_TYPE_id = #{entity.expenseType.id}, ALWNC_LOCATION_TYPE_id = #{entity.locationType.id}, ALWNC_DIVISION_id = #{entity.division.id}, ALWNC_JOB_TITLE_id = #{entity.jobTitle.id}, ALWNC_TOWN_CATEGORY_id = #{entity.townCategory.id}, ALWNC_MIN_REQUIRED_LIMIT = #{entity.minRequiredLimit}, ALWNC_MAX_REQUIRED_LIMIT = #{entity.maxRequiredLimit}, ALWNC_VALUE = #{entity.value}, ALWNC_MAX_VALUE = #{entity.maxValue}, ALWNC_VALID_FROM = #{entity.validFrom}, ALWNC_VALID_TO = #{entity.validTo}, ALWNC_CATEGORY_id = #{entity.category.id}, ALWNC_PERIOD_CATEGORY_id = #{entity.periodCategory.id}, ALWNC_IS_DOCUMENT_REQUIRED = #{entity.isDocumentRequired}, ALWNC_IS_EDITABLE = #{entity.isEditable}, ALWNC_IS_ACTIVE = #{entity.isActive}, ALWNC_UPDATED_BY = #{entity.updatedBy}, ALWNC_UPDATED_ON = #{entity.updatedOn}, ALWNC_STALE_ID = #{entity.staleId} 
+                WHERE ALWNC_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="alwnc_delete" >
+                DELETE FROM  ${schemaName}.EXP_EXPENSE_ALLOWANCES <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

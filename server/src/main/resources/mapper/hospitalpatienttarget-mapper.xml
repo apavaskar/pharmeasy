@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HospitalPatientTarget-mapper">
+    <cache />
+
+
+            <select id="hsptg_select" resultMap="hsptgMap">
+                SELECT HSPTG_HOSPITAL_ID, HSPTG_YYYY_MM, HSPTG_MONTH, HSPTG_YEAR, HSPTG_TARGET, HSPTG_CREATED_BY, HSPTG_UPDATED_BY, HSPTG_CREATED_ON, HSPTG_UPDATED_ON, HSPTG_STALE_ID, HSPTG_ID FROM ${schemaName}.RPT_HOSPITAL_PATIENT_TARGET
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="hsptgMap" type="com.squer.sfe.reporting.entity.HospitalPatientTarget" autoMapping="true">
+            		<id property="id" column="HSPTG_ID" />
+			<result property="hospital" column="HSPTG_HOSPITAL_ID" />
+			<result property="yyyyMm" column="HSPTG_YYYY_MM" />
+			<result property="month" column="HSPTG_MONTH" />
+			<result property="year" column="HSPTG_YEAR" />
+			<result property="target" column="HSPTG_TARGET" />
+			<result property="createdBy" column="HSPTG_CREATED_BY" />
+			<result property="updatedBy" column="HSPTG_UPDATED_BY" />
+			<result property="createdOn" column="HSPTG_CREATED_ON" />
+			<result property="updatedOn" column="HSPTG_UPDATED_ON" />
+			<result property="staleId" column="HSPTG_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="hsptg_insert" >
+                INSERT INTO ${schemaName}.RPT_HOSPITAL_PATIENT_TARGET(HSPTG_HOSPITAL_ID, HSPTG_YYYY_MM, HSPTG_MONTH, HSPTG_YEAR, HSPTG_TARGET, HSPTG_CREATED_BY, HSPTG_UPDATED_BY, HSPTG_CREATED_ON, HSPTG_UPDATED_ON, HSPTG_STALE_ID, HSPTG_ID)
+                VALUES (#{entity.hospital.id}, #{entity.yyyyMm}, #{entity.month}, #{entity.year}, #{entity.target}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="hsptg_update" >
+                UPDATE ${schemaName}.RPT_HOSPITAL_PATIENT_TARGET set HSPTG_HOSPITAL_id = #{entity.hospital.id}, HSPTG_YYYY_MM = #{entity.yyyyMm}, HSPTG_MONTH = #{entity.month}, HSPTG_YEAR = #{entity.year}, HSPTG_TARGET = #{entity.target}, HSPTG_UPDATED_BY = #{entity.updatedBy}, HSPTG_UPDATED_ON = #{entity.updatedOn}, HSPTG_STALE_ID = #{entity.staleId} 
+                WHERE HSPTG_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="hsptg_delete" >
+                DELETE FROM  ${schemaName}.RPT_HOSPITAL_PATIENT_TARGET <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

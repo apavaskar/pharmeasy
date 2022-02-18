@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DoctorActivity-mapper">
+    <cache />
+
+
+            <select id="docat_select" resultMap="docatMap">
+                SELECT DOCAT_DIVISION_ID_ID, DOCAT_IS_ACTIVE, DOCAT_NAME, DOCAT_CI_NAME, DOCAT_CREATED_BY, DOCAT_UPDATED_BY, DOCAT_CREATED_ON, DOCAT_UPDATED_ON, DOCAT_STALE_ID, DOCAT_ID FROM ${schemaName}.CMT_DOCTOR_ACTIVITY_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="docatMap" type="com.squer.sfe.common.entity.DoctorActivity" autoMapping="true">
+            		<id property="id" column="DOCAT_ID" />
+			<result property="divisionId" column="DOCAT_DIVISION_ID_ID" />
+			<result property="isActive" column="DOCAT_IS_ACTIVE" />
+			<result property="name" column="DOCAT_NAME" />
+			<result property="ciName" column="DOCAT_CI_NAME" />
+			<result property="createdBy" column="DOCAT_CREATED_BY" />
+			<result property="updatedBy" column="DOCAT_UPDATED_BY" />
+			<result property="createdOn" column="DOCAT_CREATED_ON" />
+			<result property="updatedOn" column="DOCAT_UPDATED_ON" />
+			<result property="staleId" column="DOCAT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="docat_insert" >
+                INSERT INTO ${schemaName}.CMT_DOCTOR_ACTIVITY_MASTER(DOCAT_DIVISION_ID_ID, DOCAT_IS_ACTIVE, DOCAT_NAME, DOCAT_CI_NAME, DOCAT_CREATED_BY, DOCAT_UPDATED_BY, DOCAT_CREATED_ON, DOCAT_UPDATED_ON, DOCAT_STALE_ID, DOCAT_ID)
+                VALUES (#{entity.divisionId.id}, #{entity.isActive}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="docat_update" >
+                UPDATE ${schemaName}.CMT_DOCTOR_ACTIVITY_MASTER set DOCAT_DIVISION_ID_id = #{entity.divisionId.id}, DOCAT_IS_ACTIVE = #{entity.isActive}, DOCAT_NAME = #{entity.name}, DOCAT_CI_NAME = #{entity.ciName}, DOCAT_UPDATED_BY = #{entity.updatedBy}, DOCAT_UPDATED_ON = #{entity.updatedOn}, DOCAT_STALE_ID = #{entity.staleId} 
+                WHERE DOCAT_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="docat_delete" >
+                DELETE FROM  ${schemaName}.CMT_DOCTOR_ACTIVITY_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

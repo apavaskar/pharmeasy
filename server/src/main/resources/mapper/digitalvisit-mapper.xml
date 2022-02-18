@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DigitalVisit-mapper">
+    <cache />
+
+
+            <select id="digvs_select" resultMap="digvsMap">
+                SELECT DIGVS_ATTENDEE_ID, DIGVS_IS_ACTIVE, DIGVS_VISIT_MODE_ID, DIGVS_START_TIME, DIGVS_DURATION, DIGVS_TEMPLATE_ID_ID, DIGVS_CREATED_BY, DIGVS_UPDATED_BY, DIGVS_CREATED_ON, DIGVS_UPDATED_ON, DIGVS_STALE_ID, DIGVS_ID FROM ${schemaName}.RPT_DIGITAL_VISIT
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="digvsMap" type="com.squer.sfe.reporting.entity.DigitalVisit" autoMapping="true">
+            		<id property="id" column="DIGVS_ID" />
+			<result property="attendee" column="DIGVS_ATTENDEE_ID" />
+			<result property="isActive" column="DIGVS_IS_ACTIVE" />
+			<result property="visitMode" column="DIGVS_VISIT_MODE_ID" />
+			<result property="startTime" column="DIGVS_START_TIME" />
+			<result property="duration" column="DIGVS_DURATION" />
+			<result property="templateId" column="DIGVS_TEMPLATE_ID_ID" />
+			<result property="createdBy" column="DIGVS_CREATED_BY" />
+			<result property="updatedBy" column="DIGVS_UPDATED_BY" />
+			<result property="createdOn" column="DIGVS_CREATED_ON" />
+			<result property="updatedOn" column="DIGVS_UPDATED_ON" />
+			<result property="staleId" column="DIGVS_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="digvs_insert" >
+                INSERT INTO ${schemaName}.RPT_DIGITAL_VISIT(DIGVS_ATTENDEE_ID, DIGVS_IS_ACTIVE, DIGVS_VISIT_MODE_ID, DIGVS_START_TIME, DIGVS_DURATION, DIGVS_TEMPLATE_ID_ID, DIGVS_CREATED_BY, DIGVS_UPDATED_BY, DIGVS_CREATED_ON, DIGVS_UPDATED_ON, DIGVS_STALE_ID, DIGVS_ID)
+                VALUES (#{entity.attendee.id}, #{entity.isActive}, #{entity.visitMode.id}, #{entity.startTime}, #{entity.duration}, #{entity.templateId.id}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="digvs_update" >
+                UPDATE ${schemaName}.RPT_DIGITAL_VISIT set DIGVS_ATTENDEE_id = #{entity.attendee.id}, DIGVS_IS_ACTIVE = #{entity.isActive}, DIGVS_VISIT_MODE_id = #{entity.visitMode.id}, DIGVS_START_TIME = #{entity.startTime}, DIGVS_DURATION = #{entity.duration}, DIGVS_TEMPLATE_ID_id = #{entity.templateId.id}, DIGVS_UPDATED_BY = #{entity.updatedBy}, DIGVS_UPDATED_ON = #{entity.updatedOn}, DIGVS_STALE_ID = #{entity.staleId} 
+                WHERE DIGVS_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="digvs_delete" >
+                DELETE FROM  ${schemaName}.RPT_DIGITAL_VISIT <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

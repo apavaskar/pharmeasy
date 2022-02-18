@@ -1,0 +1,7 @@
+.p-picklist-source{
+    height: 50px !important;
+}
+
+.p-fileupload-buttonbar button{
+    display: none;
+}

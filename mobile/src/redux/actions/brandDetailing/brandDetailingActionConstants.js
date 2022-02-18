@@ -1,0 +1,5 @@
+export const BD_INIT_START = 'BD_INIT_START';
+export const BD_INIT_SUCCESS = 'BD_INIT_SUCCESS';
+export const BD_INIT_FAIL = 'BD_INIT_FAIL';
+
+export const BD_SAVE_STATE_START = 'BD_SAVE_STATE_START';

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SurveyQuestion-mapper">
+    <cache />
+
+
+            <select id="srque_select" resultMap="srqueMap">
+                SELECT SRQUE_CATEGORY_ID, SRQUE_QUESTION_TEXT, SRQUE_DISPLAY_ORDER, SRQUE_IS_ACTIVE, SRQUE_MAX_SCORE, SRQUE_ANSWER_TYPE_ID, SRQUE_CREATED_BY, SRQUE_UPDATED_BY, SRQUE_CREATED_ON, SRQUE_UPDATED_ON, SRQUE_STALE_ID, SRQUE_ID FROM ${schemaName}.SRY_SURVEY_QUESTIONS
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="srqueMap" type="com.squer.sfe.survey.entity.SurveyQuestion" autoMapping="true">
+            		<id property="id" column="SRQUE_ID" />
+			<result property="category" column="SRQUE_CATEGORY_ID" />
+			<result property="questionText" column="SRQUE_QUESTION_TEXT" />
+			<result property="displayOrder" column="SRQUE_DISPLAY_ORDER" />
+			<result property="isActive" column="SRQUE_IS_ACTIVE" />
+			<result property="maxScore" column="SRQUE_MAX_SCORE" />
+			<result property="answerType" column="SRQUE_ANSWER_TYPE_ID" />
+			<result property="createdBy" column="SRQUE_CREATED_BY" />
+			<result property="updatedBy" column="SRQUE_UPDATED_BY" />
+			<result property="createdOn" column="SRQUE_CREATED_ON" />
+			<result property="updatedOn" column="SRQUE_UPDATED_ON" />
+			<result property="staleId" column="SRQUE_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="srque_insert" >
+                INSERT INTO ${schemaName}.SRY_SURVEY_QUESTIONS(SRQUE_CATEGORY_ID, SRQUE_QUESTION_TEXT, SRQUE_DISPLAY_ORDER, SRQUE_IS_ACTIVE, SRQUE_MAX_SCORE, SRQUE_ANSWER_TYPE_ID, SRQUE_CREATED_BY, SRQUE_UPDATED_BY, SRQUE_CREATED_ON, SRQUE_UPDATED_ON, SRQUE_STALE_ID, SRQUE_ID)
+                VALUES (#{entity.category.id}, #{entity.questionText}, #{entity.displayOrder}, #{entity.isActive}, #{entity.maxScore}, #{entity.answerType.id}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="srque_update" >
+                UPDATE ${schemaName}.SRY_SURVEY_QUESTIONS set SRQUE_CATEGORY_id = #{entity.category.id}, SRQUE_QUESTION_TEXT = #{entity.questionText}, SRQUE_DISPLAY_ORDER = #{entity.displayOrder}, SRQUE_IS_ACTIVE = #{entity.isActive}, SRQUE_MAX_SCORE = #{entity.maxScore}, SRQUE_ANSWER_TYPE_id = #{entity.answerType.id}, SRQUE_UPDATED_BY = #{entity.updatedBy}, SRQUE_UPDATED_ON = #{entity.updatedOn}, SRQUE_STALE_ID = #{entity.staleId} 
+                WHERE SRQUE_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="srque_delete" >
+                DELETE FROM  ${schemaName}.SRY_SURVEY_QUESTIONS <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

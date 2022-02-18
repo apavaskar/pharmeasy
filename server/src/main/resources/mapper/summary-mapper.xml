@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Summary-mapper">
+    <cache />
+
+    <select id="visit_days_select" resultType="map">
+        select
+            dtvst_location_id location_id, count(1) cnt
+        from rpt_daily_visit
+        where dtvst_yyyy_mm= #{conditions.yyyyMm.value}
+        <if test="conditions['working']!=null">
+            and dtvst_activity_type_id= #{conditions.typeId.value}
+        </if>
+        <if test="conditions['nonCall']!=null">
+            and dtvst_activity_type_id != #{conditions.typeId.value}
+        </if>
+        GROUP BY location_id
+    </select>
+
+    <select id="customer_count_select" resultType="map">
+
+    </select>
+</mapper>

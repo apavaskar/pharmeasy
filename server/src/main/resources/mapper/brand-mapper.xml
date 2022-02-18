@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Brand-mapper">
+    <cache />
+
+
+            <select id="brand_select" resultMap="brandMap">
+                SELECT BRAND_DIVISION_ID, BRAND_IS_ACTIVE, BRAND_IS_OWN, BRAND_PARENT_ID, BRAND_RCPA_VALUE, BRAND_RXN_UNITS, BRAND_SHOW_IN_DETAILING, BRAND_SHOW_IN_RCPA, BRAND_NAME, BRAND_CI_NAME, BRAND_CREATED_BY, BRAND_UPDATED_BY, BRAND_CREATED_ON, BRAND_UPDATED_ON, BRAND_STALE_ID, BRAND_ID FROM ${schemaName}.CMT_BRAND_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="brandMap" type="com.squer.sfe.common.entity.Brand" autoMapping="true">
+            		<id property="id" column="BRAND_ID" />
+			<result property="division" column="BRAND_DIVISION_ID" />
+			<result property="isActive" column="BRAND_IS_ACTIVE" />
+			<result property="isOwn" column="BRAND_IS_OWN" />
+			<result property="parent" column="BRAND_PARENT_ID" />
+			<result property="rcpaValue" column="BRAND_RCPA_VALUE" />
+			<result property="rxnUnits" column="BRAND_RXN_UNITS" />
+			<result property="showInDetailing" column="BRAND_SHOW_IN_DETAILING" />
+			<result property="showInRcpa" column="BRAND_SHOW_IN_RCPA" />
+			<result property="name" column="BRAND_NAME" />
+			<result property="ciName" column="BRAND_CI_NAME" />
+			<result property="createdBy" column="BRAND_CREATED_BY" />
+			<result property="updatedBy" column="BRAND_UPDATED_BY" />
+			<result property="createdOn" column="BRAND_CREATED_ON" />
+			<result property="updatedOn" column="BRAND_UPDATED_ON" />
+			<result property="staleId" column="BRAND_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="brand_insert" >
+                INSERT INTO ${schemaName}.CMT_BRAND_MASTER(BRAND_DIVISION_ID, BRAND_IS_ACTIVE, BRAND_IS_OWN, BRAND_PARENT_ID, BRAND_RCPA_VALUE, BRAND_RXN_UNITS, BRAND_SHOW_IN_DETAILING, BRAND_SHOW_IN_RCPA, BRAND_NAME, BRAND_CI_NAME, BRAND_CREATED_BY, BRAND_UPDATED_BY, BRAND_CREATED_ON, BRAND_UPDATED_ON, BRAND_STALE_ID, BRAND_ID)
+                VALUES (#{entity.division.id}, #{entity.isActive}, #{entity.isOwn}, #{entity.parent.id}, #{entity.rcpaValue}, #{entity.rxnUnits}, #{entity.showInDetailing}, #{entity.showInRcpa}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="brand_update" >
+                UPDATE ${schemaName}.CMT_BRAND_MASTER set BRAND_DIVISION_id = #{entity.division.id}, BRAND_IS_ACTIVE = #{entity.isActive}, BRAND_IS_OWN = #{entity.isOwn}, BRAND_PARENT_id = #{entity.parent.id}, BRAND_RCPA_VALUE = #{entity.rcpaValue}, BRAND_RXN_UNITS = #{entity.rxnUnits}, BRAND_SHOW_IN_DETAILING = #{entity.showInDetailing}, BRAND_SHOW_IN_RCPA = #{entity.showInRcpa}, BRAND_NAME = #{entity.name}, BRAND_CI_NAME = #{entity.ciName}, BRAND_UPDATED_BY = #{entity.updatedBy}, BRAND_UPDATED_ON = #{entity.updatedOn}, BRAND_STALE_ID = #{entity.staleId} 
+                WHERE brand.ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="brand_delete" >
+                DELETE FROM  ${schemaName}.CMT_BRAND_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

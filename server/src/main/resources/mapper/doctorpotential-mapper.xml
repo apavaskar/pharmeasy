@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DoctorPotential-mapper">
+    <cache />
+
+
+            <select id="docpu_select" resultMap="docpuMap">
+                SELECT DOCPU_DOCTOR_ID, DOCPU_BRAND_ID, DOCPU_IS_FOCUSED, DOCPU_POTENTIAL, DOCPU_CREATED_BY, DOCPU_UPDATED_BY, DOCPU_CREATED_ON, DOCPU_UPDATED_ON, DOCPU_STALE_ID, DOCPU_ID FROM ${schemaName}.CMT_DOCTOR_POTENTIAL
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="docpuMap" type="com.squer.sfe.common.entity.DoctorPotential" autoMapping="true">
+            		<id property="id" column="DOCPU_ID" />
+			<result property="doctor" column="DOCPU_DOCTOR_ID" />
+			<result property="brand" column="DOCPU_BRAND_ID" />
+			<result property="isFocused" column="DOCPU_IS_FOCUSED" />
+			<result property="potential" column="DOCPU_POTENTIAL" />
+			<result property="createdBy" column="DOCPU_CREATED_BY" />
+			<result property="updatedBy" column="DOCPU_UPDATED_BY" />
+			<result property="createdOn" column="DOCPU_CREATED_ON" />
+			<result property="updatedOn" column="DOCPU_UPDATED_ON" />
+			<result property="staleId" column="DOCPU_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="docpu_insert" >
+                INSERT INTO ${schemaName}.CMT_DOCTOR_POTENTIAL(DOCPU_DOCTOR_ID, DOCPU_BRAND_ID, DOCPU_IS_FOCUSED, DOCPU_POTENTIAL, DOCPU_CREATED_BY, DOCPU_UPDATED_BY, DOCPU_CREATED_ON, DOCPU_UPDATED_ON, DOCPU_STALE_ID, DOCPU_ID)
+                VALUES (#{entity.doctor.id}, #{entity.brand.id}, #{entity.isFocused}, #{entity.potential}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="docpu_update" >
+                UPDATE ${schemaName}.CMT_DOCTOR_POTENTIAL set DOCPU_DOCTOR_id = #{entity.doctor.id}, DOCPU_BRAND_id = #{entity.brand.id}, DOCPU_IS_FOCUSED = #{entity.isFocused}, DOCPU_POTENTIAL = #{entity.potential}, DOCPU_UPDATED_BY = #{entity.updatedBy}, DOCPU_UPDATED_ON = #{entity.updatedOn}, DOCPU_STALE_ID = #{entity.staleId} 
+                WHERE DOCPU_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="docpu_delete" >
+                DELETE FROM  ${schemaName}.CMT_DOCTOR_POTENTIAL <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

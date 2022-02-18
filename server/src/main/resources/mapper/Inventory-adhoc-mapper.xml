@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Inventory-adhoc-mapper">
+    <cache />
+    <select id="inventory-for-employee-select" resultMap="invResultMap">
+        SELECT
+        mst.invmt_id, mst.invmt_inventory_code, mst.invmt_name,tp.syslv_name, stk.invst_batch_number, stk.invst_inventory_date, stk.invst_expiry_date,
+        stk.invst_id,stk.invst_quantity_added,stk.invst_distributed,stk.invst_balance
+        from INV_INVENTORY_STOCK stk
+        INNER JOIN inv_inventory_master mst on stk.invst_item_id = mst.invmt_id
+        inner join fmk_system_lov tp on tp.syslv_id = mst.invmt_type_id
+        <where>
+            <if test="conditions['employee']!=null">
+                and stk.invst_employee_id = #{conditions.employee.value}
+            </if>
+            <if test="conditions['currentDate']!=null">
+                and (stk.invst_expiry_date &gt;= #{conditions.currentDate.value} or stk.invst_expiry_date is null)
+            </if>
+            <if test="conditions['type']!=null">
+                and stk.invst_type_id= #{conditions.type.value}
+            </if>
+            <if test="conditions['item']!=null">
+                and invmt_id = #{conditions.item.value}
+            </if>
+            <if test="conditions['isActive']!=null">
+                and mst.invmt_is_active = #{conditions.isActive.value}
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="invResultMap" type="com.squer.sfe.inventory.controller.dto.InventoryListDTO">
+        <result property="id" column="invmt_id"/>
+        <result property="stockId" column="invst_id"/>
+        <result property="code" column="invmt_inventory_code"/>
+        <result property="name" column="invmt_name"/>
+        <result property="type" column="syslv_name"/>
+        <result property="batchNumber" column="invst_batch_number"/>
+        <result property="inventoryDate" column="invst_inventory_date"/>
+        <result property="expiryDate" column="invst_expiry_date"/>
+        <result property="quantityAdded" column="invst_quantity_added"/>
+        <result property="distributed" column="invst_distributed"/>
+        <result property="balance" column="invst_balance"/>
+    </resultMap>
+
+    <select id="inventory-stock-select" resultMap="InventoryStock-mapper.invstMap">
+        SELECT INVST_ITEM_ID, INVST_DOCUMENT_NUMBER, INVST_ITEM_NUMBER, INVST_LOCATION_ID, INVST_EMPLOYEE_ID, INVST_INVENTORY_DATE, INVST_BATCH_NUMBER, INVST_EXPIRY_DATE, INVST_SAP_DOWNLOAD_DATE, INVST_NET_VALUE, INVST_QUANTITY_ADDED, INVST_DISTRIBUTED, INVST_BALANCE, INVST_CREATED_BY, INVST_UPDATED_BY, INVST_CREATED_ON, INVST_UPDATED_ON, INVST_STALE_ID, INVST_ID FROM ${schemaName}.INV_INVENTORY_STOCK
+        where
+        INVST_EMPLOYEE_ID = #{conditions.employee.value}
+        and INVST_ITEM_ID = #{conditions.item.value}
+        and INVST_EXPIRY_DATE &gt;= #{conditions.currentDate.value}
+        order by INVST_EXPIRY_DATE, INVST_INVENTORY_DATE
+    </select>
+</mapper>

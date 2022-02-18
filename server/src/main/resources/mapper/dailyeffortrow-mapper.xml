@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DailyEffortRow-mapper">
+    <cache />
+
+
+            <select id="deffr_select" resultMap="deffrMap">
+                SELECT DEFFR_LOCATION_ID, DEFFR_REPORTING_DATE, DEFFR_REPORTING_DATE_YY_MM, DEFFR_REPORTING_DATE_YY_MM_DD, DEFFR_IS_INDIVIDUAL, DEFFR_COUNT_SUPER_CORE_DR, DEFFR_COUNT_CORE_DR, DEFFR_COUNT_NON_CORE_DR, DEFFR_COUNT_TOTAL_DR, DEFFR_COUNT_SUPER_CORE_RETAILER, DEFFR_COUNT_CORE_RETAILER, DEFFR_COUNT_NON_CORE_RETAILER, DEFFR_COUNT_TOTAL_RETAILER, DEFFR_COUNT_SUPER_CORE_HOSPITAL, DEFFR_COUNT_CORE_HOSPITAL, DEFFR_COUNT_NON_CORE_HOSPITAL, DEFFR_COUNT_TOTAL_HOSPITAL, DEFFR_COUNT_SUPER_CORE_DR_REPORTED, DEFFR_COUNT_CORE_DR_REPORTED, DEFFR_COUNT_NON_CORE_DR_REPORTED, DEFFR_COUNT_TOTAL_DR_REPORTED, DEFFR_COUNT_SUPER_CORE_RETAILER_REPORTED, DEFFR_COUNT_CORE_RETAILER_REPORTED, DEFFR_COUNT_NON_CORE_RETAILER_REPORTED, DEFFR_COUNT_TOTAL_RETAILER_REPORTED, DEFFR_COUNT_SUPER_CORE_HOSPITAL_REPORTED, DEFFR_COUNT_CORE_HOSPITAL_REPORTED, DEFFR_COUNT_NON_CORE_HOSPITAL_REPORTED, DEFFR_COUNT_TOTAL_HOSPITAL_REPORTED, DEFFR_COUNT_NCA, DEFFR_DURATION_NCA, DEFFR_LEAVE_DURATION, DEFFR_COUNT_PHYSICAL_SUPER_CORE_DR, DEFFR_COUNT_PHYSICAL_CORE_DR, DEFFR_COUNT_PHYSICAL_NON_CORE_DR, DEFFR_COUNT_PHYSICAL_TOTAL_DR, DEFFR_COUNT_PHYSICAL_SUPER_CORE_RETAILER, DEFFR_COUNT_PHYSICAL_CORE_RETAILER, DEFFR_COUNT_PHYSICAL_NON_CORE_RETAILER, DEFFR_COUNT_PHYSICAL_TOTAL_RETAILER, DEFFR_COUNT_PHYSICAL_SUPER_CORE_HOSPITAL, DEFFR_COUNT_PHYSICAL_CORE_HOSPITAL, DEFFR_COUNT_PHYSICAL_NON_CORE_HOSPITAL, DEFFR_COUNT_PHYSICAL_TOTAL_HOSPITAL, DEFFR_COUNT_DIGITAL_SUPER_CORE_DR, DEFFR_COUNT_DIGITAL_CORE_DR, DEFFR_COUNT_DIGITAL_NON_CORE_DR, DEFFR_COUNT_DIGITAL_TOTAL_DR, DEFFR_COUNT_DIGITAL_SUPER_CORE_RETAILER, DEFFR_COUNT_DIGITAL_CORE_RETAILER, DEFFR_COUNT_DIGITAL_NON_CORE_RETAILER, DEFFR_COUNT_DIGITAL_TOTAL_RETAILER, DEFFR_COUNT_DIGITAL_SUPER_CORE_HOSPITAL, DEFFR_COUNT_DIGITAL_CORE_HOSPITAL, DEFFR_COUNT_DIGITAL_NON_CORE_HOSPITAL, DEFFR_COUNT_DIGITAL_TOTAL_HOSPITAL, DEFFR_ID FROM ${schemaName}.CON_DAILY_EFFORT_ROW
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="deffrMap" type="com.squer.consolidation.effort.DailyEffortRow" autoMapping="true">
+            		<id property="id" column="DEFFR_ID" />
+			<result property="locationId" column="DEFFR_LOCATION_ID" />
+			<result property="reportingDate" column="DEFFR_REPORTING_DATE" />
+			<result property="reportingDateYyMm" column="DEFFR_REPORTING_DATE_YY_MM" />
+			<result property="reportingDateYyMmDd" column="DEFFR_REPORTING_DATE_YY_MM_DD" />
+			<result property="individual" column="DEFFR_IS_INDIVIDUAL" />
+			<result property="countSuperCoreDr" column="DEFFR_COUNT_SUPER_CORE_DR" />
+			<result property="countCoreDr" column="DEFFR_COUNT_CORE_DR" />
+			<result property="countNonCoreDr" column="DEFFR_COUNT_NON_CORE_DR" />
+			<result property="countTotalDr" column="DEFFR_COUNT_TOTAL_DR" />
+			<result property="countSuperCoreRetailer" column="DEFFR_COUNT_SUPER_CORE_RETAILER" />
+			<result property="countCoreRetailer" column="DEFFR_COUNT_CORE_RETAILER" />
+			<result property="countNonCoreRetailer" column="DEFFR_COUNT_NON_CORE_RETAILER" />
+			<result property="countTotalRetailer" column="DEFFR_COUNT_TOTAL_RETAILER" />
+			<result property="countSuperCoreHospital" column="DEFFR_COUNT_SUPER_CORE_HOSPITAL" />
+			<result property="countCoreHospital" column="DEFFR_COUNT_CORE_HOSPITAL" />
+			<result property="countNonCoreHospital" column="DEFFR_COUNT_NON_CORE_HOSPITAL" />
+			<result property="countTotalHospital" column="DEFFR_COUNT_TOTAL_HOSPITAL" />
+			<result property="countSuperCoreDrReported" column="DEFFR_COUNT_SUPER_CORE_DR_REPORTED" />
+			<result property="countCoreDrReported" column="DEFFR_COUNT_CORE_DR_REPORTED" />
+			<result property="countNonCoreDrReported" column="DEFFR_COUNT_NON_CORE_DR_REPORTED" />
+			<result property="countTotalDrReported" column="DEFFR_COUNT_TOTAL_DR_REPORTED" />
+			<result property="countSuperCoreRetailerReported" column="DEFFR_COUNT_SUPER_CORE_RETAILER_REPORTED" />
+			<result property="countCoreRetailerReported" column="DEFFR_COUNT_CORE_RETAILER_REPORTED" />
+			<result property="countNonCoreRetailerReported" column="DEFFR_COUNT_NON_CORE_RETAILER_REPORTED" />
+			<result property="countTotalRetailerReported" column="DEFFR_COUNT_TOTAL_RETAILER_REPORTED" />
+			<result property="countSuperCoreHospitalReported" column="DEFFR_COUNT_SUPER_CORE_HOSPITAL_REPORTED" />
+			<result property="countCoreHospitalReported" column="DEFFR_COUNT_CORE_HOSPITAL_REPORTED" />
+			<result property="countNonCoreHospitalReported" column="DEFFR_COUNT_NON_CORE_HOSPITAL_REPORTED" />
+			<result property="countTotalHospitalReported" column="DEFFR_COUNT_TOTAL_HOSPITAL_REPORTED" />
+			<result property="countNCA" column="DEFFR_COUNT_NCA" />
+			<result property="durationNCA" column="DEFFR_DURATION_NCA" />
+			<result property="leaveDuration" column="DEFFR_LEAVE_DURATION" />
+			<result property="countPhysicalSuperCoreDr" column="DEFFR_COUNT_PHYSICAL_SUPER_CORE_DR" />
+			<result property="countPhysicalCoreDr" column="DEFFR_COUNT_PHYSICAL_CORE_DR" />
+			<result property="countPhysicalNonCoreDr" column="DEFFR_COUNT_PHYSICAL_NON_CORE_DR" />
+			<result property="countPhysicalTotalDr" column="DEFFR_COUNT_PHYSICAL_TOTAL_DR" />
+			<result property="countPhysicalSuperCoreRetailer" column="DEFFR_COUNT_PHYSICAL_SUPER_CORE_RETAILER" />
+			<result property="countPhysicalCoreRetailer" column="DEFFR_COUNT_PHYSICAL_CORE_RETAILER" />
+			<result property="countPhysicalNonCoreRetailer" column="DEFFR_COUNT_PHYSICAL_NON_CORE_RETAILER" />
+			<result property="countPhysicalTotalRetailer" column="DEFFR_COUNT_PHYSICAL_TOTAL_RETAILER" />
+			<result property="countPhysicalSuperCoreHospital" column="DEFFR_COUNT_PHYSICAL_SUPER_CORE_HOSPITAL" />
+			<result property="countPhysicalCoreHospital" column="DEFFR_COUNT_PHYSICAL_CORE_HOSPITAL" />
+			<result property="countPhysicalNonCoreHospital" column="DEFFR_COUNT_PHYSICAL_NON_CORE_HOSPITAL" />
+			<result property="countPhysicalTotalHospital" column="DEFFR_COUNT_PHYSICAL_TOTAL_HOSPITAL" />
+			<result property="countDigitalSuperCoreDr" column="DEFFR_COUNT_DIGITAL_SUPER_CORE_DR" />
+			<result property="countDigitalCoreDr" column="DEFFR_COUNT_DIGITAL_CORE_DR" />
+			<result property="countDigitalNonCoreDr" column="DEFFR_COUNT_DIGITAL_NON_CORE_DR" />
+			<result property="countDigitalTotalDr" column="DEFFR_COUNT_DIGITAL_TOTAL_DR" />
+			<result property="countDigitalSuperCoreRetailer" column="DEFFR_COUNT_DIGITAL_SUPER_CORE_RETAILER" />
+			<result property="countDigitalCoreRetailer" column="DEFFR_COUNT_DIGITAL_CORE_RETAILER" />
+			<result property="countDigitalNonCoreRetailer" column="DEFFR_COUNT_DIGITAL_NON_CORE_RETAILER" />
+			<result property="countDigitalTotalRetailer" column="DEFFR_COUNT_DIGITAL_TOTAL_RETAILER" />
+			<result property="countDigitalSuperCoreHospital" column="DEFFR_COUNT_DIGITAL_SUPER_CORE_HOSPITAL" />
+			<result property="countDigitalCoreHospital" column="DEFFR_COUNT_DIGITAL_CORE_HOSPITAL" />
+			<result property="countDigitalNonCoreHospital" column="DEFFR_COUNT_DIGITAL_NON_CORE_HOSPITAL" />
+			<result property="countDigitalTotalHospital" column="DEFFR_COUNT_DIGITAL_TOTAL_HOSPITAL" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="deffr_insert" >
+                INSERT INTO ${schemaName}.CON_DAILY_EFFORT_ROW(DEFFR_LOCATION_ID, DEFFR_REPORTING_DATE, DEFFR_REPORTING_DATE_YY_MM, DEFFR_REPORTING_DATE_YY_MM_DD, DEFFR_IS_INDIVIDUAL, DEFFR_COUNT_SUPER_CORE_DR, DEFFR_COUNT_CORE_DR, DEFFR_COUNT_NON_CORE_DR, DEFFR_COUNT_TOTAL_DR, DEFFR_COUNT_SUPER_CORE_RETAILER, DEFFR_COUNT_CORE_RETAILER, DEFFR_COUNT_NON_CORE_RETAILER, DEFFR_COUNT_TOTAL_RETAILER, DEFFR_COUNT_SUPER_CORE_HOSPITAL, DEFFR_COUNT_CORE_HOSPITAL, DEFFR_COUNT_NON_CORE_HOSPITAL, DEFFR_COUNT_TOTAL_HOSPITAL, DEFFR_COUNT_SUPER_CORE_DR_REPORTED, DEFFR_COUNT_CORE_DR_REPORTED, DEFFR_COUNT_NON_CORE_DR_REPORTED, DEFFR_COUNT_TOTAL_DR_REPORTED, DEFFR_COUNT_SUPER_CORE_RETAILER_REPORTED, DEFFR_COUNT_CORE_RETAILER_REPORTED, DEFFR_COUNT_NON_CORE_RETAILER_REPORTED, DEFFR_COUNT_TOTAL_RETAILER_REPORTED, DEFFR_COUNT_SUPER_CORE_HOSPITAL_REPORTED, DEFFR_COUNT_CORE_HOSPITAL_REPORTED, DEFFR_COUNT_NON_CORE_HOSPITAL_REPORTED, DEFFR_COUNT_TOTAL_HOSPITAL_REPORTED, DEFFR_COUNT_NCA, DEFFR_DURATION_NCA, DEFFR_LEAVE_DURATION, DEFFR_COUNT_PHYSICAL_SUPER_CORE_DR, DEFFR_COUNT_PHYSICAL_CORE_DR, DEFFR_COUNT_PHYSICAL_NON_CORE_DR, DEFFR_COUNT_PHYSICAL_TOTAL_DR, DEFFR_COUNT_PHYSICAL_SUPER_CORE_RETAILER, DEFFR_COUNT_PHYSICAL_CORE_RETAILER, DEFFR_COUNT_PHYSICAL_NON_CORE_RETAILER, DEFFR_COUNT_PHYSICAL_TOTAL_RETAILER, DEFFR_COUNT_PHYSICAL_SUPER_CORE_HOSPITAL, DEFFR_COUNT_PHYSICAL_CORE_HOSPITAL, DEFFR_COUNT_PHYSICAL_NON_CORE_HOSPITAL, DEFFR_COUNT_PHYSICAL_TOTAL_HOSPITAL, DEFFR_COUNT_DIGITAL_SUPER_CORE_DR, DEFFR_COUNT_DIGITAL_CORE_DR, DEFFR_COUNT_DIGITAL_NON_CORE_DR, DEFFR_COUNT_DIGITAL_TOTAL_DR, DEFFR_COUNT_DIGITAL_SUPER_CORE_RETAILER, DEFFR_COUNT_DIGITAL_CORE_RETAILER, DEFFR_COUNT_DIGITAL_NON_CORE_RETAILER, DEFFR_COUNT_DIGITAL_TOTAL_RETAILER, DEFFR_COUNT_DIGITAL_SUPER_CORE_HOSPITAL, DEFFR_COUNT_DIGITAL_CORE_HOSPITAL, DEFFR_COUNT_DIGITAL_NON_CORE_HOSPITAL, DEFFR_COUNT_DIGITAL_TOTAL_HOSPITAL, DEFFR_ID)
+                VALUES (#{entity.locationId}, #{entity.reportingDate}, #{entity.reportingDateYyMm}, #{entity.reportingDateYyMmDd}, #{entity.individual}, #{entity.countSuperCoreDr}, #{entity.countCoreDr}, #{entity.countNonCoreDr}, #{entity.countTotalDr}, #{entity.countSuperCoreRetailer}, #{entity.countCoreRetailer}, #{entity.countNonCoreRetailer}, #{entity.countTotalRetailer}, #{entity.countSuperCoreHospital}, #{entity.countCoreHospital}, #{entity.countNonCoreHospital}, #{entity.countTotalHospital}, #{entity.countSuperCoreDrReported}, #{entity.countCoreDrReported}, #{entity.countNonCoreDrReported}, #{entity.countTotalDrReported}, #{entity.countSuperCoreRetailerReported}, #{entity.countCoreRetailerReported}, #{entity.countNonCoreRetailerReported}, #{entity.countTotalRetailerReported}, #{entity.countSuperCoreHospitalReported}, #{entity.countCoreHospitalReported}, #{entity.countNonCoreHospitalReported}, #{entity.countTotalHospitalReported}, #{entity.countNCA}, #{entity.durationNCA}, #{entity.leaveDuration}, #{entity.countPhysicalSuperCoreDr}, #{entity.countPhysicalCoreDr}, #{entity.countPhysicalNonCoreDr}, #{entity.countPhysicalTotalDr}, #{entity.countPhysicalSuperCoreRetailer}, #{entity.countPhysicalCoreRetailer}, #{entity.countPhysicalNonCoreRetailer}, #{entity.countPhysicalTotalRetailer}, #{entity.countPhysicalSuperCoreHospital}, #{entity.countPhysicalCoreHospital}, #{entity.countPhysicalNonCoreHospital}, #{entity.countPhysicalTotalHospital}, #{entity.countDigitalSuperCoreDr}, #{entity.countDigitalCoreDr}, #{entity.countDigitalNonCoreDr}, #{entity.countDigitalTotalDr}, #{entity.countDigitalSuperCoreRetailer}, #{entity.countDigitalCoreRetailer}, #{entity.countDigitalNonCoreRetailer}, #{entity.countDigitalTotalRetailer}, #{entity.countDigitalSuperCoreHospital}, #{entity.countDigitalCoreHospital}, #{entity.countDigitalNonCoreHospital}, #{entity.countDigitalTotalHospital}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="deffr_update" >
+                UPDATE ${schemaName}.CON_DAILY_EFFORT_ROW set DEFFR_LOCATION_ID = #{entity.locationId}, DEFFR_REPORTING_DATE = #{entity.reportingDate}, DEFFR_REPORTING_DATE_YY_MM = #{entity.reportingDateYyMm}, DEFFR_REPORTING_DATE_YY_MM_DD = #{entity.reportingDateYyMmDd}, DEFFR_IS_INDIVIDUAL = #{entity.individual}, DEFFR_COUNT_SUPER_CORE_DR = #{entity.countSuperCoreDr}, DEFFR_COUNT_CORE_DR = #{entity.countCoreDr}, DEFFR_COUNT_NON_CORE_DR = #{entity.countNonCoreDr}, DEFFR_COUNT_TOTAL_DR = #{entity.countTotalDr}, DEFFR_COUNT_SUPER_CORE_RETAILER = #{entity.countSuperCoreRetailer}, DEFFR_COUNT_CORE_RETAILER = #{entity.countCoreRetailer}, DEFFR_COUNT_NON_CORE_RETAILER = #{entity.countNonCoreRetailer}, DEFFR_COUNT_TOTAL_RETAILER = #{entity.countTotalRetailer}, DEFFR_COUNT_SUPER_CORE_HOSPITAL = #{entity.countSuperCoreHospital}, DEFFR_COUNT_CORE_HOSPITAL = #{entity.countCoreHospital}, DEFFR_COUNT_NON_CORE_HOSPITAL = #{entity.countNonCoreHospital}, DEFFR_COUNT_TOTAL_HOSPITAL = #{entity.countTotalHospital}, DEFFR_COUNT_SUPER_CORE_DR_REPORTED = #{entity.countSuperCoreDrReported}, DEFFR_COUNT_CORE_DR_REPORTED = #{entity.countCoreDrReported}, DEFFR_COUNT_NON_CORE_DR_REPORTED = #{entity.countNonCoreDrReported}, DEFFR_COUNT_TOTAL_DR_REPORTED = #{entity.countTotalDrReported}, DEFFR_COUNT_SUPER_CORE_RETAILER_REPORTED = #{entity.countSuperCoreRetailerReported}, DEFFR_COUNT_CORE_RETAILER_REPORTED = #{entity.countCoreRetailerReported}, DEFFR_COUNT_NON_CORE_RETAILER_REPORTED = #{entity.countNonCoreRetailerReported}, DEFFR_COUNT_TOTAL_RETAILER_REPORTED = #{entity.countTotalRetailerReported}, DEFFR_COUNT_SUPER_CORE_HOSPITAL_REPORTED = #{entity.countSuperCoreHospitalReported}, DEFFR_COUNT_CORE_HOSPITAL_REPORTED = #{entity.countCoreHospitalReported}, DEFFR_COUNT_NON_CORE_HOSPITAL_REPORTED = #{entity.countNonCoreHospitalReported}, DEFFR_COUNT_TOTAL_HOSPITAL_REPORTED = #{entity.countTotalHospitalReported}, DEFFR_COUNT_NCA = #{entity.countNCA}, DEFFR_DURATION_NCA = #{entity.durationNCA}, DEFFR_LEAVE_DURATION = #{entity.leaveDuration}, DEFFR_COUNT_PHYSICAL_SUPER_CORE_DR = #{entity.countPhysicalSuperCoreDr}, DEFFR_COUNT_PHYSICAL_CORE_DR = #{entity.countPhysicalCoreDr}, DEFFR_COUNT_PHYSICAL_NON_CORE_DR = #{entity.countPhysicalNonCoreDr}, DEFFR_COUNT_PHYSICAL_TOTAL_DR = #{entity.countPhysicalTotalDr}, DEFFR_COUNT_PHYSICAL_SUPER_CORE_RETAILER = #{entity.countPhysicalSuperCoreRetailer}, DEFFR_COUNT_PHYSICAL_CORE_RETAILER = #{entity.countPhysicalCoreRetailer}, DEFFR_COUNT_PHYSICAL_NON_CORE_RETAILER = #{entity.countPhysicalNonCoreRetailer}, DEFFR_COUNT_PHYSICAL_TOTAL_RETAILER = #{entity.countPhysicalTotalRetailer}, DEFFR_COUNT_PHYSICAL_SUPER_CORE_HOSPITAL = #{entity.countPhysicalSuperCoreHospital}, DEFFR_COUNT_PHYSICAL_CORE_HOSPITAL = #{entity.countPhysicalCoreHospital}, DEFFR_COUNT_PHYSICAL_NON_CORE_HOSPITAL = #{entity.countPhysicalNonCoreHospital}, DEFFR_COUNT_PHYSICAL_TOTAL_HOSPITAL = #{entity.countPhysicalTotalHospital}, DEFFR_COUNT_DIGITAL_SUPER_CORE_DR = #{entity.countDigitalSuperCoreDr}, DEFFR_COUNT_DIGITAL_CORE_DR = #{entity.countDigitalCoreDr}, DEFFR_COUNT_DIGITAL_NON_CORE_DR = #{entity.countDigitalNonCoreDr}, DEFFR_COUNT_DIGITAL_TOTAL_DR = #{entity.countDigitalTotalDr}, DEFFR_COUNT_DIGITAL_SUPER_CORE_RETAILER = #{entity.countDigitalSuperCoreRetailer}, DEFFR_COUNT_DIGITAL_CORE_RETAILER = #{entity.countDigitalCoreRetailer}, DEFFR_COUNT_DIGITAL_NON_CORE_RETAILER = #{entity.countDigitalNonCoreRetailer}, DEFFR_COUNT_DIGITAL_TOTAL_RETAILER = #{entity.countDigitalTotalRetailer}, DEFFR_COUNT_DIGITAL_SUPER_CORE_HOSPITAL = #{entity.countDigitalSuperCoreHospital}, DEFFR_COUNT_DIGITAL_CORE_HOSPITAL = #{entity.countDigitalCoreHospital}, DEFFR_COUNT_DIGITAL_NON_CORE_HOSPITAL = #{entity.countDigitalNonCoreHospital}, DEFFR_COUNT_DIGITAL_TOTAL_HOSPITAL = #{entity.countDigitalTotalHospital} 
+                WHERE DEFFR_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="deffr_delete" >
+                DELETE FROM  ${schemaName}.CON_DAILY_EFFORT_ROW <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

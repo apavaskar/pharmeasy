@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HospitalDailyRcpa-mapper">
+    <cache />
+
+
+            <select id="hdrcp_select" resultMap="hdrcpMap">
+                SELECT HDRCP_HOSPITAL_ID, HDRCP_DOCTOR_ID_ID, HDRCP_DOCTOR_NAME, HDRCP_LOCATION_ID, HDRCP_EMPLOYEE_ID, HDRCP_YYYY_MM, HDRCP_YYYY_MM_DD, HDRCP_EMROK_IV_PATIENTS, HDRCP_EMROK_OPATIENTS, HDRCP_BOTH_PATIENTS, HDRCP_IS_ACTIVE, HDRCP_CREATED_BY, HDRCP_UPDATED_BY, HDRCP_CREATED_ON, HDRCP_UPDATED_ON, HDRCP_STALE_ID, HDRCP_ID FROM ${schemaName}.RPT_HOSPITAL_DAILY_RCPA
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="hdrcpMap" type="com.squer.sfe.reporting.entity.HospitalDailyRcpa" autoMapping="true">
+            		<id property="id" column="HDRCP_ID" />
+			<result property="hospital" column="HDRCP_HOSPITAL_ID" />
+			<result property="doctorId" column="HDRCP_DOCTOR_ID_ID" />
+			<result property="doctorName" column="HDRCP_DOCTOR_NAME" />
+			<result property="location" column="HDRCP_LOCATION_ID" />
+			<result property="employee" column="HDRCP_EMPLOYEE_ID" />
+			<result property="yyyyMm" column="HDRCP_YYYY_MM" />
+			<result property="yyyyMmDd" column="HDRCP_YYYY_MM_DD" />
+			<result property="emrokIvPatients" column="HDRCP_EMROK_IV_PATIENTS" />
+			<result property="emrokOPatients" column="HDRCP_EMROK_OPATIENTS" />
+			<result property="bothPatients" column="HDRCP_BOTH_PATIENTS" />
+			<result property="isActive" column="HDRCP_IS_ACTIVE" />
+			<result property="createdBy" column="HDRCP_CREATED_BY" />
+			<result property="updatedBy" column="HDRCP_UPDATED_BY" />
+			<result property="createdOn" column="HDRCP_CREATED_ON" />
+			<result property="updatedOn" column="HDRCP_UPDATED_ON" />
+			<result property="staleId" column="HDRCP_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="hdrcp_insert" >
+                INSERT INTO ${schemaName}.RPT_HOSPITAL_DAILY_RCPA(HDRCP_HOSPITAL_ID, HDRCP_DOCTOR_ID_ID, HDRCP_DOCTOR_NAME, HDRCP_LOCATION_ID, HDRCP_EMPLOYEE_ID, HDRCP_YYYY_MM, HDRCP_YYYY_MM_DD, HDRCP_EMROK_IV_PATIENTS, HDRCP_EMROK_OPATIENTS, HDRCP_BOTH_PATIENTS, HDRCP_IS_ACTIVE, HDRCP_CREATED_BY, HDRCP_UPDATED_BY, HDRCP_CREATED_ON, HDRCP_UPDATED_ON, HDRCP_STALE_ID, HDRCP_ID)
+                VALUES (#{entity.hospital.id}, #{entity.doctorId.id}, #{entity.doctorName}, #{entity.location.id}, #{entity.employee.id}, #{entity.yyyyMm}, #{entity.yyyyMmDd}, #{entity.emrokIvPatients}, #{entity.emrokOPatients}, #{entity.bothPatients}, #{entity.isActive}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="hdrcp_update" >
+                UPDATE ${schemaName}.RPT_HOSPITAL_DAILY_RCPA set HDRCP_HOSPITAL_id = #{entity.hospital.id}, HDRCP_DOCTOR_ID_id = #{entity.doctorId.id}, HDRCP_DOCTOR_NAME = #{entity.doctorName}, HDRCP_LOCATION_id = #{entity.location.id}, HDRCP_EMPLOYEE_id = #{entity.employee.id}, HDRCP_YYYY_MM = #{entity.yyyyMm}, HDRCP_YYYY_MM_DD = #{entity.yyyyMmDd}, HDRCP_EMROK_IV_PATIENTS = #{entity.emrokIvPatients}, HDRCP_EMROK_OPATIENTS = #{entity.emrokOPatients}, HDRCP_BOTH_PATIENTS = #{entity.bothPatients}, HDRCP_IS_ACTIVE = #{entity.isActive}, HDRCP_UPDATED_BY = #{entity.updatedBy}, HDRCP_UPDATED_ON = #{entity.updatedOn}, HDRCP_STALE_ID = #{entity.staleId} 
+                WHERE HDRCP_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="hdrcp_delete" >
+                DELETE FROM  ${schemaName}.RPT_HOSPITAL_DAILY_RCPA <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

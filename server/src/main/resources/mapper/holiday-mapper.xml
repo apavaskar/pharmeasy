@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Holiday-mapper">
+    <cache />
+
+
+            <select id="holdy_select" resultMap="holdyMap">
+                SELECT HOLDY_IS_ACTIVE, HOLDY_NAME, HOLDY_CI_NAME, HOLDY_CREATED_BY, HOLDY_UPDATED_BY, HOLDY_CREATED_ON, HOLDY_UPDATED_ON, HOLDY_STALE_ID, HOLDY_ID FROM ${schemaName}.CMT_HOLIDAY_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="holdyMap" type="com.squer.sfe.common.entity.Holiday" autoMapping="true">
+            		<id property="id" column="HOLDY_ID" />
+			<result property="isActive" column="HOLDY_IS_ACTIVE" />
+			<result property="name" column="HOLDY_NAME" />
+			<result property="ciName" column="HOLDY_CI_NAME" />
+			<result property="createdBy" column="HOLDY_CREATED_BY" />
+			<result property="updatedBy" column="HOLDY_UPDATED_BY" />
+			<result property="createdOn" column="HOLDY_CREATED_ON" />
+			<result property="updatedOn" column="HOLDY_UPDATED_ON" />
+			<result property="staleId" column="HOLDY_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="holdy_insert" >
+                INSERT INTO ${schemaName}.CMT_HOLIDAY_MASTER(HOLDY_IS_ACTIVE, HOLDY_NAME, HOLDY_CI_NAME, HOLDY_CREATED_BY, HOLDY_UPDATED_BY, HOLDY_CREATED_ON, HOLDY_UPDATED_ON, HOLDY_STALE_ID, HOLDY_ID)
+                VALUES (#{entity.isActive}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="holdy_update" >
+                UPDATE ${schemaName}.CMT_HOLIDAY_MASTER set HOLDY_IS_ACTIVE = #{entity.isActive}, HOLDY_NAME = #{entity.name}, HOLDY_CI_NAME = #{entity.ciName}, HOLDY_UPDATED_BY = #{entity.updatedBy}, HOLDY_UPDATED_ON = #{entity.updatedOn}, HOLDY_STALE_ID = #{entity.staleId} 
+                WHERE HOLDY_ID = #{entity.id} 
+            </update>    
+        
+
+
+            <delete id="holdy_delete" >
+                DELETE FROM  ${schemaName}.CMT_HOLIDAY_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

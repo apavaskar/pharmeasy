@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SurveyResponseMaster-mapper">
+    <cache />
+
+
+            <select id="srvrm_select" resultMap="srvrmMap">
+                SELECT SRVRM_SURVEY_ID, SRVRM_SURVEY_BY_ID, SRVRM_SURVEY_FOR_ID, SRVRM_SURVEY_DATE, SRVRM_YYYY_MM, SRVRM_IS_LATEST, SRVRM_CREATED_BY, SRVRM_UPDATED_BY, SRVRM_CREATED_ON, SRVRM_UPDATED_ON, SRVRM_STALE_ID, SRVRM_ID FROM ${schemaName}.SRY_SURVEY_RESPONSE_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="srvrmMap" type="com.squer.sfe.survey.entity.SurveyResponseMaster" autoMapping="true">
+            		<id property="id" column="SRVRM_ID" />
+			<result property="survey" column="SRVRM_SURVEY_ID" />
+			<result property="surveyBy" column="SRVRM_SURVEY_BY_ID" />
+			<result property="surveyFor" column="SRVRM_SURVEY_FOR_ID" />
+			<result property="surveyDate" column="SRVRM_SURVEY_DATE" />
+			<result property="yyyyMm" column="SRVRM_YYYY_MM" />
+			<result property="isLatest" column="SRVRM_IS_LATEST" />
+			<result property="createdBy" column="SRVRM_CREATED_BY" />
+			<result property="updatedBy" column="SRVRM_UPDATED_BY" />
+			<result property="createdOn" column="SRVRM_CREATED_ON" />
+			<result property="updatedOn" column="SRVRM_UPDATED_ON" />
+			<result property="staleId" column="SRVRM_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="srvrm_insert" >
+                INSERT INTO ${schemaName}.SRY_SURVEY_RESPONSE_MASTER(SRVRM_SURVEY_ID, SRVRM_SURVEY_BY_ID, SRVRM_SURVEY_FOR_ID, SRVRM_SURVEY_DATE, SRVRM_YYYY_MM, SRVRM_IS_LATEST, SRVRM_CREATED_BY, SRVRM_UPDATED_BY, SRVRM_CREATED_ON, SRVRM_UPDATED_ON, SRVRM_STALE_ID, SRVRM_ID)
+                VALUES (#{entity.survey.id}, #{entity.surveyBy.id}, #{entity.surveyFor.id}, #{entity.surveyDate}, #{entity.yyyyMm}, #{entity.isLatest}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="srvrm_update" >
+                UPDATE ${schemaName}.SRY_SURVEY_RESPONSE_MASTER set SRVRM_SURVEY_id = #{entity.survey.id}, SRVRM_SURVEY_BY_id = #{entity.surveyBy.id}, SRVRM_SURVEY_FOR_id = #{entity.surveyFor.id}, SRVRM_SURVEY_DATE = #{entity.surveyDate}, SRVRM_YYYY_MM = #{entity.yyyyMm}, SRVRM_IS_LATEST = #{entity.isLatest}, SRVRM_UPDATED_BY = #{entity.updatedBy}, SRVRM_UPDATED_ON = #{entity.updatedOn}, SRVRM_STALE_ID = #{entity.staleId} 
+                WHERE SRVRM_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="srvrm_delete" >
+                DELETE FROM  ${schemaName}.SRY_SURVEY_RESPONSE_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

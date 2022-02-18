@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReportUnlocking-mapper">
+    <cache />
+    <select id="rptuh_select" resultMap="rptuhMap">
+        SELECT RPTUH_ID, RPTUH_EMPLOYEE_ID, RPTUH_FROM_DATE, RPTUH_FROM_DATE_YYYY_MM,
+                RPTUH_FROM_DATE_YYYY_MM_DD, RPTUH_TO_DATE, RPTUH_TO_DATE_YYYY_MM, RPTUH_TO_DATE_YYYY_MM_DD,
+                RPTUH_UNLOCKED_ON_YYYY_MM_DD, RPTUH_UNLOCKED_BY, RPTUH_STATUS FROM ${schemaName}.RPT_REPORTING_UNLOCK_HISTORY
+        <include refid="base.where_statement"></include>
+    </select>
+    <resultMap id="rptuhMap" type="com.squer.sfe.reporting.entity.ReportingUnlockHistory" autoMapping="true">
+        <id property="id" column="RPTUH_ID" />
+        <result property="employee" column="RPTUH_EMPLOYEE_ID" />
+        <result property="fromDate" column="RPTUH_FROM_DATE" />
+        <result property="fromDateYyyyMm" column="RPTUH_FROM_DATE_YYYY_MM" />
+        <result property="fromDateYyyyMmDd" column="RPTUH_FROM_DATE_YYYY_MM_DD" />
+        <result property="toDate" column="RPTUH_TO_DATE" />
+        <result property="toDateYyyyMm" column="RPTUH_TO_DATE_YYYY_MM" />
+        <result property="toDateYyyyMmDd" column="RPTUH_TO_DATE_YYYY_MM_DD" />
+        <result property="unlockedOn" column="RPTUH_UNLOCKED_ON_YYYY_MM_DD"/>
+        <result property="unlockedBy" column="RPTUH_UNLOCKED_BY"/>
+        <result property="status" column="RPTUH_STATUS" />
+    </resultMap>
+
+    <insert id="rptuh_insert">
+        insert into ${schemaName}.RPT_REPORTING_UNLOCK_HISTORY(RPTUH_ID, RPTUH_EMPLOYEE_ID, RPTUH_FROM_DATE, RPTUH_FROM_DATE_YYYY_MM,
+        RPTUH_FROM_DATE_YYYY_MM_DD, RPTUH_TO_DATE, RPTUH_TO_DATE_YYYY_MM, RPTUH_TO_DATE_YYYY_MM_DD,
+        RPTUH_UNLOCKED_ON_YYYY_MM_DD, RPTUH_UNLOCKED_BY, RPTUH_STATUS)
+        values(#{entity.id}, #{entity.employee.id}, #{entity.fromDate}, #{entity.fromDateYyyyMm},  #{entity.fromDateYyyyMmDd},
+               #{entity.toDate}, #{entity.toDateYyyyMm}, #{entity.toDateYyyyMmDd},
+               #{entity.unlockedOn}, #{entity.unlockedBy}, #{entity.status})
+    </insert>
+
+    <update id="rptuh_update">
+        update ${schemaName}.RPT_REPORTING_UNLOCK_HISTORY
+                    set RPTUH_EMPLOYEE_ID = #{entity.employee.id},
+                        RPTUH_FROM_DATE = #{entity.fromDate},
+                        RPTUH_FROM_DATE_YYYY_MM = #{entity.fromDateYyyyMm},
+                        RPTUH_FROM_DATE_YYYY_MM_DD = #{entity.fromDateYyyyMmDd},
+                        RPTUH_TO_DATE = #{entity.toDate},
+                        RPTUH_TO_DATE_YYYY_MM = #{entity.toDateYyyyMm},
+                        RPTUH_TO_DATE_YYYY_MM_DD = #{entity.toDateYyyyMmDd},
+                        RPTUH_UNLOCKED_ON_YYYY_MM_DD = #{entity.unlockedOn},
+                        RPTUH_UNLOCKED_BY = #{entity.unlockedBy},
+                        RPTUH_STATUS = #{entity.status}
+        where  RPTUH_ID = #{entity.id}
+    </update>
+
+    <update id="unlock_reporting_for_user_update" parameterType="map">
+        update rpt_reporting_unlock_history h set rptuh_unlocked_by='emply00000000000000000000000000000000' , rptuh_status = 'APPROVED', rptuh_unlocked_on_yyyy_mm_dd = now()
+        from cmt_employee_master e where rptuh_status = 'SUBMITTED' and h.rptuh_employee_id =e.emply_id and e.emply_person_code = #{employeeCode}
+    </update>
+</mapper>

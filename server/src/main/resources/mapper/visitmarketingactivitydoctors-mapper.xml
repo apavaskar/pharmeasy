@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VisitMarketingActivityDoctors-mapper">
+    <cache />
+
+
+            <select id="mradt_select" resultMap="mradtMap">
+                SELECT MRADT_MARKETING_ACTIVITY_ID, MRADT_DOCTOR_ID, MRADT_CREATED_BY, MRADT_UPDATED_BY, MRADT_CREATED_ON, MRADT_UPDATED_ON, MRADT_STALE_ID, MRADT_ID FROM ${schemaName}.RPT_MARKETING_ACTIVITY_DOCTORS
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="mradtMap" type="com.squer.sfe.reporting.entity.VisitMarketingActivityDoctors" autoMapping="true">
+            		<id property="id" column="MRADT_ID" />
+			<result property="marketingActivity" column="MRADT_MARKETING_ACTIVITY_ID" />
+			<result property="doctor" column="MRADT_DOCTOR_ID" />
+			<result property="createdBy" column="MRADT_CREATED_BY" />
+			<result property="updatedBy" column="MRADT_UPDATED_BY" />
+			<result property="createdOn" column="MRADT_CREATED_ON" />
+			<result property="updatedOn" column="MRADT_UPDATED_ON" />
+			<result property="staleId" column="MRADT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="mradt_insert" >
+                INSERT INTO ${schemaName}.RPT_MARKETING_ACTIVITY_DOCTORS(MRADT_MARKETING_ACTIVITY_ID, MRADT_DOCTOR_ID, MRADT_CREATED_BY, MRADT_UPDATED_BY, MRADT_CREATED_ON, MRADT_UPDATED_ON, MRADT_STALE_ID, MRADT_ID)
+                VALUES (#{entity.marketingActivity.id}, #{entity.doctor.id}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="mradt_update" >
+                UPDATE ${schemaName}.RPT_MARKETING_ACTIVITY_DOCTORS set MRADT_MARKETING_ACTIVITY_id = #{entity.marketingActivity.id}, MRADT_DOCTOR_id = #{entity.doctor.id}, MRADT_UPDATED_BY = #{entity.updatedBy}, MRADT_UPDATED_ON = #{entity.updatedOn}, MRADT_STALE_ID = #{entity.staleId} 
+                WHERE MRADT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="mradt_delete" >
+                DELETE FROM  ${schemaName}.RPT_MARKETING_ACTIVITY_DOCTORS <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

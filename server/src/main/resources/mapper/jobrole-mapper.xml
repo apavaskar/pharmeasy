@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="JobRole-mapper">
+    <cache />
+
+
+            <select id="jobrl_select" resultMap="jobrlMap">
+                SELECT JOBRL_NAME, JOBRL_CI_NAME, JOBRL_CREATED_BY, JOBRL_UPDATED_BY, JOBRL_CREATED_ON, JOBRL_UPDATED_ON, JOBRL_STALE_ID, JOBRL_ID FROM ${schemaName}.CMT_JOB_ROLE
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="jobrlMap" type="com.squer.sfe.common.entity.JobRole" autoMapping="true">
+            		<id property="id" column="JOBRL_ID" />
+			<result property="name" column="JOBRL_NAME" />
+			<result property="ciName" column="JOBRL_CI_NAME" />
+			<result property="createdBy" column="JOBRL_CREATED_BY" />
+			<result property="updatedBy" column="JOBRL_UPDATED_BY" />
+			<result property="createdOn" column="JOBRL_CREATED_ON" />
+			<result property="updatedOn" column="JOBRL_UPDATED_ON" />
+			<result property="staleId" column="JOBRL_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="jobrl_insert" >
+                INSERT INTO ${schemaName}.CMT_JOB_ROLE(JOBRL_NAME, JOBRL_CI_NAME, JOBRL_CREATED_BY, JOBRL_UPDATED_BY, JOBRL_CREATED_ON, JOBRL_UPDATED_ON, JOBRL_STALE_ID, JOBRL_ID)
+                VALUES (#{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="jobrl_update" >
+                UPDATE ${schemaName}.CMT_JOB_ROLE set JOBRL_NAME = #{entity.name}, JOBRL_CI_NAME = #{entity.ciName}, JOBRL_UPDATED_BY = #{entity.updatedBy}, JOBRL_UPDATED_ON = #{entity.updatedOn}, JOBRL_STALE_ID = #{entity.staleId} 
+                WHERE JOBRL_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="jobrl_delete" >
+                DELETE FROM  ${schemaName}.CMT_JOB_ROLE WHERE ID = #{entity.id} 
+            </delete>    
+        
+
+</mapper>

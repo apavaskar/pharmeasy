@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EmployeeProfile-mapper">
+    <cache />
+
+
+            <select id="emprf_select" resultMap="emprfMap">
+                SELECT EMPRF_EMPLOYEE_ID, EMPRF_LOCATION_ID, EMPRF_JOB_ROLE_ID, EMPRF_MANAGER_ID, EMPRF_FROM_DATE, EMPRF_TO_DATE, EMPRF_IS_ACTIVE, EMPRF_IS_DEFAULT, EMPRF_CREATED_BY, EMPRF_UPDATED_BY, EMPRF_CREATED_ON, EMPRF_UPDATED_ON, EMPRF_STALE_ID, EMPRF_ID FROM ${schemaName}.CMT_EMPLOYEE_PROFILE
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="emprfMap" type="com.squer.sfe.common.entity.EmployeeProfile" autoMapping="true">
+                <id property="id" column="EMPRF_ID" />
+                <result property="employee" column="EMPRF_EMPLOYEE_ID" />
+                <result property="location" column="EMPRF_LOCATION_ID" />
+                <result property="jobRole" column="EMPRF_JOB_ROLE_ID" />
+                <result property="manager" column="EMPRF_MANAGER_ID" />
+                <result property="fromDate" column="EMPRF_FROM_DATE" />
+                <result property="toDate" column="EMPRF_TO_DATE" />
+                <result property="isActive" column="EMPRF_IS_ACTIVE" />
+                <result property="isDefault" column="EMPRF_IS_DEFAULT" />
+                <result property="createdBy" column="EMPRF_CREATED_BY" />
+                <result property="updatedBy" column="EMPRF_UPDATED_BY" />
+                <result property="createdOn" column="EMPRF_CREATED_ON" />
+                <result property="updatedOn" column="EMPRF_UPDATED_ON" />
+                <result property="staleId" column="EMPRF_STALE_ID" />
+            </resultMap>         
+        
+
+
+            <insert id="emprf_insert" >
+                INSERT INTO ${schemaName}.CMT_EMPLOYEE_PROFILE(EMPRF_EMPLOYEE_ID, EMPRF_LOCATION_ID, EMPRF_JOB_ROLE_ID, EMPRF_MANAGER_ID, EMPRF_FROM_DATE, EMPRF_TO_DATE, EMPRF_IS_ACTIVE, EMPRF_IS_DEFAULT, EMPRF_CREATED_BY, EMPRF_UPDATED_BY, EMPRF_CREATED_ON, EMPRF_UPDATED_ON, EMPRF_STALE_ID, EMPRF_ID)
+                VALUES (#{entity.employee.id}, #{entity.location.id}, #{entity.jobRole.id}, #{entity.manager.id}, #{entity.fromDate}, #{entity.toDate}, #{entity.isActive}, #{entity.isDefault}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="emprf_update" >
+                UPDATE ${schemaName}.CMT_EMPLOYEE_PROFILE set EMPRF_EMPLOYEE_id = #{entity.employee.id}, EMPRF_LOCATION_id = #{entity.location.id}, EMPRF_JOB_ROLE_id = #{entity.jobRole.id}, EMPRF_MANAGER_id = #{entity.manager.id}, EMPRF_FROM_DATE = #{entity.fromDate}, EMPRF_TO_DATE = #{entity.toDate}, EMPRF_IS_ACTIVE = #{entity.isActive}, EMPRF_IS_DEFAULT = #{entity.isDefault}, EMPRF_UPDATED_BY = #{entity.updatedBy}, EMPRF_UPDATED_ON = #{entity.updatedOn}, EMPRF_STALE_ID = #{entity.staleId} 
+                WHERE EMPRF_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="emprf_delete" >
+                DELETE FROM  ${schemaName}.CMT_EMPLOYEE_PROFILE <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DetailingStatMaster-mapper">
+    <cache />
+
+
+            <select id="dtlmt_select" resultMap="dtlmtMap">
+                SELECT DTLMT_DAILY_ATTENDEE_ID_ID, DTLMT_DOCTOR_ID, DTLMT_BRAND_ID, DTLMT_START_TIME, DTLMT_END_TIME, DTLMT_CREATED_BY, DTLMT_UPDATED_BY, DTLMT_CREATED_ON, DTLMT_UPDATED_ON, DTLMT_STALE_ID, DTLMT_ID FROM ${schemaName}.DTL_STAT_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="dtlmtMap" type="com.squer.sfe.edetailing.entity.DetailingStatMaster" autoMapping="true">
+            		<id property="id" column="DTLMT_ID" />
+			<result property="dailyAttendeeId" column="DTLMT_DAILY_ATTENDEE_ID_ID" />
+			<result property="doctor" column="DTLMT_DOCTOR_ID" />
+			<result property="brand" column="DTLMT_BRAND_ID" />
+			<result property="startTime" column="DTLMT_START_TIME" />
+			<result property="endTime" column="DTLMT_END_TIME" />
+			<result property="createdBy" column="DTLMT_CREATED_BY" />
+			<result property="updatedBy" column="DTLMT_UPDATED_BY" />
+			<result property="createdOn" column="DTLMT_CREATED_ON" />
+			<result property="updatedOn" column="DTLMT_UPDATED_ON" />
+			<result property="staleId" column="DTLMT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="dtlmt_insert" >
+                INSERT INTO ${schemaName}.DTL_STAT_MASTER(DTLMT_DAILY_ATTENDEE_ID_ID, DTLMT_DOCTOR_ID, DTLMT_BRAND_ID, DTLMT_START_TIME, DTLMT_END_TIME, DTLMT_CREATED_BY, DTLMT_UPDATED_BY, DTLMT_CREATED_ON, DTLMT_UPDATED_ON, DTLMT_STALE_ID, DTLMT_ID)
+                VALUES (#{entity.dailyAttendeeId.id}, #{entity.doctor.id}, #{entity.brand.id}, #{entity.startTime}, #{entity.endTime}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="dtlmt_update" >
+                UPDATE ${schemaName}.DTL_STAT_MASTER set DTLMT_DAILY_ATTENDEE_ID_id = #{entity.dailyAttendeeId.id}, DTLMT_DOCTOR_id = #{entity.doctor.id}, DTLMT_BRAND_id = #{entity.brand.id}, DTLMT_START_TIME = #{entity.startTime}, DTLMT_END_TIME = #{entity.endTime}, DTLMT_UPDATED_BY = #{entity.updatedBy}, DTLMT_UPDATED_ON = #{entity.updatedOn}, DTLMT_STALE_ID = #{entity.staleId} 
+                WHERE DTLMT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="dtlmt_delete" >
+                DELETE FROM  ${schemaName}.DTL_STAT_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

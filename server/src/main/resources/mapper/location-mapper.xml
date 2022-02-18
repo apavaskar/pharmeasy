@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Location-mapper">
+    <cache />
+
+
+            <select id="locat_select" resultMap="locatMap">
+                SELECT LOCAT_TYPE_ID, LOCAT_DIVISION_ID, LOCAT_TOWN_ID, LOCAT_IS_ACTIVE, LOCAT_PARENT_ID, LOCAT_EXTERNAL_CODE, LOCAT_EXTERNAL_NAME, LOCAT_NAME, LOCAT_CI_NAME, LOCAT_CREATED_BY, LOCAT_UPDATED_BY, LOCAT_CREATED_ON, LOCAT_UPDATED_ON, LOCAT_STALE_ID, LOCAT_ID FROM ${schemaName}.CMT_LOCATION_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="locatMap" type="com.squer.sfe.common.entity.Location" autoMapping="true">
+            		<id property="id" column="LOCAT_ID" />
+			<result property="type" column="LOCAT_TYPE_ID" />
+			<result property="division" column="LOCAT_DIVISION_ID" />
+			<result property="town" column="LOCAT_TOWN_ID" />
+			<result property="isActive" column="LOCAT_IS_ACTIVE" />
+			<result property="parent" column="LOCAT_PARENT_ID" />
+			<result property="externalCode" column="LOCAT_EXTERNAL_CODE" />
+			<result property="externalName" column="LOCAT_EXTERNAL_NAME" />
+			<result property="name" column="LOCAT_NAME" />
+			<result property="ciName" column="LOCAT_CI_NAME" />
+			<result property="createdBy" column="LOCAT_CREATED_BY" />
+			<result property="updatedBy" column="LOCAT_UPDATED_BY" />
+			<result property="createdOn" column="LOCAT_CREATED_ON" />
+			<result property="updatedOn" column="LOCAT_UPDATED_ON" />
+			<result property="staleId" column="LOCAT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="locat_insert" >
+                INSERT INTO ${schemaName}.CMT_LOCATION_MASTER(LOCAT_TYPE_ID, LOCAT_DIVISION_ID, LOCAT_TOWN_ID, LOCAT_IS_ACTIVE, LOCAT_PARENT_ID, LOCAT_EXTERNAL_CODE, LOCAT_EXTERNAL_NAME, LOCAT_NAME, LOCAT_CI_NAME, LOCAT_CREATED_BY, LOCAT_UPDATED_BY, LOCAT_CREATED_ON, LOCAT_UPDATED_ON, LOCAT_STALE_ID, LOCAT_ID)
+                VALUES (#{entity.type.id}, #{entity.division.id}, #{entity.town.id}, #{entity.isActive}, #{entity.parent.id}, #{entity.externalCode}, #{entity.externalName}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="locat_update" >
+                UPDATE ${schemaName}.CMT_LOCATION_MASTER set LOCAT_TYPE_id = #{entity.type.id}, LOCAT_DIVISION_id = #{entity.division.id}, LOCAT_TOWN_id = #{entity.town.id}, LOCAT_IS_ACTIVE = #{entity.isActive}, LOCAT_PARENT_id = #{entity.parent.id}, LOCAT_EXTERNAL_CODE = #{entity.externalCode}, LOCAT_EXTERNAL_NAME = #{entity.externalName}, LOCAT_NAME = #{entity.name}, LOCAT_CI_NAME = #{entity.ciName}, LOCAT_UPDATED_BY = #{entity.updatedBy}, LOCAT_UPDATED_ON = #{entity.updatedOn}, LOCAT_STALE_ID = #{entity.staleId} 
+                WHERE LOCAT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="locat_delete" >
+                DELETE FROM  ${schemaName}.CMT_LOCATION_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

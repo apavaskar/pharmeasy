@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VisitActivity-mapper">
+    <cache />
+
+
+            <select id="vactv_select" resultMap="vactvMap">
+                SELECT VACTV_VISIT_ID, VACTV_TYPE_ID, VACTV_DURATION_ID, VACTV_BRAND_ID, VACTV_ATTENDEES, VACTV_LEADS, VACTV_CREATED_BY, VACTV_UPDATED_BY, VACTV_CREATED_ON, VACTV_UPDATED_ON, VACTV_STALE_ID, VACTV_ID FROM ${schemaName}.RPT_VISIT_ACTIVITY
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="vactvMap" type="com.squer.sfe.reporting.entity.VisitActivity" autoMapping="true">
+            		<id property="id" column="VACTV_ID" />
+			<result property="visit" column="VACTV_VISIT_ID" />
+			<result property="type" column="VACTV_TYPE_ID" />
+			<result property="duration" column="VACTV_DURATION_ID" />
+			<result property="brand" column="VACTV_BRAND_ID" />
+			<result property="attendees" column="VACTV_ATTENDEES" />
+			<result property="leads" column="VACTV_LEADS" />
+			<result property="createdBy" column="VACTV_CREATED_BY" />
+			<result property="updatedBy" column="VACTV_UPDATED_BY" />
+			<result property="createdOn" column="VACTV_CREATED_ON" />
+			<result property="updatedOn" column="VACTV_UPDATED_ON" />
+			<result property="staleId" column="VACTV_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="vactv_insert" >
+                INSERT INTO ${schemaName}.RPT_VISIT_ACTIVITY(VACTV_VISIT_ID, VACTV_TYPE_ID, VACTV_DURATION_ID, VACTV_BRAND_ID, VACTV_ATTENDEES, VACTV_LEADS, VACTV_CREATED_BY, VACTV_UPDATED_BY, VACTV_CREATED_ON, VACTV_UPDATED_ON, VACTV_STALE_ID, VACTV_ID)
+                VALUES (#{entity.visit.id}, #{entity.type.id}, #{entity.duration.id}, #{entity.brand.id}, #{entity.attendees}, #{entity.leads}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="vactv_update" >
+                UPDATE ${schemaName}.RPT_VISIT_ACTIVITY set VACTV_VISIT_id = #{entity.visit.id}, VACTV_TYPE_id = #{entity.type.id}, VACTV_DURATION_id = #{entity.duration.id}, VACTV_BRAND_id = #{entity.brand.id}, VACTV_ATTENDEES = #{entity.attendees}, VACTV_LEADS = #{entity.leads}, VACTV_UPDATED_BY = #{entity.updatedBy}, VACTV_UPDATED_ON = #{entity.updatedOn}, VACTV_STALE_ID = #{entity.staleId} 
+                WHERE VACTV_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="vactv_delete" >
+                DELETE FROM  ${schemaName}.RPT_VISIT_ACTIVITY <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

@@ -1,0 +1,3 @@
+rootProject.name='infinity3.0'
+include 'infinity-web'
+include 'nu-sfe'

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Routs-mapper">
+    <cache />
+
+
+            <select id="routs_select" resultMap="routsMap">
+                SELECT ROUTS_EXPENSE_DETAIL_ID, ROUTS_FROM_TOWN_ID, ROUTS_TO_TOWN_ID, ROUTS_FROM_TOWN_NAME, ROUTS_TO_TOWN_NAME, ROUTS_TRANSPORT_MODE_ID, ROUTS_DISTANCE, ROUTS_ALLOWNACE, ROUTS_AMOUNT, ROUTS_IS_RETURN, ROUTS_CREATED_BY, ROUTS_UPDATED_BY, ROUTS_CREATED_ON, ROUTS_UPDATED_ON, ROUTS_STALE_ID, ROUTS_ID FROM ${schemaName}.EXP_EXPENSE_ROUTS
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="routsMap" type="com.squer.sfe.expense.entity.Routs" autoMapping="true">
+                <id property="id" column="ROUTS_ID" />
+                <result property="expenseDetail" column="ROUTS_EXPENSE_DETAIL_ID" />
+                <result property="fromTown" column="ROUTS_FROM_TOWN_ID" />
+                <result property="toTown" column="ROUTS_TO_TOWN_ID" />
+                <result property="fromTownName" column="ROUTS_FROM_TOWN_NAME" />
+                <result property="toTownName" column="ROUTS_TO_TOWN_NAME" />
+                <result property="transportMode" column="ROUTS_TRANSPORT_MODE_ID" />
+                <result property="distance" column="ROUTS_DISTANCE" />
+                <result property="allownace" column="ROUTS_ALLOWNACE" />
+                <result property="amount" column="ROUTS_AMOUNT" />
+                <result property="isReturn" column="ROUTS_IS_RETURN" />
+                <result property="createdBy" column="ROUTS_CREATED_BY" />
+                <result property="updatedBy" column="ROUTS_UPDATED_BY" />
+                <result property="createdOn" column="ROUTS_CREATED_ON" />
+                <result property="updatedOn" column="ROUTS_UPDATED_ON" />
+                <result property="staleId" column="ROUTS_STALE_ID" />
+            </resultMap>         
+
+            <insert id="routs_insert" >
+                INSERT INTO ${schemaName}.EXP_EXPENSE_ROUTS(ROUTS_EXPENSE_DETAIL_ID, ROUTS_FROM_TOWN_ID, ROUTS_TO_TOWN_ID, ROUTS_FROM_TOWN_NAME, ROUTS_TO_TOWN_NAME, ROUTS_TRANSPORT_MODE_ID, ROUTS_DISTANCE, ROUTS_ALLOWNACE, ROUTS_AMOUNT, ROUTS_IS_RETURN, ROUTS_CREATED_BY, ROUTS_UPDATED_BY, ROUTS_CREATED_ON, ROUTS_UPDATED_ON, ROUTS_STALE_ID, ROUTS_ID)
+                VALUES (#{entity.expenseDetail.id}, #{entity.fromTown.id}, #{entity.toTown.id}, #{entity.fromTownName}, #{entity.toTownName}, #{entity.transportMode.id}, #{entity.distance}, #{entity.allownace}, #{entity.amount}, #{entity.isReturn}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+
+            <update id="routs_update" >
+                UPDATE ${schemaName}.EXP_EXPENSE_ROUTS set ROUTS_EXPENSE_DETAIL_id = #{entity.expenseDetail.id}, ROUTS_FROM_TOWN_id = #{entity.fromTown.id}, ROUTS_TO_TOWN_id = #{entity.toTown.id}, ROUTS_FROM_TOWN_NAME = #{entity.fromTownName}, ROUTS_TO_TOWN_NAME = #{entity.toTownName}, ROUTS_TRANSPORT_MODE_id = #{entity.transportMode.id}, ROUTS_DISTANCE = #{entity.distance}, ROUTS_ALLOWNACE = #{entity.allownace}, ROUTS_AMOUNT = #{entity.amount}, ROUTS_IS_RETURN = #{entity.isReturn}, ROUTS_UPDATED_BY = #{entity.updatedBy}, ROUTS_UPDATED_ON = #{entity.updatedOn}, ROUTS_STALE_ID = #{entity.staleId} 
+                WHERE ROUTS_ID = #{entity.id} 
+            </update>    
+
+            <delete id="routs_delete" >
+                DELETE FROM  ${schemaName}.EXP_EXPENSE_ROUTS where routs_id = #{entity.id}
+            </delete>    
+        
+
+</mapper>

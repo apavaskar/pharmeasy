@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SystemLov-mapper">
+    <cache />
+
+
+            <select id="syslv_select" resultMap="syslvMap">
+                SELECT SYSLV_DISPLAY_ORDER, SYSLV_TYPE, SYSLV_IS_ACTIVE, SYSLV_NAME, SYSLV_CI_NAME, SYSLV_CREATED_BY, SYSLV_UPDATED_BY, SYSLV_CREATED_ON, SYSLV_UPDATED_ON, SYSLV_STALE_ID, SYSLV_ID FROM ${schemaName}.FMK_SYSTEM_LOV
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="syslvMap" type="com.squer.sfe.common.entity.SystemLov" autoMapping="true">
+            		<id property="id" column="SYSLV_ID" />
+			<result property="displayOrder" column="SYSLV_DISPLAY_ORDER" />
+			<result property="type" column="SYSLV_TYPE" />
+			<result property="isActive" column="SYSLV_IS_ACTIVE" />
+			<result property="name" column="SYSLV_NAME" />
+			<result property="ciName" column="SYSLV_CI_NAME" />
+			<result property="createdBy" column="SYSLV_CREATED_BY" />
+			<result property="updatedBy" column="SYSLV_UPDATED_BY" />
+			<result property="createdOn" column="SYSLV_CREATED_ON" />
+			<result property="updatedOn" column="SYSLV_UPDATED_ON" />
+			<result property="staleId" column="SYSLV_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="syslv_insert" >
+                INSERT INTO ${schemaName}.FMK_SYSTEM_LOV(SYSLV_DISPLAY_ORDER, SYSLV_TYPE, SYSLV_IS_ACTIVE, SYSLV_NAME, SYSLV_CI_NAME, SYSLV_CREATED_BY, SYSLV_UPDATED_BY, SYSLV_CREATED_ON, SYSLV_UPDATED_ON, SYSLV_STALE_ID, SYSLV_ID)
+                VALUES (#{entity.displayOrder}, #{entity.type}, #{entity.isActive}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="syslv_update" >
+                UPDATE ${schemaName}.FMK_SYSTEM_LOV set SYSLV_DISPLAY_ORDER = #{entity.displayOrder}, SYSLV_TYPE = #{entity.type}, SYSLV_IS_ACTIVE = #{entity.isActive}, SYSLV_NAME = #{entity.name}, SYSLV_CI_NAME = #{entity.ciName}, SYSLV_UPDATED_BY = #{entity.updatedBy}, SYSLV_UPDATED_ON = #{entity.updatedOn}, SYSLV_STALE_ID = #{entity.staleId} 
+                WHERE SYSLV_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="syslv_delete" >
+                DELETE FROM  ${schemaName}.FMK_SYSTEM_LOV <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

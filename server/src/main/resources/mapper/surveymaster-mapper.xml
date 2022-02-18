@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SurveyMaster-mapper">
+    <cache />
+
+
+            <select id="survy_select" resultMap="survyMap">
+                SELECT SURVY_TITLE, SURVY_FROM_DATE, SURVY_TO_DATE, SURVY_IS_ACTIVE, SURVY_TYPE_ID, SURVY_CREATED_BY, SURVY_UPDATED_BY, SURVY_CREATED_ON, SURVY_UPDATED_ON, SURVY_STALE_ID, SURVY_ID FROM ${schemaName}.SRY_SURVEY_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="survyMap" type="com.squer.sfe.survey.entity.SurveyMaster" autoMapping="true">
+            		<id property="id" column="SURVY_ID" />
+			<result property="title" column="SURVY_TITLE" />
+			<result property="fromDate" column="SURVY_FROM_DATE" />
+			<result property="toDate" column="SURVY_TO_DATE" />
+			<result property="isActive" column="SURVY_IS_ACTIVE" />
+			<result property="type" column="SURVY_TYPE_ID" />
+			<result property="createdBy" column="SURVY_CREATED_BY" />
+			<result property="updatedBy" column="SURVY_UPDATED_BY" />
+			<result property="createdOn" column="SURVY_CREATED_ON" />
+			<result property="updatedOn" column="SURVY_UPDATED_ON" />
+			<result property="staleId" column="SURVY_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="survy_insert" >
+                INSERT INTO ${schemaName}.SRY_SURVEY_MASTER(SURVY_TITLE, SURVY_FROM_DATE, SURVY_TO_DATE, SURVY_IS_ACTIVE, SURVY_TYPE_ID, SURVY_CREATED_BY, SURVY_UPDATED_BY, SURVY_CREATED_ON, SURVY_UPDATED_ON, SURVY_STALE_ID, SURVY_ID)
+                VALUES (#{entity.title}, #{entity.fromDate}, #{entity.toDate}, #{entity.isActive}, #{entity.type.id}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="survy_update" >
+                UPDATE ${schemaName}.SRY_SURVEY_MASTER set SURVY_TITLE = #{entity.title}, SURVY_FROM_DATE = #{entity.fromDate}, SURVY_TO_DATE = #{entity.toDate}, SURVY_IS_ACTIVE = #{entity.isActive}, SURVY_TYPE_id = #{entity.type.id}, SURVY_UPDATED_BY = #{entity.updatedBy}, SURVY_UPDATED_ON = #{entity.updatedOn}, SURVY_STALE_ID = #{entity.staleId} 
+                WHERE SURVY_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="survy_delete" >
+                DELETE FROM  ${schemaName}.SRY_SURVEY_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

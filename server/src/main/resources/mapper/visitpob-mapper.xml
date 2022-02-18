@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VisitPob-mapper">
+    <cache />
+
+
+            <select id="vtpob_select" resultMap="vtpobMap">
+                SELECT VTPOB_ATTENDEE_ID, VTPOB_PRODUCT_ID, VTPOB_QUANTITY, VTPOB_IS_ACTIVE, VTPOB_CREATED_BY, VTPOB_UPDATED_BY, VTPOB_CREATED_ON, VTPOB_UPDATED_ON, VTPOB_STALE_ID, VTPOB_ID FROM ${schemaName}.RPT_VISIT_POB
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="vtpobMap" type="com.squer.sfe.reporting.entity.VisitPob" autoMapping="true">
+            		<id property="id" column="VTPOB_ID" />
+			<result property="attendee" column="VTPOB_ATTENDEE_ID" />
+			<result property="product" column="VTPOB_PRODUCT_ID" />
+			<result property="quantity" column="VTPOB_QUANTITY" />
+			<result property="isActive" column="VTPOB_IS_ACTIVE" />
+			<result property="createdBy" column="VTPOB_CREATED_BY" />
+			<result property="updatedBy" column="VTPOB_UPDATED_BY" />
+			<result property="createdOn" column="VTPOB_CREATED_ON" />
+			<result property="updatedOn" column="VTPOB_UPDATED_ON" />
+			<result property="staleId" column="VTPOB_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="vtpob_insert" >
+                INSERT INTO ${schemaName}.RPT_VISIT_POB(VTPOB_ATTENDEE_ID, VTPOB_PRODUCT_ID, VTPOB_QUANTITY, VTPOB_IS_ACTIVE, VTPOB_CREATED_BY, VTPOB_UPDATED_BY, VTPOB_CREATED_ON, VTPOB_UPDATED_ON, VTPOB_STALE_ID, VTPOB_ID)
+                VALUES (#{entity.attendee.id}, #{entity.product.id}, #{entity.quantity}, #{entity.isActive}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="vtpob_update" >
+                UPDATE ${schemaName}.RPT_VISIT_POB set VTPOB_ATTENDEE_id = #{entity.attendee.id}, VTPOB_PRODUCT_id = #{entity.product.id}, VTPOB_QUANTITY = #{entity.quantity}, VTPOB_IS_ACTIVE = #{entity.isActive}, VTPOB_UPDATED_BY = #{entity.updatedBy}, VTPOB_UPDATED_ON = #{entity.updatedOn}, VTPOB_STALE_ID = #{entity.staleId} 
+                WHERE VTPOB_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="vtpob_delete" >
+                DELETE FROM  ${schemaName}.RPT_VISIT_POB <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

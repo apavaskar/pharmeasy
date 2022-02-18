@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Wockhardt-custom-mapper">
+    <cache />
+        <select id="wcsfc_select" resultMap="wcsfcMap">
+            SELECT wcsfc_id, wcsfc_location_id, wcsfc_from_town_id, wcsfc_to_town_id, wcsfc_distance,
+            wcsfc_corrected_distance
+            FROM ${schemaName}.CST_WOCKHARDT_SFC
+            <include refid="base.where_statement"></include>
+        </select>
+        <resultMap id="wcsfcMap" type="com.squer.sfe.custom.wockhardt.entity.SFCMaster" autoMapping="true">
+            <id property="id" column="WCSFC_ID" />
+            <result property="location" column="WCSFC_LOCATION_ID" />
+            <result property="fromTown" column="WCSFC_FROM_TOWN_ID" />
+            <result property="toTown" column="WCSFC_TO_TOWN_ID" />
+            <result property="distance" column="WCSFC_DISTANCE" />
+            <result property="correctedDistance" column="WCSFC_CORRECTED_DISTANCE" />
+            <result property="createdBy" column="WCSFC_CREATED_BY" />
+            <result property="updatedBy" column="WCSFC_UPDATED_BY" />
+            <result property="createdOn" column="WCSFC_CREATED_ON" />
+            <result property="updatedOn" column="WCSFC_UPDATED_ON" />
+            <result property="staleId" column="WCSFC_STALE_ID" />
+        </resultMap>
+
+        <update id="wcsfc_update">
+            update ${schemaName}.CST_WOCKHARDT_SFC set wcsfc_corrected_distance=#{entity.correctedDistance} where wcsfc_id = #{entity.id.id}
+        </update>
+
+        <insert id="wcsfc_insert">
+            insert into ${schemaName}.CST_WOCKHARDT_SFC (wcsfc_id, wcsfc_location_id, wcsfc_from_town_id, wcsfc_to_town_id, wcsfc_distance,
+            wcsfc_corrected_distance, wcsfc_created_by, wcsfc_updated_by, wcsfc_created_on, wcsfc_updated_on, wcsfc_stale_id) values (#{entity.id.id}, #{entity.location.id}, #{entity.fromTown.id}, #{entity.toTown.id}, #{entity.distance},
+            #{entity.correctedDistance}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId})
+        </insert>
+</mapper>

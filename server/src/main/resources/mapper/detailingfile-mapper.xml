@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DetailingFile-mapper">
+    <cache />
+
+
+            <select id="dtlfl_select" resultMap="dtlflMap">
+                SELECT DTLFL_BRAND_ID, DTLFL_HTML_FILE_PATH, DTLFL_THUMBNAIL_FILE_PATH, DTLFL_TITLE, DTLFL_SEQUENCE, DTLFL_DISCRIPTION, DTLFL_IS_ACTIVE, DTLFL_FROM_DATE, DTLFL_TO_DATE, DTLFL_CREATED_BY, DTLFL_UPDATED_BY, DTLFL_CREATED_ON, DTLFL_UPDATED_ON, DTLFL_STALE_ID, DTLFL_ID FROM ${schemaName}.DTL_DETAILING_FILE
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="dtlflMap" type="com.squer.sfe.edetailing.entity.DetailingFile" autoMapping="true">
+            		<id property="id" column="DTLFL_ID" />
+			<result property="brand" column="DTLFL_BRAND_ID" />
+			<result property="htmlFilePath" column="DTLFL_HTML_FILE_PATH" />
+			<result property="thumbnailFilePath" column="DTLFL_THUMBNAIL_FILE_PATH" />
+			<result property="title" column="DTLFL_TITLE" />
+			<result property="sequence" column="DTLFL_SEQUENCE" />
+			<result property="discription" column="DTLFL_DISCRIPTION" />
+			<result property="isActive" column="DTLFL_IS_ACTIVE" />
+			<result property="fromDate" column="DTLFL_FROM_DATE" />
+			<result property="toDate" column="DTLFL_TO_DATE" />
+			<result property="createdBy" column="DTLFL_CREATED_BY" />
+			<result property="updatedBy" column="DTLFL_UPDATED_BY" />
+			<result property="createdOn" column="DTLFL_CREATED_ON" />
+			<result property="updatedOn" column="DTLFL_UPDATED_ON" />
+			<result property="staleId" column="DTLFL_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="dtlfl_insert" >
+                INSERT INTO ${schemaName}.DTL_DETAILING_FILE(DTLFL_BRAND_ID, DTLFL_HTML_FILE_PATH, DTLFL_THUMBNAIL_FILE_PATH, DTLFL_TITLE, DTLFL_SEQUENCE, DTLFL_DISCRIPTION, DTLFL_IS_ACTIVE, DTLFL_FROM_DATE, DTLFL_TO_DATE, DTLFL_CREATED_BY, DTLFL_UPDATED_BY, DTLFL_CREATED_ON, DTLFL_UPDATED_ON, DTLFL_STALE_ID, DTLFL_ID)
+                VALUES (#{entity.brand.id}, #{entity.htmlFilePath}, #{entity.thumbnailFilePath}, #{entity.title}, #{entity.sequence}, #{entity.discription}, #{entity.isActive}, #{entity.fromDate}, #{entity.toDate}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="dtlfl_update" >
+                UPDATE ${schemaName}.DTL_DETAILING_FILE set DTLFL_BRAND_id = #{entity.brand.id}, DTLFL_HTML_FILE_PATH = #{entity.htmlFilePath}, DTLFL_THUMBNAIL_FILE_PATH = #{entity.thumbnailFilePath}, DTLFL_TITLE = #{entity.title}, DTLFL_SEQUENCE = #{entity.sequence}, DTLFL_DISCRIPTION = #{entity.discription}, DTLFL_IS_ACTIVE = #{entity.isActive}, DTLFL_FROM_DATE = #{entity.fromDate}, DTLFL_TO_DATE = #{entity.toDate}, DTLFL_UPDATED_BY = #{entity.updatedBy}, DTLFL_UPDATED_ON = #{entity.updatedOn}, DTLFL_STALE_ID = #{entity.staleId} 
+                WHERE DTLFL_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="dtlfl_delete" >
+                DELETE FROM  ${schemaName}.DTL_DETAILING_FILE <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

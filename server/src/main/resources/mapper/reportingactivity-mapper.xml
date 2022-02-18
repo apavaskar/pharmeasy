@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReportingActivity-mapper">
+    <cache />
+
+
+            <select id="rpact_select" resultMap="rpactMap">
+                SELECT RPACT_CATEGORY, RPACT_DISPLAY_ORDER, RPACT_IS_ACTIVE, RPACT_DURATION, RPACT_NAME, RPACT_CI_NAME, RPACT_CREATED_BY, RPACT_UPDATED_BY, RPACT_CREATED_ON, RPACT_UPDATED_ON, RPACT_STALE_ID, RPACT_ID FROM ${schemaName}.CMT_REPORTING_ACTIVITY_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="rpactMap" type="com.squer.sfe.common.entity.ReportingActivity" autoMapping="true">
+            		<id property="id" column="RPACT_ID" />
+			<result property="category" column="RPACT_CATEGORY" />
+			<result property="displayOrder" column="RPACT_DISPLAY_ORDER" />
+			<result property="isActive" column="RPACT_IS_ACTIVE" />
+			<result property="duration" column="RPACT_DURATION" />
+			<result property="name" column="RPACT_NAME" />
+			<result property="ciName" column="RPACT_CI_NAME" />
+			<result property="createdBy" column="RPACT_CREATED_BY" />
+			<result property="updatedBy" column="RPACT_UPDATED_BY" />
+			<result property="createdOn" column="RPACT_CREATED_ON" />
+			<result property="updatedOn" column="RPACT_UPDATED_ON" />
+			<result property="staleId" column="RPACT_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="rpact_insert" >
+                INSERT INTO ${schemaName}.CMT_REPORTING_ACTIVITY_MASTER(RPACT_CATEGORY, RPACT_DISPLAY_ORDER, RPACT_IS_ACTIVE, RPACT_DURATION, RPACT_NAME, RPACT_CI_NAME, RPACT_CREATED_BY, RPACT_UPDATED_BY, RPACT_CREATED_ON, RPACT_UPDATED_ON, RPACT_STALE_ID, RPACT_ID)
+                VALUES (#{entity.category}, #{entity.displayOrder}, #{entity.isActive}, #{entity.duration}, #{entity.name}, #{entity.ciName}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="rpact_update" >
+                UPDATE ${schemaName}.CMT_REPORTING_ACTIVITY_MASTER set RPACT_CATEGORY = #{entity.category}, RPACT_DISPLAY_ORDER = #{entity.displayOrder}, RPACT_IS_ACTIVE = #{entity.isActive}, RPACT_DURATION = #{entity.duration}, RPACT_NAME = #{entity.name}, RPACT_CI_NAME = #{entity.ciName}, RPACT_UPDATED_BY = #{entity.updatedBy}, RPACT_UPDATED_ON = #{entity.updatedOn}, RPACT_STALE_ID = #{entity.staleId} 
+                WHERE RPACT_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="rpact_delete" >
+                DELETE FROM  ${schemaName}.CMT_REPORTING_ACTIVITY_MASTER WHERE ID = #{entity.id} 
+            </delete>    
+        
+
+</mapper>

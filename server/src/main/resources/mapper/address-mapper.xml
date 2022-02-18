@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Address-mapper">
+    <cache />
+
+
+            <select id="addrs_select" resultMap="addrsMap">
+                SELECT ADDRS_BUILDING_NAME, ADDRS_ADDRESS_LINE1, ADDRS_ADDRESS_LINE2, ADDRS_TOWN_ID, ADDRS_STATE_ID, ADDRS_TYPE_ID, ADDRS_OWNER_ID, ADDRS_ID FROM ${schemaName}.CMT_ADDRESS_MASTER
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="addrsMap" type="com.squer.sfe.common.entity.Address" autoMapping="true">
+            		<id property="id" column="ADDRS_ID" />
+			<result property="buildingName" column="ADDRS_BUILDING_NAME" />
+			<result property="addressLine1" column="ADDRS_ADDRESS_LINE1" />
+			<result property="addressLine2" column="ADDRS_ADDRESS_LINE2" />
+			<result property="town" column="ADDRS_TOWN_ID" />
+			<result property="state" column="ADDRS_STATE_ID" />
+			<result property="type" column="ADDRS_TYPE_ID" />
+			<result property="owner" column="ADDRS_OWNER_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="addrs_insert" >
+                INSERT INTO ${schemaName}.CMT_ADDRESS_MASTER(ADDRS_BUILDING_NAME, ADDRS_ADDRESS_LINE1, ADDRS_ADDRESS_LINE2, ADDRS_TOWN_ID, ADDRS_STATE_ID, ADDRS_TYPE_ID, ADDRS_OWNER_ID, ADDRS_ID)
+                VALUES (#{entity.buildingName}, #{entity.addressLine1}, #{entity.addressLine2}, #{entity.town.id}, #{entity.state.id}, #{entity.type.id}, #{entity.owner.id}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="addrs_update" >
+                UPDATE ${schemaName}.CMT_ADDRESS_MASTER set ADDRS_BUILDING_NAME = #{entity.buildingName}, ADDRS_ADDRESS_LINE1 = #{entity.addressLine1}, ADDRS_ADDRESS_LINE2 = #{entity.addressLine2}, ADDRS_TOWN_id = #{entity.town.id}, ADDRS_STATE_id = #{entity.state.id}, ADDRS_TYPE_id = #{entity.type.id}, ADDRS_OWNER_id = #{entity.owner.id} 
+                WHERE ADDRS_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="addrs_delete" >
+                DELETE FROM  ${schemaName}.CMT_ADDRESS_MASTER <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

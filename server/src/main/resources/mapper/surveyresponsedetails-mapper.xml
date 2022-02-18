@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SurveyResponseDetails-mapper">
+    <cache />
+
+
+            <select id="srvrd_select" resultMap="srvrdMap">
+                SELECT SRVRD_MASTER_ID, SRVRD_QUESTION_ID, SRVRD_SCORE, SRVRD_CREATED_BY, SRVRD_UPDATED_BY, SRVRD_CREATED_ON, SRVRD_UPDATED_ON, SRVRD_STALE_ID, SRVRD_ID FROM ${schemaName}.SRY_SURVEY_RESPONSE_DETAILS
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="srvrdMap" type="com.squer.sfe.survey.entity.SurveyResponseDetails" autoMapping="true">
+            		<id property="id" column="SRVRD_ID" />
+			<result property="master" column="SRVRD_MASTER_ID" />
+			<result property="question" column="SRVRD_QUESTION_ID" />
+			<result property="score" column="SRVRD_SCORE" />
+			<result property="createdBy" column="SRVRD_CREATED_BY" />
+			<result property="updatedBy" column="SRVRD_UPDATED_BY" />
+			<result property="createdOn" column="SRVRD_CREATED_ON" />
+			<result property="updatedOn" column="SRVRD_UPDATED_ON" />
+			<result property="staleId" column="SRVRD_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="srvrd_insert" >
+                INSERT INTO ${schemaName}.SRY_SURVEY_RESPONSE_DETAILS(SRVRD_MASTER_ID, SRVRD_QUESTION_ID, SRVRD_SCORE, SRVRD_CREATED_BY, SRVRD_UPDATED_BY, SRVRD_CREATED_ON, SRVRD_UPDATED_ON, SRVRD_STALE_ID, SRVRD_ID)
+                VALUES (#{entity.master.id}, #{entity.question.id}, #{entity.score}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="srvrd_update" >
+                UPDATE ${schemaName}.SRY_SURVEY_RESPONSE_DETAILS set SRVRD_MASTER_id = #{entity.master.id}, SRVRD_QUESTION_id = #{entity.question.id}, SRVRD_SCORE = #{entity.score}, SRVRD_UPDATED_BY = #{entity.updatedBy}, SRVRD_UPDATED_ON = #{entity.updatedOn}, SRVRD_STALE_ID = #{entity.staleId} 
+                WHERE SRVRD_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="srvrd_delete" >
+                DELETE FROM  ${schemaName}.SRY_SURVEY_RESPONSE_DETAILS <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

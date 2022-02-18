@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VisitMarketingActivityBrands-mapper">
+    <cache />
+
+
+            <select id="mracb_select" resultMap="mracbMap">
+                SELECT MRACB_MARKETING_ACTIVITY_ID, MRACB_BRAND_ID, MRACB_CREATED_BY, MRACB_UPDATED_BY, MRACB_CREATED_ON, MRACB_UPDATED_ON, MRACB_STALE_ID, MRACB_ID FROM ${schemaName}.RPT_MARKETING_ACTIVITY_BRANDS
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="mracbMap" type="com.squer.sfe.reporting.entity.VisitMarketingActivityBrands" autoMapping="true">
+            		<id property="id" column="MRACB_ID" />
+			<result property="marketingActivity" column="MRACB_MARKETING_ACTIVITY_ID" />
+			<result property="brand" column="MRACB_BRAND_ID" />
+			<result property="createdBy" column="MRACB_CREATED_BY" />
+			<result property="updatedBy" column="MRACB_UPDATED_BY" />
+			<result property="createdOn" column="MRACB_CREATED_ON" />
+			<result property="updatedOn" column="MRACB_UPDATED_ON" />
+			<result property="staleId" column="MRACB_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="mracb_insert" >
+                INSERT INTO ${schemaName}.RPT_MARKETING_ACTIVITY_BRANDS(MRACB_MARKETING_ACTIVITY_ID, MRACB_BRAND_ID, MRACB_CREATED_BY, MRACB_UPDATED_BY, MRACB_CREATED_ON, MRACB_UPDATED_ON, MRACB_STALE_ID, MRACB_ID)
+                VALUES (#{entity.marketingActivity.id}, #{entity.brand.id}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="mracb_update" >
+                UPDATE ${schemaName}.RPT_MARKETING_ACTIVITY_BRANDS set MRACB_MARKETING_ACTIVITY_id = #{entity.marketingActivity.id}, MRACB_BRAND_id = #{entity.brand.id}, MRACB_UPDATED_BY = #{entity.updatedBy}, MRACB_UPDATED_ON = #{entity.updatedOn}, MRACB_STALE_ID = #{entity.staleId} 
+                WHERE MRACB_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="mracb_delete" >
+                DELETE FROM  ${schemaName}.RPT_MARKETING_ACTIVITY_BRANDS <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>

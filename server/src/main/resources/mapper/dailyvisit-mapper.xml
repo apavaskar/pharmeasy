@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DailyVisit-mapper">
+    <cache />
+
+
+            <select id="dtvst_select" resultMap="dtvstMap">
+                SELECT DTVST_PLAN_ID, DTVST_LOCATION_ID, DTVST_EMPLOYEE_ID, DTVST_VISIT_DATE, DTVST_YYYY_MM, DTVST_YYYY_MM_DD, DTVST_ACTIVITY_TYPE_ID, DTVST_DURATION, DTVST_CREATED_BY, DTVST_UPDATED_BY, DTVST_CREATED_ON, DTVST_UPDATED_ON, DTVST_STALE_ID, DTVST_ID FROM ${schemaName}.RPT_DAILY_VISIT
+                <include refid="base.where_statement"></include>
+            </select>
+            <resultMap id="dtvstMap" type="com.squer.sfe.reporting.entity.DailyVisit" autoMapping="true">
+            		<id property="id" column="DTVST_ID" />
+			<result property="plan" column="DTVST_PLAN_ID" />
+			<result property="location" column="DTVST_LOCATION_ID" />
+			<result property="employee" column="DTVST_EMPLOYEE_ID" />
+			<result property="visitDate" column="DTVST_VISIT_DATE" />
+			<result property="yyyyMm" column="DTVST_YYYY_MM" />
+			<result property="yyyyMmDD" column="DTVST_YYYY_MM_DD" />
+			<result property="activityType" column="DTVST_ACTIVITY_TYPE_ID" />
+			<result property="duration" column="DTVST_DURATION" />
+			<result property="createdBy" column="DTVST_CREATED_BY" />
+			<result property="updatedBy" column="DTVST_UPDATED_BY" />
+			<result property="createdOn" column="DTVST_CREATED_ON" />
+			<result property="updatedOn" column="DTVST_UPDATED_ON" />
+			<result property="staleId" column="DTVST_STALE_ID" />
+            
+            </resultMap>         
+        
+
+
+            <insert id="dtvst_insert" >
+                INSERT INTO ${schemaName}.RPT_DAILY_VISIT(DTVST_PLAN_ID, DTVST_LOCATION_ID, DTVST_EMPLOYEE_ID, DTVST_VISIT_DATE, DTVST_YYYY_MM, DTVST_YYYY_MM_DD, DTVST_ACTIVITY_TYPE_ID, DTVST_DURATION, DTVST_CREATED_BY, DTVST_UPDATED_BY, DTVST_CREATED_ON, DTVST_UPDATED_ON, DTVST_STALE_ID, DTVST_ID)
+                VALUES (#{entity.plan.id}, #{entity.location.id}, #{entity.employee.id}, #{entity.visitDate}, #{entity.yyyyMm}, #{entity.yyyyMmDD}, #{entity.activityType.id}, #{entity.duration}, #{entity.createdBy}, #{entity.updatedBy}, #{entity.createdOn}, #{entity.updatedOn}, #{entity.staleId}, #{entity.id})
+            </insert>    
+        
+
+
+            <update id="dtvst_update" >
+                UPDATE ${schemaName}.RPT_DAILY_VISIT set DTVST_PLAN_id = #{entity.plan.id}, DTVST_LOCATION_id = #{entity.location.id}, DTVST_EMPLOYEE_id = #{entity.employee.id}, DTVST_VISIT_DATE = #{entity.visitDate}, DTVST_YYYY_MM = #{entity.yyyyMm}, DTVST_YYYY_MM_DD = #{entity.yyyyMmDD}, DTVST_ACTIVITY_TYPE_id = #{entity.activityType.id}, DTVST_DURATION = #{entity.duration}, DTVST_UPDATED_BY = #{entity.updatedBy}, DTVST_UPDATED_ON = #{entity.updatedOn}, DTVST_STALE_ID = #{entity.staleId} 
+                WHERE DTVST_ID = #{entity.id}
+            </update>    
+        
+
+
+            <delete id="dtvst_delete" >
+                DELETE FROM  ${schemaName}.RPT_DAILY_VISIT <include refid="base.delete_where_statement"></include> 
+            </delete>    
+        
+
+</mapper>
